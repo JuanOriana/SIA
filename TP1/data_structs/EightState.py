@@ -14,27 +14,26 @@ class EightState:
         coordX, coordY = -1, -1
         for x in range(self.width):
             for y in range(self.height):
-                if self.board[x][y] == 0:
-                    coordX, coordY = x, y
+                if self.board[y,x] == 0:
+                    coordY, coordX = y, x
                     break
             if coordX != -1:
                 break
-
-        if x > 0:
+        if coordX > 0:
             new_board = self.board.copy()
-            new_board[x - 1][y], new_board[x][y] = new_board[x][y], new_board[x - 1][y]
+            new_board[coordY,coordX-1], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY,coordX-1]
             all_possible_moves.append(EightState(new_board))
         if x < self.width - 1:
             new_board = self.board.copy()
-            new_board[x + 1][y], new_board[x][y] = new_board[x][y], new_board[x + 1][y]
+            new_board[coordY,coordX+1], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY,coordX+1]
             all_possible_moves.append(EightState(new_board))
         if y > 0:
             new_board = self.board.copy()
-            new_board[x][y - 1], new_board[x][y] = new_board[x][y - 1], new_board[x][y]
+            new_board[coordY-1,coordX], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY-1,coordX]
             all_possible_moves.append(EightState(new_board))
-        if y > self.height - 1:
+        if y < self.height - 1:
             new_board = self.board.copy()
-            new_board[x][y + 1], new_board[x][y] = new_board[x][y + 1], new_board[x][y]
+            new_board[coordY+1,coordX], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY+1,coordX]
             all_possible_moves.append(EightState(new_board))
 
         return all_possible_moves
