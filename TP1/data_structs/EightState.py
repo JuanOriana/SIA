@@ -4,36 +4,47 @@ SIDE_SIZE = 3
 
 class EightState:
     width, height = SIDE_SIZE,SIDE_SIZE
+    blank_cell = (0,0)
 
     def __init__(self, board):
         (board_w,board_h) = np.shape(board)
         assert board_w == self.width and board_h == self.height
         self.board = board
-    def possible_moves(self):
-        all_possible_moves = []
-        coordX, coordY = -1, -1
+
+        coord_x, coord_y = -1, -1
         for x in range(self.width):
             for y in range(self.height):
                 if self.board[y,x] == 0:
-                    coordY, coordX = y, x
+                    coord_x, coord_y = x, y
                     break
-            if coordX != -1:
+            if coord_x != -1:
                 break
-        if coordX > 0:
+
+        assert coord_x != -1 and  coord_y != -1
+        self.blank_cell = (coord_x,coord_y)
+
+    def possible_moves(self):
+        all_possible_moves = []
+        coord_x, coord_y = self.blank_cell
+        if coord_x > 0:
             new_board = self.board.copy()
-            new_board[coordY,coordX-1], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY,coordX-1]
+            new_board[coord_y,coord_x-1], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y,coord_x-1]
+            self.blank_cell = (coord_x-1,coord_y)
             all_possible_moves.append(EightState(new_board))
-        if x < self.width - 1:
+        if coord_x < self.width - 1:
             new_board = self.board.copy()
-            new_board[coordY,coordX+1], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY,coordX+1]
+            new_board[coord_y,coord_x+1], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y,coord_x+1]
+            self.blank_cell = (coord_x+1,coord_y)
             all_possible_moves.append(EightState(new_board))
-        if y > 0:
+        if coord_y > 0:
             new_board = self.board.copy()
-            new_board[coordY-1,coordX], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY-1,coordX]
+            new_board[coord_y-1,coord_x], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y-1,coord_x]
+            self.blank_cell = (coord_x,coord_y-1)
             all_possible_moves.append(EightState(new_board))
-        if y < self.height - 1:
+        if coord_y < self.height - 1:
             new_board = self.board.copy()
-            new_board[coordY+1,coordX], new_board[coordY,coordX] = new_board[coordY,coordX], new_board[coordY+1,coordX]
+            new_board[coord_y+1,coord_x], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y+1,coord_x]
+            self.blank_cell = (coord_x, coord_y + 1)
             all_possible_moves.append(EightState(new_board))
 
         return all_possible_moves
