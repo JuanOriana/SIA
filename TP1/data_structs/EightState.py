@@ -14,7 +14,7 @@ class EightState:
         coord_x, coord_y = -1, -1
         for x in range(self.width):
             for y in range(self.height):
-                if self.board[y,x] == 0:
+                if self.board[x,y] == 0:
                     coord_x, coord_y = x, y
                     break
             if coord_x != -1:
@@ -28,22 +28,22 @@ class EightState:
         coord_x, coord_y = self.blank_cell
         if coord_x > 0:
             new_board = self.board.copy()
-            new_board[coord_y,coord_x-1], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y,coord_x-1]
+            new_board[coord_x-1,coord_y], new_board[coord_x,coord_y] = new_board[coord_x,coord_y], new_board[coord_x-1,coord_y]
             self.blank_cell = (coord_x-1,coord_y)
             all_possible_moves.append(EightState(new_board))
         if coord_x < self.width - 1:
             new_board = self.board.copy()
-            new_board[coord_y,coord_x+1], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y,coord_x+1]
+            new_board[coord_x+1,coord_y], new_board[coord_x,coord_y] = new_board[coord_x,coord_y], new_board[coord_x+1,coord_y]
             self.blank_cell = (coord_x+1,coord_y)
             all_possible_moves.append(EightState(new_board))
         if coord_y > 0:
             new_board = self.board.copy()
-            new_board[coord_y-1,coord_x], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y-1,coord_x]
+            new_board[coord_x,coord_y-1], new_board[coord_x,coord_y] = new_board[coord_x,coord_y], new_board[coord_x,coord_y-1]
             self.blank_cell = (coord_x,coord_y-1)
             all_possible_moves.append(EightState(new_board))
         if coord_y < self.height - 1:
             new_board = self.board.copy()
-            new_board[coord_y+1,coord_x], new_board[coord_y,coord_x] = new_board[coord_y,coord_x], new_board[coord_y+1,coord_x]
+            new_board[coord_x,coord_y+1], new_board[coord_x,coord_y] = new_board[coord_x,coord_y], new_board[coord_x,coord_y+1]
             self.blank_cell = (coord_x, coord_y + 1)
             all_possible_moves.append(EightState(new_board))
 
@@ -53,9 +53,9 @@ class EightState:
         to_find = 1
         for x in range(self.width):
             for y in range(self.height):
-                if to_find == 9 and self.board[x][y] == 0:
+                if to_find == 9 and self.board[x,y] == 0:
                     return True
-                elif self.board[x][y] == to_find:
+                elif self.board[x,y] == to_find:
                     to_find += 1
                 else:
                     return False
