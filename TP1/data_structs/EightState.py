@@ -12,6 +12,7 @@ class EightState(Searchable):
     def __init__(self, board, blank_cell=(0, 0), parent=None):
         (board_w, board_h) = np.shape(board)
         assert board_w == self.width and board_h == self.height
+
         # Only calculate blank cell if not given or given incorrectly
         if board[blank_cell] != 0:
             coord_x, coord_y = -1, -1
@@ -57,6 +58,23 @@ class EightState(Searchable):
 
     def is_solved(self) -> bool:
         return np.array_equal(self.board, self.finished_state)
+
+    @staticmethod
+    def is_matrix_solvable(mat):
+        if mat is None:
+            return False
+        flattened_mat = np.asarray(mat).flatten()
+        # Check that all numbers are in the matrix
+        if not [x for x in range(SIDE_SIZE*SIDE_SIZE)] in flattened_mat:
+            return False
+
+        # https://mathworld.wolfram.com/15Puzzle.html
+        inversions = 0
+        for i in range(len(flattened_mat)):
+            for j in range(i+1,len(flattened_mat)):
+                inversions += 1 if flattened_mat[j] > flattened_mat[i] else 0
+        return inversions % 2 == 0
+
 
     def __str__(self):
         return '\n'.join([str(self.board[0][:3]),
