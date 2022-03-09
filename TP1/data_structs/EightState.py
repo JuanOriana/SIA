@@ -29,7 +29,7 @@ class EightState(Searchable):
         self.blank_cell = blank_cell
         self.parent = parent
 
-    def possible_moves(self):
+    def possible_moves(self) -> []:
         all_possible_moves = []
         coord_x, coord_y = self.blank_cell
         if coord_x > 0:
@@ -55,7 +55,7 @@ class EightState(Searchable):
 
         return all_possible_moves
 
-    def is_solved(self):
+    def is_solved(self) -> bool:
         to_find = 1
         for x in range(self.width):
             for y in range(self.height):

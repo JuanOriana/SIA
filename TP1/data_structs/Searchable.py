@@ -1,7 +1,7 @@
 class Searchable:
 
-    def possible_moves(self):
+    def possible_moves(self) -> []:
         pass
 
-    def is_solved(self):
+    def is_solved(self) -> bool:
         pass
