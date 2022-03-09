@@ -13,12 +13,7 @@ class AnalysisBoard:
         self.time = time
 
     def __str__(self):
-        print("SUCCESS!" if self.success else "FAILED :(")
         if self.success:
-            print("Start state ->" + self.start_node.state)
-            print("End state ->" + self.end_node.state)
-            print("End depth: " + self.end_node.depth)
-            print("End cost: " + self.end_node.cost)
-            print("Time elapsed: " + self.time)
-        print("Expanded count: " + str(self.expanded_count))
-        print("Frontier count: " + str(self.frontier_count))
+            return "SUCCESS! \n Start state ->" + str(self.start_node.state) + "\n" + "End state ->" + str(self.end_node.state) + "\n" + "End depth: " + str(self.end_node.depth) + "\n" + "End cost: " + str(self.end_node.cost) + "\n" + "Time elapsed: " + str(self.time) + "\n" + "Expanded count: " + str(self.expanded_count) + "\n" +"Frontier count: " + str(self.frontier_count)
+        else:
+            return "FAILED :("

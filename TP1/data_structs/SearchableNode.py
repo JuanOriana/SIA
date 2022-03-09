@@ -11,7 +11,22 @@ class SearchableNode(Searchable):
         self.estimation = estimation
 
     def possible_moves(self) -> []:
-        return map(lambda move: SearchableNode(state=move, parent=self), self.state.possible_moves())
+        return self.state.possible_moves();
 
     def is_solved(self) -> bool:
         return self.state.is_solved()
+
+    def __cmp__(self, other):
+        return self.state == other.state
+
+    def __eq__(self, other):
+        return self.__cmp__(other)
+
+    def __ne__(self, other):
+        return not self.__cmp__(other)
+
+    def __lt__(self, other):
+        return False
+
+    def __hash__(self):
+        return hash(self.state)

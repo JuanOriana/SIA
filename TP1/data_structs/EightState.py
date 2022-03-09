@@ -59,22 +59,22 @@ class EightState(Searchable):
     def is_solved(self) -> bool:
         return np.array_equal(self.board, self.finished_state)
 
+    # TODO: fix
     @staticmethod
     def is_matrix_solvable(mat):
         if mat is None:
             return False
         flattened_mat = np.asarray(mat).flatten()
         # Check that all numbers are in the matrix
-        if not [x for x in range(SIDE_SIZE*SIDE_SIZE)] in flattened_mat:
+        if not [x for x in range(SIDE_SIZE * SIDE_SIZE)] in flattened_mat:
             return False
 
         # https://mathworld.wolfram.com/15Puzzle.html
         inversions = 0
         for i in range(len(flattened_mat)):
-            for j in range(i+1,len(flattened_mat)):
+            for j in range(i + 1, len(flattened_mat)):
                 inversions += 1 if flattened_mat[j] > flattened_mat[i] else 0
         return inversions % 2 == 0
-
 
     def __str__(self):
         return '\n'.join([str(self.board[0][:3]),
@@ -96,4 +96,3 @@ class EightState(Searchable):
 
     def __hash__(self):
         return hash(str(self.board))
-
