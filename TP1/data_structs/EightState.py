@@ -1,4 +1,5 @@
 import numpy as np
+
 from TP1.data_structs.Searchable import Searchable
 
 SIDE_SIZE = 3
@@ -6,14 +7,13 @@ SIDE_SIZE = 3
 
 class EightState(Searchable):
     width, height = SIDE_SIZE, SIDE_SIZE
-    blank_cell = (0, 0)
+    finished_state = np.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 0]], dtype=int)
 
     def __init__(self, board, blank_cell=(0, 0), parent=None):
         (board_w, board_h) = np.shape(board)
         assert board_w == self.width and board_h == self.height
         # Only calculate blank cell if not given or given incorrectly
         if board[blank_cell] != 0:
-            print("RECALCULATING!\n")
             coord_x, coord_y = -1, -1
             for x in range(self.width):
                 for y in range(self.height):
@@ -56,24 +56,16 @@ class EightState(Searchable):
         return all_possible_moves
 
     def is_solved(self) -> bool:
-        to_find = 1
-        for x in range(self.width):
-            for y in range(self.height):
-                if to_find == 9 and self.board[x, y] == 0:
-                    return True
-                elif self.board[x, y] == to_find:
-                    to_find += 1
-                else:
-                    return False
-        return False
+        return np.array_equal(self.board, self.finished_state)
 
     def __str__(self):
         return '\n'.join([str(self.board[0][:3]),
                           str(self.board[1][:3]),
-                          str(self.board[2][:3])]).replace('[', '').replace(']', '').replace(',', '').replace('0', 'x') + '\n'
+                          str(self.board[2][:3])]).replace('[', '').replace(']', '').replace(',', '').replace('0',
+                                                                                                              'x') + '\n'
 
     def __cmp__(self, other):
-        return np.array_equal(self.board,other.board)
+        return np.array_equal(self.board, other.board)
 
     def __eq__(self, other):
         return self.__cmp__(other)
@@ -81,5 +73,9 @@ class EightState(Searchable):
     def __ne__(self, other):
         return not self.__cmp__(other)
 
+    def __lt__(self, other):
+        return False
+
     def __hash__(self):
         return hash(str(self.board))
+

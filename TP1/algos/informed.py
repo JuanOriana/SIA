@@ -1,29 +1,39 @@
-def heuristic(a: GridLocation, b: GridLocation) -> float:
-    (x1, y1) = a
-    (x2, y2) = b
-    return abs(x1 - x2) + abs(y1 - y2)
+from TP1.data_structs.Searchable import Searchable
+from queue import PriorityQueue
 
+def hill_climbing_local(start: Searchable, heuristic):
+    next = start
+    visited = set()
+    while next:
+        visited.add(next)
+        if next.is_solved():
+            print("SOLVED!!")
+            print(next)
+            return
+        possible_moves = next.possible_moves()
+        possible_moves.sort(key=heuristic)
+        next = None
+        for move in possible_moves:
+            if move not in visited:
+                next = move
+                if next.is_solved():
+                    print("SOLVED!!")
+                    print(next)
+                    return
+                break
 
-def a_star_search(graph, start, goal):
-    frontier = PriorityQueue()
-    frontier.put(start, 0)
-    came_from: Dict[Location, Optional[Location]] = {}
-    cost_so_far: Dict[Location, float] = {}
-    came_from[start] = None
-    cost_so_far[start] = 0
-
-    while not frontier.empty():
-        current: Location = frontier.get()
-
-        if current == goal:
-            break
-
-        for next in graph.neighbors(current):
-            new_cost = cost_so_far[current] + graph.cost(current, next)
-            if next not in cost_so_far or new_cost < cost_so_far[next]:
-                cost_so_far[next] = new_cost
-                priority = new_cost + heuristic(next, goal)
-                frontier.put(next, priority)
-                came_from[next] = current
-
-    return came_from, cost_so_far
+def hill_climbing_global(start: Searchable, heuristic):
+    possible_next_queue = PriorityQueue()
+    possible_next_queue.put((heuristic(start),start))
+    visited = set()
+    while possible_next_queue:
+        next = possible_next_queue.get()[1]
+        if next not in visited:
+            visited.add(next)
+            possible_moves = next.possible_moves()
+            for move in possible_moves:
+                if move.is_solved():
+                    print("SOLVED!!")
+                    print(next)
+                    return
+                possible_next_queue.put((heuristic(move),move))
