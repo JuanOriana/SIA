@@ -1,23 +1,31 @@
-def dfs(graph, node, visited=None):  # function for dfs
-    if visited is None:
-        visited = set()
-    if node not in visited:
-        print(node)
-        visited.add(node)
-        for neighbour in graph[node]:
-            dfs(graph, neighbour, visited)
+from TP1.data_structs.Searchable import Searchable
 
 
-def bfs(graph, node):  # function for BFS
-    visited = [node]
-    queue = [node]
+def dfs(start: Searchable):  # function for dfs
+    stack = [start]
+    visited = set()
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            for new_state in node.possible_moves():
+                if new_state.is_solved():
+                    print("SOLVED!!")
+                    print(new_state)
+                    return
+                stack.append(new_state)
+
+def bfs(start:Searchable):  # function for BFS
+    visited = set()
+    queue = [start]
 
     while queue:  # Creating loop to visit each node
-        m = queue.pop(0)
-        print(m, end=" ")
-
-    for neighbour in graph[m]:
-        if neighbour not in visited:
-            visited.append(neighbour)
-            queue.append(neighbour
-                     )
+        node = queue.pop(0)
+        if node not in visited:
+            visited.add(node)
+            for new_state in node.possible_moves():
+                if new_state.is_solved():
+                    print("SOLVED!!")
+                    print(new_state)
+                    return
+                queue.append(new_state)
