@@ -13,12 +13,12 @@ def main():
     matrix_from_json = [data['start_state']['0'], data['start_state']['1'], data['start_state']['2']]
     # matrix = [[6, 8, 4], [3, 5, 7], [0, 1, 2]]
     matrix = matrix_from_json
-    # if not EightState.is_matrix_solvable(matrix):
-    #     print("This matrix does not correspond to a valid state in the game")
-    #     return
-    board = EightState(np.matrix(matrix, dtype=int))
-    anal = bfs(board)
-    print(str(anal))
+    if not EightState.is_matrix_solvable(matrix):
+        print("This matrix does not correspond to a valid state in the game")
+        return
+    # board = EightState(np.matrix(matrix, dtype=int))
+    # anal = bfs(board)
+    # print(str(anal))
 
 
 if __name__ == "__main__":

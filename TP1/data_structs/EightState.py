@@ -66,14 +66,15 @@ class EightState(Searchable):
             return False
         flattened_mat = np.asarray(mat).flatten()
         # Check that all numbers are in the matrix
-        if not [x for x in range(SIDE_SIZE * SIDE_SIZE)] in flattened_mat:
-            return False
+        for n in range(SIDE_SIZE*SIDE_SIZE):
+            if n not in flattened_mat:
+                return False
 
         # https://mathworld.wolfram.com/15Puzzle.html
         inversions = 0
         for i in range(len(flattened_mat)):
             for j in range(i + 1, len(flattened_mat)):
-                inversions += 1 if flattened_mat[j] > flattened_mat[i] else 0
+                inversions += 1 if 0 < flattened_mat[i] < flattened_mat[j] and flattened_mat[j] > 0 else 0
         return inversions % 2 == 0
 
     def __str__(self):
