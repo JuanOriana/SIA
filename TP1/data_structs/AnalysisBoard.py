@@ -25,7 +25,7 @@ class AnalysisBoard:
 
     def __str__(self):
         if self.success:
-            return "SUCCESS! \n Start state ->" + str(self.start_node.state) + "\n" + "End state ->" + str(
+            return "SUCCESS! \n Start state ->\n" + str(self.start_node.state) + "\n" + "End state ->\n" + str(
                 self.end_node.state) + "\n" + "End depth: " + str(self.end_node.depth) + "\n" + "End cost: " + str(
                 self.end_node.cost) + "\n" + "Time elapsed: " + str(self.time) + "\n" + "Expanded count: " + str(
                 self.expanded_count) + "\n" + "Frontier count: " + str(self.frontier_count)
