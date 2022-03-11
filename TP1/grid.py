@@ -1,6 +1,7 @@
 # Simple pygame program
 
 # Import and initialize the pygame library
+import math
 import os
 import sys
 import json
@@ -47,16 +48,22 @@ class SlidePuzzle:
 
         self.tiles_class = []
 
-        print(self.tiles_len)
-        print(self.tiles)
-        print(self.tile_pos)
+        self.state = EightState(np.matrix([[1,2,0],[4,5,6],[7,8,3]], dtype=int))
+
+    def handle_click(self,pos):
+        x_idx = math.floor((pos[0]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
+        y_idx = math.floor((pos[1]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
+        if self.is_clickable(y_idx,x_idx):
+            new_coords = (y_idx,x_idx)
+            self.state.board[self.state.blank_cell], self.state.board[new_coords]  =self.state.board[new_coords], self.state.board[self.state.blank_cell]
+            self.state.blank_cell = new_coords
+
+    def is_clickable(self,x,y):
+        blank_cell = self.state.blank_cell
+        return (x+1,y) == blank_cell or (x-1,y) == blank_cell or (x,y+1) == blank_cell or (x,y-1) == blank_cell
 
     def update(self, dt):
         pass
-
-    def getBlank(self): return self.tiles[-1]
-    def setBlank(self, pos): self.tiles[-1] = pos
-    opentile = property(getBlank, setBlank)
 
     def switch(self, tile):
         n = self.tiles.index(tile)
@@ -65,12 +72,11 @@ class SlidePuzzle:
         self.tiles[n],self.opentile = self.opentile, self.tiles[n]
 
     def draw(self, screen):
-        for i in range(self.tiles_len):
-            self.tiles_class += [TileNumber(i, self.tile_pos[i], self.images[i])]
-            print(str(self.tile_pos[i][0]) + ", " + str(self.tile_pos[i][1]))
-            pygame.draw.rect(screen, (0, 255, 0), (self.tile_pos[i][0], self.tile_pos[i][1], self.tile_size, self.tile_size))
-            screen.blit(self.images[i], (self.tile_pos[i][0], self.tile_pos[i][1]))
-            print(str(self.tiles_class[i]))
+        for i in range(self.tiles_len+1):
+            number = self.state.board[i  // 3, i % 3]
+            if number > 0:
+                pygame.draw.rect(screen, (0, 255, 0), (self.tile_pos[i][0], self.tile_pos[i][1], self.tile_size, self.tile_size))
+                screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
         # self.switch((0, 0))
 
@@ -113,6 +119,10 @@ def main_gui():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            pos = pygame.mouse.get_pos()
+            program.handle_click(pos)
 
         program.update(dt)
 

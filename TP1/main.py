@@ -22,7 +22,7 @@ def main():
         print("This matrix does not correspond to a valid state in the game")
         return
     board = EightState(np.matrix(matrix, dtype=int))
-    searcher = BFSSearcher()
+    searcher = GlobalHeuristicSearcher(basic_heuristic)
     searcher.solve(board)
     print(searcher.analytics)
 
