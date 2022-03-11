@@ -15,7 +15,7 @@ from TP1.data_structs.EightState import EightState
 class SlidePuzzle:
     def __init__(self, grid_size, tile_size, margin_size):
         self.grid_size, self.tile_size, self.margin_size = grid_size, tile_size, margin_size
-
+        self.is_thinking = False
         self.tiles_len = grid_size[0]*grid_size[1]-1
         self.tiles = [ (x,y) for y in range(grid_size[1]) for x in range(grid_size[0]) ]
 
@@ -25,7 +25,7 @@ class SlidePuzzle:
 
         self.images = []
         for i in range(self.tiles_len):
-            image = pygame.Surface((tile_size,tile_size)); image.fill((0,255,0))
+            image = pygame.Surface((tile_size,tile_size)); image.fill((110,130,255))
             text = self.font.render(str(i+1),2,(0,0,0)); w,h = text.get_size()
             image.blit(text, ((tile_size-w)/2,(tile_size-h)/2))
             self.images += [image]
@@ -50,11 +50,14 @@ class SlidePuzzle:
         pass
 
     def draw(self, screen):
-        for i in range(self.tiles_len+1):
-            number = self.state.board[i  // 3, i % 3]
-            if number > 0:
-                pygame.draw.rect(screen, (0, 255, 0), (self.tile_pos[i][0], self.tile_pos[i][1], self.tile_size, self.tile_size))
-                screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
+        if self.is_thinking:
+            text =self.font.render("thinking...",2,(255,255,255));
+            screen.blit(text, (100,100))
+        else:
+            for i in range(self.tiles_len+1):
+                number = self.state.board[i  // 3, i % 3]
+                if number > 0:
+                    screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
 def main_gui():
     pygame.init()
