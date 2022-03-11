@@ -19,7 +19,7 @@ class Searcher:
 
         if start.is_solved():
             self.analytics.success = True
-            self.analytics.end_node = self.frontier[0]
+            self.analytics.end_node = self.start_node
             return self.analytics
 
         start_timer = time.time()

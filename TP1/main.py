@@ -7,6 +7,7 @@ from TP1.searchers.informed.ponderated.AStarSearcher import AStarSearcher
 
 from TP1.data_structs.EightState import EightState
 from TP1.searchers.uninformed.BFSSearcher import BFSSearcher
+from TP1.searchers.uninformed.DFSIterativeSearcher import DFSIterativeSearcher
 from TP1.searchers.uninformed.DFSSearcher import DFSSearcher
 from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
 
@@ -21,7 +22,7 @@ def main():
         print("This matrix does not correspond to a valid state in the game")
         return
     board = EightState(np.matrix(matrix, dtype=int))
-    searcher = AStarSearcher(fat_heuristic)
+    searcher = BFSSearcher()
     searcher.solve(board)
     print(searcher.analytics)
 
