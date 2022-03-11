@@ -1,10 +1,14 @@
 import numpy as np
 import json
 
+from TP1.searchers.informed.LocalHeuristicSearcher import LocalHeuristicSearcher
+from TP1.searchers.informed.ponderated.GlobalHeuristicSearcher import GlobalHeuristicSearcher
+from TP1.searchers.informed.ponderated.AStarSearcher import AStarSearcher
+
 from TP1.data_structs.EightState import EightState
-from TP1.algos.not_informed import dfs
-from TP1.algos.informed import ponderated
-from TP1.utils.heuristics import deep_heuristic
+from TP1.searchers.uninformed.BFSSearcher import BFSSearcher
+from TP1.searchers.uninformed.DFSSearcher import DFSSearcher
+from TP1.utils.heuristics import deep_heuristic, basic_heuristic
 
 
 def main():
@@ -17,8 +21,10 @@ def main():
         print("This matrix does not correspond to a valid state in the game")
         return
     board = EightState(np.matrix(matrix, dtype=int))
-    anal = dfs(board)
-    print(str(anal))
+    searcher = AStarSearcher(deep_heuristic)
+    searcher.solve(board)
+    print(searcher.analytics)
+
 
 
 if __name__ == "__main__":

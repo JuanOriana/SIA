@@ -12,8 +12,22 @@ class AnalysisBoard:
         self.frontier_count = frontier_count
         self.time = time
 
+    def get_path(self):
+        if not self.success:
+            return
+        final_order = []
+        node = self.end_node
+        while node:
+            final_order.append(node)
+            node = node.parent
+        final_order.reverse()
+        return final_order
+
     def __str__(self):
         if self.success:
-            return "SUCCESS! \n Start state ->" + str(self.start_node.state) + "\n" + "End state ->" + str(self.end_node.state) + "\n" + "End depth: " + str(self.end_node.depth) + "\n" + "End cost: " + str(self.end_node.cost) + "\n" + "Time elapsed: " + str(self.time) + "\n" + "Expanded count: " + str(self.expanded_count) + "\n" +"Frontier count: " + str(self.frontier_count)
+            return "SUCCESS! \n Start state ->" + str(self.start_node.state) + "\n" + "End state ->" + str(
+                self.end_node.state) + "\n" + "End depth: " + str(self.end_node.depth) + "\n" + "End cost: " + str(
+                self.end_node.cost) + "\n" + "Time elapsed: " + str(self.time) + "\n" + "Expanded count: " + str(
+                self.expanded_count) + "\n" + "Frontier count: " + str(self.frontier_count)
         else:
             return "FAILED :("
