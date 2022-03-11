@@ -10,22 +10,6 @@ import numpy as np
 import pygame
 
 from TP1.data_structs.EightState import EightState
-from TP1.main import main
-from TP1.searchers.informed.ponderated.AStarSearcher import AStarSearcher
-from TP1.utils.heuristics import fat_heuristic
-
-class TileNumber:
-    def __init__(self, number, tile_pos, image):
-        self.number = number
-        self.tile_pos = tile_pos
-        self.image = image
-
-    def swap_number(self, other_tile):
-        self.number = other_tile.number
-        self.image = other_tile.image
-
-    def __str__(self) -> str:
-        return "TileNumber: " + str(self.number) + ", " + str(self.tile_pos)
 
 
 class SlidePuzzle:
@@ -65,20 +49,12 @@ class SlidePuzzle:
     def update(self, dt):
         pass
 
-    def switch(self, tile):
-        n = self.tiles.index(tile)
-        print(self.tiles)
-        print(n)
-        self.tiles[n],self.opentile = self.opentile, self.tiles[n]
-
     def draw(self, screen):
         for i in range(self.tiles_len+1):
             number = self.state.board[i  // 3, i % 3]
             if number > 0:
                 pygame.draw.rect(screen, (0, 255, 0), (self.tile_pos[i][0], self.tile_pos[i][1], self.tile_size, self.tile_size))
                 screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
-
-        # self.switch((0, 0))
 
 def main_gui():
     pygame.init()
