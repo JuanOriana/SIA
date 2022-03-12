@@ -50,8 +50,10 @@ class SlidePuzzle:
         self.state = EightState(np.matrix([[7,2,4],[5,0,6],[8,3,1]], dtype=int))
 
     def handle_click(self,pos):
-        x_idx = math.floor((pos[0]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
-        y_idx = math.floor((pos[1]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
+        x_idx = math.floor((pos[0]-self.margin_size)/(self.tile_size+self.margin_size))
+        y_idx = math.floor((pos[1]-self.margin_size)/(self.tile_size+self.margin_size))
+        if x_idx >= 3 or y_idx >= 3 or x_idx < 0 or y_idx < 0:
+            return
         if self.is_clickable(y_idx,x_idx):
             new_coords = (y_idx,x_idx)
             self.state.board[self.state.blank_cell], self.state.board[new_coords]  =self.state.board[new_coords], self.state.board[self.state.blank_cell]
