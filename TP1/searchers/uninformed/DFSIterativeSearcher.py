@@ -1,12 +1,15 @@
-from queue import PriorityQueue
 
 from TP1.data_structs.DeepSearchableNode import DeepSearchableNode
-from TP1.data_structs.SearchableNode import SearchableNode
 from TP1.searchers.Searcher import Searcher
 
 
 class DFSIterativeSearcher(Searcher):
+    """
+      A class that represents a Searcher for the interative version of the DFS algorithm.
+      One can define the starting limit for the algorithm, and the maximum amount of iterations.
+      The algorithm will then try to scale the limit until it finds a valid solution or it runs out of iterations.
 
+    """
     def __init__(self, start_limit = 12, max_iterations = 5):
         super().__init__()
         self.start_limit = start_limit
@@ -17,7 +20,7 @@ class DFSIterativeSearcher(Searcher):
         iterations = self.max_iterations
         solution = None
         while iterations and not solution:
-            solution = self.solve_internal_limited(limit)
+            solution = self.__solve_internal_limited(limit)
             if not solution:
                 limit += self.start_limit
             iterations -= 1

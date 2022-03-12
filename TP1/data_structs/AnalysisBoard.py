@@ -3,8 +3,29 @@ import time
 
 
 class AnalysisBoard:
+    """
+    A class to represent the analytics of a search result.
+
+
+    Attributes
+    ----------
+    success : bool
+        result of the search
+    start_node : SearchableNode
+        root node of the search
+    end_node : SearchableNode
+        last node of the found path
+    expanded_count : int
+        amount of expanded nodes in search
+    frontier_count : int
+        amount of nodes in frontier at the last step
+    time: time
+        lapse of execution
+
+    """
+
     def __init__(self, success: bool = False, start_node: SearchableNode = None,
-                 end_node: SearchableNode = None, expanded_count=0, frontier_count=0, processing_time: time = None):
+                 end_node: SearchableNode = None, expanded_count=0, frontier_count=0, time: time = None):
         self.success = success
         self.start_node = start_node
         self.end_node = end_node
@@ -13,8 +34,9 @@ class AnalysisBoard:
         self.time = time
 
     def get_path(self):
+        """Returns complete path of nodes if found, empty list otherwise"""
         if not self.success:
-            return
+            return []
         final_order = []
         node = self.end_node
         while node:

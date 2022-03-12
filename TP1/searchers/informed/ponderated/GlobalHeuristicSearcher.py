@@ -2,6 +2,10 @@ from TP1.searchers.informed.ponderated.PonderatedInformedSearcher import Pondera
 
 
 class GlobalHeuristicSearcher(PonderatedInformedSearcher):
+    """
+      A class that represents an InformedSearcher that implements the Global Heursitic algorithm.
+      This algorithm DOES contemplate backtracking.
 
+    """
     def __init__(self, heuristic):
         super().__init__(heuristic, 1)

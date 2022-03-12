@@ -2,6 +2,9 @@ from TP1.data_structs.SearchableNode import SearchableNode
 
 
 class DeepSearchableNode(SearchableNode):
+    """
+    A class to represent the node that takes into account cost for comparisons
+    """
 
     def __cmp__(self, other):
         return self.state == other.state and other.cost >= self.cost

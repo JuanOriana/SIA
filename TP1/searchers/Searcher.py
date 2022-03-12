@@ -1,11 +1,30 @@
 import time
+from typing import Optional
+
 from TP1.data_structs.AnalysisBoard import AnalysisBoard
 from TP1.data_structs.Searchable import Searchable
 from TP1.data_structs.SearchableNode import SearchableNode
-from TP1.utils.visualization import solve_path
 
 
 class Searcher:
+    """
+    An interface to represent a searching algorithm for a path finding problem.
+    A solve_internal function must be overriden with the adequate algorithm, which has
+    a frontier and a visited set to its disposal.
+
+
+    Attributes
+    ----------
+    frontier : List
+        nodes to be explored
+    visited : Set
+        nodes visited
+    analytics : AnalysisBoard
+        end result analytics of search
+    start_node : SearchableNode
+        current node to begin searching
+
+    """
 
     def __init__(self):
         self.frontier = []
@@ -14,15 +33,18 @@ class Searcher:
         self.start_node = None
 
     def solve(self, start: Searchable) -> []:
+        """Attempts to find a valid goal based on a starting state"""
 
         self.set_up(start)
+
+        start_timer = time.time()
 
         if start.is_solved():
             self.analytics.success = True
             self.analytics.end_node = self.start_node
+            self.analytics.time = time.time() - start_timer
             return self.analytics
 
-        start_timer = time.time()
         end_node = self.solve_internal()
         self.analytics.time = time.time() - start_timer
 
@@ -35,7 +57,7 @@ class Searcher:
 
         return self.analytics
 
-    def solve_internal(self):
+    def solve_internal(self) -> Optional[SearchableNode]:
         pass
 
     def set_up(self, start):
