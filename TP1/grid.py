@@ -17,7 +17,7 @@ from TP1.utils.searcher_picker import searcher_picker
 
 heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
 
-SCREEN_SIZE = (800, 600)
+SCREEN_SIZE = (800, 500)
 pygame.init()
 BASIC_FONT = pygame.font.Font(None, 120)
 
@@ -111,6 +111,12 @@ pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
                                      text="Heuristica:",
                                      relative_rect=pygame.Rect((470, 95), (170, 30)))
 
+### HotKeys label
+hot_keys_text = "Teclas - s: Resolver"
+pygame_gui.elements.ui_label.UILabel(manager=manager,
+                              text=hot_keys_text,
+                              relative_rect=pygame.Rect((510, 200), (170, 30)))
+
 
 def refresh_all_gui(program, curr_manager, screen, dt):
     screen.fill((0, 0, 0))
@@ -152,8 +158,9 @@ def main_gui():
                     if algorithm not in ["bpa", "bpp", "bppv"]:
                         analytics = "<p>Heuristica: {heu}</p>" + analytics
                     pygame_gui.windows.ui_confirmation_dialog.UIConfirmationDialog(
-                        rect=pygame.Rect((SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2), (300, 300)),
+                        rect=pygame.Rect((0, 0), (300, 300)),
                         manager=manager,
+                        blocking=False,
                         action_long_desc=analytics.format(heu=heuristic,
                                                           algo=algorithm,
                                                           depth=searcher.analytics.end_node.depth,
