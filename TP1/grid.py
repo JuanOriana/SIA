@@ -112,7 +112,7 @@ pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
                                      relative_rect=pygame.Rect((470, 95), (170, 30)))
 
 
-def refresh_all_gui(program,curr_manager, screen, dt):
+def refresh_all_gui(program, curr_manager, screen, dt):
     screen.fill((0, 0, 0))
     program.draw(screen)
     program.update(dt)
@@ -135,9 +135,7 @@ def main_gui():
             if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
                 if event.ui_element == algorithmDropDown:
                     algorithm = event.text
-
-            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-                if event.ui_element == heuristicDropDown:
+                elif event.ui_element == heuristicDropDown:
                     heuristic = event.text
 
             if event.type == pygame.KEYDOWN:
@@ -147,7 +145,7 @@ def main_gui():
                     result_path = searcher.analytics.get_path()
                     for node in result_path:
                         program.state = node.state
-                        refresh_all_gui(program,manager,screen,dt)
+                        refresh_all_gui(program, manager, screen, dt)
                         time.sleep(0.2)
                         print(node.state)
 

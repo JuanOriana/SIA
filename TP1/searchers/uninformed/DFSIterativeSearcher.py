@@ -36,8 +36,10 @@ class DFSIterativeSearcher(Searcher):
             return self.start_node
         while self.frontier:
             node = self.frontier.pop()
-            self.analytics.expanded_count += 1
+            if node.state in self.visited:
+                continue
             self.visited.add(node)
+            self.analytics.expanded_count += 1
             for new_state in node.possible_moves():
                 new_node = DeepSearchableNode(new_state, node, node.depth + 1, node.cost + 1)
                 if new_node not in self.visited and node.depth + 1 <= limit:

@@ -1,11 +1,11 @@
 {
   "start_state": {
-    "0": [7, 2, 4],
-    "1": [5, 0, 6],
-    "2": [8, 3, 1]
+    "0": [8, 7, 6],
+    "1": [1, 4, 3],
+    "2": [5, 2, 0]
   },
-  "algorithm": "bpa",
-  "heuristic": "basic"
+  "algorithm": "bpp",
+  "heuristic": "deep"
 }
 
 

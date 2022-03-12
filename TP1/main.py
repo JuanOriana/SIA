@@ -14,7 +14,7 @@ def main():
     json_information = json_validator(data)
 
     if not json_information['is_valid']:
-        print(json_information['err_msg'])
+        print(json_information['error_msg'])
         return
 
     matrix = json_information['matrix']

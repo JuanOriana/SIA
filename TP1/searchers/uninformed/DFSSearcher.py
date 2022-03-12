@@ -13,8 +13,10 @@ class DFSSearcher(Searcher):
         self.frontier.append(self.start_node)
         while self.frontier:
             node = self.frontier.pop()
-            self.analytics.expanded_count += 1
+            if node.state in self.visited:
+                continue
             self.visited.add(node.state)
+            self.analytics.expanded_count += 1
             for new_state in node.possible_moves():
                 if new_state not in self.visited:
                     new_node = SearchableNode(new_state, node, node.depth + 1, node.cost + 1)

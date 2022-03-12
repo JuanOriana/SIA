@@ -37,8 +37,10 @@ class PonderatedInformedSearcher(InformedSearcher):
         self.frontier.put((start_f, self.start_node))
 
         while self.frontier:
-            self.analytics.expanded_count += 1
             node = self.frontier.get()[1]
+            if node.state in self.visited:
+                continue
+            self.analytics.expanded_count += 1
             self.visited.add(node.state)
             for move in node.possible_moves():
                 if move not in self.visited:
