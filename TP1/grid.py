@@ -5,6 +5,7 @@ import math
 import os
 import sys
 import json
+import time
 
 import numpy as np
 import pygame
@@ -70,16 +71,6 @@ class SlidePuzzle:
                 if number > 0:
                     screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
-    def draw_state(self, screen, state):
-        self.state = state
-        self.draw(screen)
-
-
-solve_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((600, 100), (120, 50)),
-                                                text='SOLVE',
-                                                manager=manager,
-                                                )
-
 def main_gui():
     fpaclock = pygame.time.Clock()
     program = SlidePuzzle((3,3), 160, 5)
@@ -99,8 +90,15 @@ def main_gui():
                     searcher.solve(program.state)
                     result_path = searcher.analytics.get_path()
                     for node in result_path:
+                        program.state = node.state
+                        screen.fill((0, 0, 0))
+                        program.draw(screen)
+                        manager.update(dt)
+                        manager.draw_ui(screen)
+                        program.update(dt)
+                        pygame.display.update()
+                        time.sleep(0.5)
                         print(node.state)
-                        program.draw_state(screen, node.state)
 
                     print(searcher.analytics)
 
