@@ -13,7 +13,10 @@ import pygame_gui
 
 from TP1.data_structs.EightState import EightState
 from TP1.main import main
-from TP1.utils.searcher_picker import searcher_picker, heuristics_functions
+from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
+from TP1.utils.searcher_picker import searcher_picker
+
+heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
 
 SCREEN_SIZE = (800,600)
 pygame.init()
@@ -71,7 +74,38 @@ class SlidePuzzle:
                 if number > 0:
                     screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
+
+### algorithmOptions DropDown
+dropdown_layout_rect = pygame.Rect((510, 50), (280, 35))
+algorithmOptions = ["BPA", "BPP", "BPPV", "A*", "Heuristica Local"]
+algorithmDropDown = pygame_gui.elements.UIDropDownMenu(options_list=algorithmOptions,
+                                                       starting_option=algorithmOptions[0],
+                                                       relative_rect=dropdown_layout_rect,
+                                                       manager=manager)
+
+### Algorithm label
+pygame_gui.elements.ui_label.UILabel(parent_element=algorithmDropDown,
+                                     manager=manager,
+                                     text="Algoritmo:",
+                                     relative_rect=pygame.Rect((470, 25), (170, 30)))
+
+### heuristicOptions DropDown
+dropdown_layout_rect_heuristic = pygame.Rect((510, 120), (280, 35))
+heuristicOptions = ["Basic", "Deep", "Fat"]
+heuristicDropDown = pygame_gui.elements.UIDropDownMenu(options_list=heuristicOptions,
+                                                       starting_option=heuristicOptions[0],
+                                                       relative_rect=dropdown_layout_rect_heuristic,
+                                                       manager=manager)
+
+### Algorithm label
+pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
+                                     manager=manager,
+                                     text="Heuristica:",
+                                     relative_rect=pygame.Rect((470, 95), (170, 30)))
+
 def main_gui():
+    algorithm = "BPA"
+    heuristic = "Basic"
     fpaclock = pygame.time.Clock()
     program = SlidePuzzle((3,3), 160, 5)
 
@@ -84,9 +118,38 @@ def main_gui():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
 
+            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if event.ui_element == algorithmDropDown:
+                    algorithm = event.text
+
+            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                if event.ui_element == heuristicDropDown:
+                    algorithm = event.text
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
-                    searcher = searcher_picker('a_star', heuristics_functions['basic'])
+
+                    if algorithm == "BPA":
+                        searcher = searcher_picker('bpa', None)
+                    elif algorithm == "BPP":
+                        searcher = searcher_picker('bpp', None)
+                    elif algorithm == "BPPV":
+                        searcher = searcher_picker('bppv', None)
+                    elif algorithm == "A*":
+                        if heuristic == 'Basic':
+                            searcher = searcher_picker('a_star', heuristics_functions['basic'])
+                        elif heuristic == 'Deep':
+                            searcher = searcher_picker('a_star', heuristics_functions['deep'])
+                        elif heuristic == 'Fat':
+                            searcher = searcher_picker('a_star', heuristics_functions['fat'])
+                    elif algorithm == "Heuristica Local":
+                        if heuristic == 'Basic':
+                            searcher = searcher_picker('local_heuristic', heuristics_functions['basic'])
+                        elif heuristic == 'Deep':
+                            searcher = searcher_picker('local_heuristic', heuristics_functions['deep'])
+                        elif heuristic == 'Fat':
+                            searcher = searcher_picker('local_heuristic', heuristics_functions['fat'])
+
                     searcher.solve(program.state)
                     result_path = searcher.analytics.get_path()
                     for node in result_path:
@@ -97,7 +160,7 @@ def main_gui():
                         manager.draw_ui(screen)
                         program.update(dt)
                         pygame.display.update()
-                        time.sleep(0.5)
+                        time.sleep(0.2)
                         print(node.state)
 
                     print(searcher.analytics)
