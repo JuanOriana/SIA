@@ -6,7 +6,26 @@ from TP1.searchers.Searcher import Searcher
 
 
 class InformedSearcher(Searcher):
+    """
+      An interface to represent a searching algorithm for an INFORMED path finding problem.
+      A solve_internal function must be overriden with the adequate algorithm, which has
+      a frontier (PriorityQueue!) and a visited set to its disposal.
 
+
+      Attributes
+      ----------
+      frontier : PriorityQueue
+          nodes to be explored
+      visited : Set
+          nodes visited
+      analytics : AnalysisBoard
+          end result analytics of search
+      start_node : SearchableNode
+          current node to begin searching
+      heuristic: (Serachable) -> double
+          the heuristic to estimate
+
+    """
     def __init__(self, heuristic):
         super().__init__()
         self.heuristic = heuristic

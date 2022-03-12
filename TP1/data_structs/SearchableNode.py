@@ -2,6 +2,23 @@ from TP1.data_structs.Searchable import Searchable
 
 
 class SearchableNode(Searchable):
+    """
+    A class to represent the node of a searchable tree.
+
+
+    Attributes
+    ----------
+    state : Searchable
+        current state of search
+    parent : SearchableNode
+        parent node
+    depth : int
+        moves until root
+    cost : int
+        cost until root
+    estimation : int
+        estimated cost until goal
+    """
 
     def __init__(self, state: Searchable, parent=None, depth=0, cost=0, estimation=0):
         self.state = state

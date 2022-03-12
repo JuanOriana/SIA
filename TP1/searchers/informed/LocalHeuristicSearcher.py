@@ -3,7 +3,11 @@ from TP1.data_structs.SearchableNode import SearchableNode
 
 
 class LocalHeuristicSearcher(InformedSearcher):
+    """
+      A class that represents an InformedSearcher for the Local Heuristic optimization algorithm.
+      This algorithm does NOT contemplate backtracking.
 
+    """
     def solve_internal(self):
         next_node = self.start_node
         while next_node:

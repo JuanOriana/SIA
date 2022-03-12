@@ -4,7 +4,7 @@ from TP1.utils.searcher_picker import not_informed_algorithms, informed_algorith
 
 def json_validator(data):
     return_value = {'is_valid': True, 'matrix': None, 'algorithm_name': '', 'heuristic': 'basic'}
-    if 'algorithm' not in data or  'start_state' not in data:
+    if 'algorithm' not in data or 'start_state' not in data:
         print("Invalid JSON.Fields algorithm and start_state must be on json")
         return_value['is_valid'] = False
         return return_value
@@ -15,12 +15,11 @@ def json_validator(data):
         return_value['is_valid'] = False
         return return_value
 
-    if not (informed_algorithms.__contains__(data['algorithm']) or  not_informed_algorithms.__contains__(data['algorithm'])):
+    if not (informed_algorithms.__contains__(data['algorithm']) or not_informed_algorithms.__contains__(
+            data['algorithm'])):
         print("Invalid JSON.Invalid algorithm name")
         return_value['is_valid'] = False
         return return_value
-
-
 
     if informed_algorithms.__contains__(data['algorithm']):
         if 'heuristic' not in data or not heuristics_functions.__contains__(data['heuristic']):
@@ -35,4 +34,3 @@ def json_validator(data):
     return_value['matrix'] = [data['start_state']['0'], data['start_state']['1'], data['start_state']['2']]
 
     return return_value
-

@@ -8,7 +8,7 @@ from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
 
 informed_algorithms = {'a_star': AStarSearcher, 'local_heuristic': LocalHeuristicSearcher,
                        'global_heuristic': GlobalHeuristicSearcher}
-not_informed_algorithms = {'bpa': DFSSearcher, 'bpp': BFSSearcher, 'bppv': DFSIterativeSearcher}
+not_informed_algorithms = {'bpa': BFSSearcher, 'bpp': DFSSearcher, 'bppv': DFSIterativeSearcher}
 heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
 
 

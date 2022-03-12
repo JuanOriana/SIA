@@ -1,4 +1,3 @@
-import math
 
 from TP1.data_structs.EightState import EightState
 import numpy as np
@@ -7,6 +6,7 @@ flattened_solved = np.asarray(EightState.finished_state).flatten()
 
 
 def basic_heuristic(state: EightState) -> int:
+    """Heursitic that evaluates how many numbers are out of place. It is admissible"""
     estimation = 0
     width, height = state.width, state.height
     for x in range(width):
@@ -16,6 +16,7 @@ def basic_heuristic(state: EightState) -> int:
 
 
 def deep_heuristic(state: EightState) -> int:
+    """Heursitic that evaluates the manhattan distance from each number to its adequate place. It is admissible"""
     estimation = 0
     width, height = state.width, state.height
     for x in range(width):
@@ -24,9 +25,13 @@ def deep_heuristic(state: EightState) -> int:
                 n = state.board[x, y]
                 actual_x, actual_y = (n - 1) // 3, (n + 2) % 3
                 estimation += abs(actual_x - x) + abs(actual_y - y)
-                # estimation += math.sqrt((actual_x-x)**2 + (actual_y-y)**2)
     return estimation
 
 
 def fat_heuristic(state: EightState) -> int:
-    return 2 * basic_heuristic(state)
+    """
+        Heursitic that evaluates how many numbers are out of place and then squares it.
+        Its faster than a basic_heuristic in some cases but it is not admissible.
+    """
+    basic_estimation = basic_heuristic(state)
+    return basic_estimation**2

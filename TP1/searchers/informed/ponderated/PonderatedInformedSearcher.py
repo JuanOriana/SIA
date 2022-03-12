@@ -3,10 +3,30 @@ from TP1.data_structs.SearchableNode import SearchableNode
 
 
 class PonderatedInformedSearcher(InformedSearcher):
+    """
+      A class that represents an InformedSearcher that can ponder between the G and H function.
 
+      Attributes
+      ----------
+      frontier : PriorityQueue
+          nodes to be explored
+      visited : Set
+          nodes visited
+      analytics : AnalysisBoard
+          end result analytics of search
+      start_node : SearchableNode
+          current node to begin searching
+      heuristic: (Serachable) -> double
+          the heuristic to estimate
+      heuristic_weight: double
+          how much the h weights in the f calculation
+
+
+    """
     def __init__(self, heuristic, heuristic_weight):
         super().__init__(heuristic)
         self.heuristic_weight = heuristic_weight
+        assert heuristic_weight <= 1
 
     def solve_internal(self):
         ponderation = (1-self.heuristic_weight,self.heuristic_weight)

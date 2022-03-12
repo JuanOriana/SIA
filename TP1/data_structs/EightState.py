@@ -6,10 +6,23 @@ SIDE_SIZE = 3
 
 
 class EightState(Searchable):
+    """
+    A class to represent the state of an Eight Number Game.
+
+
+    Attributes
+    ----------
+    board : np.matrix
+        current state of the board
+    blank_cell : (int,int)
+        coordinates of blank cell. can be given to optimize initialization.
+
+    """
+
     width, height = SIDE_SIZE, SIDE_SIZE
     finished_state = np.matrix([[1, 2, 3], [4, 5, 6], [7, 8, 0]], dtype=int)
 
-    def __init__(self, board, blank_cell=(0, 0), parent=None):
+    def __init__(self, board, blank_cell=(0, 0)):
         (board_w, board_h) = np.shape(board)
         assert board_w == self.width and board_h == self.height
 
@@ -28,40 +41,41 @@ class EightState(Searchable):
 
         self.board = board
         self.blank_cell = blank_cell
-        self.parent = parent
 
     def possible_moves(self) -> []:
+        """Returns an array of all posible moves from the current state"""
         all_possible_moves = []
         coord_x, coord_y = self.blank_cell
         if coord_x > 0:
             new_board = self.board.copy()
             new_board[coord_x - 1, coord_y], new_board[coord_x, coord_y] = new_board[coord_x, coord_y], new_board[
                 coord_x - 1, coord_y]
-            all_possible_moves.append(EightState(new_board, (coord_x - 1, coord_y), self))
+            all_possible_moves.append(EightState(new_board, (coord_x - 1, coord_y)))
         if coord_x < self.width - 1:
             new_board = self.board.copy()
             new_board[coord_x + 1, coord_y], new_board[coord_x, coord_y] = new_board[coord_x, coord_y], new_board[
                 coord_x + 1, coord_y]
-            all_possible_moves.append(EightState(new_board, (coord_x + 1, coord_y), self))
+            all_possible_moves.append(EightState(new_board, (coord_x + 1, coord_y)))
         if coord_y > 0:
             new_board = self.board.copy()
             new_board[coord_x, coord_y - 1], new_board[coord_x, coord_y] = new_board[coord_x, coord_y], new_board[
                 coord_x, coord_y - 1]
-            all_possible_moves.append(EightState(new_board, (coord_x, coord_y - 1), self))
+            all_possible_moves.append(EightState(new_board, (coord_x, coord_y - 1)))
         if coord_y < self.height - 1:
             new_board = self.board.copy()
             new_board[coord_x, coord_y + 1], new_board[coord_x, coord_y] = new_board[coord_x, coord_y], new_board[
                 coord_x, coord_y + 1]
-            all_possible_moves.append(EightState(new_board, (coord_x, coord_y + 1), self))
+            all_possible_moves.append(EightState(new_board, (coord_x, coord_y + 1)))
 
         return all_possible_moves
 
     def is_solved(self) -> bool:
+        """Returns true if the board is equal to the finished state"""
         return np.array_equal(self.board, self.finished_state)
 
-    # TODO: fix
     @staticmethod
     def is_matrix_solvable(mat):
+        """Returns true if the matrix satisfies all conditions for the game to be solvable"""
         if mat is None:
             return False
         flattened_mat = np.asarray(mat).flatten()
