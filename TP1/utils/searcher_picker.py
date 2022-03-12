@@ -13,12 +13,11 @@ heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat':
 
 
 def searcher_picker(algo_name, heuristic):
-
     if informed_algorithms.__contains__(algo_name):
         return informed_algorithms[algo_name](heuristic)
 
     elif not_informed_algorithms.__contains__(algo_name):
         return not_informed_algorithms[algo_name]()
     else:
-        print("This algorithm is not valid")
+        print("ERROR: This algorithm is not valid")
 
