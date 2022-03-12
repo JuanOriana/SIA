@@ -12,6 +12,7 @@ import pygame_gui
 
 from TP1.data_structs.EightState import EightState
 from TP1.main import main
+from TP1.utils.searcher_picker import searcher_picker, heuristics_functions
 
 SCREEN_SIZE = (800,600)
 pygame.init()
@@ -42,7 +43,7 @@ class SlidePuzzle:
 
         self.tiles_class = []
 
-        self.state = EightState(np.matrix([[1,2,0],[4,5,6],[7,8,3]], dtype=int))
+        self.state = EightState(np.matrix([[7,2,4],[5,0,6],[8,3,1]], dtype=int))
 
     def handle_click(self,pos):
         x_idx = math.floor((pos[0]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
@@ -53,7 +54,6 @@ class SlidePuzzle:
             self.state.blank_cell = new_coords
 
     def is_clickable(self,x,y):
-        if x not in range(self.grid_size[0]) or y not in range(self.grid_size[1]): return False
         blank_cell = self.state.blank_cell
         return (x+1,y) == blank_cell or (x-1,y) == blank_cell or (x,y+1) == blank_cell or (x,y-1) == blank_cell
 
@@ -70,6 +70,10 @@ class SlidePuzzle:
                 if number > 0:
                     screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
+    def draw_state(self, screen, state):
+        self.state = state
+        self.draw(screen)
+
 
 solve_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((600, 100), (120, 50)),
                                                 text='SOLVE',
@@ -85,24 +89,21 @@ def main_gui():
 
         screen.fill((0,0,0))
         program.draw(screen)
-        #
-        # image = pygame.Surface((120, 50));
-        # image.fill((130, 171, 161))
-        # text = pygame.font.Font(None, 50).render("SOLVE", 2, (0, 0, 0)); w,h = text.get_size()
-        # image.blit(text, ((120-w)/2,(50-h)/2))
-        # screen.blit(image, (600,100))
-
-        #
-        # pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
 
-            if event.type == pygame.USEREVENT:
-                if event.type == pygame_gui.UI_BUTTON_PRESSED:
-                    print("click")
-                    if event.ui_element == solve_button:
-                        print("click")
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    searcher = searcher_picker('a_star', heuristics_functions['basic'])
+                    searcher.solve(program.state)
+                    result_path = searcher.analytics.get_path()
+                    for node in result_path:
+                        print(node.state)
+                        program.draw_state(screen, node.state)
+
+                    print(searcher.analytics)
+
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
