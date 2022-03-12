@@ -10,6 +10,8 @@ class DFSIterativeSearcher(Searcher):
       The algorithm will then try to scale the limit until it finds a valid solution or it runs out of iterations.
 
     """
+    name = "Interative DFS"
+
     def __init__(self, start_limit = 12, max_iterations = 5):
         super().__init__()
         self.start_limit = start_limit

@@ -26,6 +26,8 @@ class Searcher:
 
     """
 
+    name = "Searcher"
+
     def __init__(self):
         self.frontier = []
         self.visited = set()

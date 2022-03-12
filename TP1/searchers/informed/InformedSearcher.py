@@ -26,6 +26,9 @@ class InformedSearcher(Searcher):
           the heuristic to estimate
 
     """
+
+    name = "Informed Searcher"
+
     def __init__(self, heuristic):
         super().__init__()
         self.heuristic = heuristic

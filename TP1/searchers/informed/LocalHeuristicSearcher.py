@@ -8,6 +8,9 @@ class LocalHeuristicSearcher(InformedSearcher):
       This algorithm does NOT contemplate backtracking.
 
     """
+
+    name = "Local Heuristic"
+
     def solve_internal(self):
         next_node = self.start_node
         while next_node:

@@ -7,6 +7,8 @@ class DFSSearcher(Searcher):
       A class that represents a Searcher for the DFS algorithm
 
     """
+    name = "DFS"
+
     def solve_internal(self):
         self.frontier.append(self.start_node)
         while self.frontier:

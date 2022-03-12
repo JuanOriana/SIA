@@ -23,6 +23,9 @@ class PonderatedInformedSearcher(InformedSearcher):
 
 
     """
+
+    name = "Ponderated Informed Searcher"
+
     def __init__(self, heuristic, heuristic_weight):
         super().__init__(heuristic)
         self.heuristic_weight = heuristic_weight
