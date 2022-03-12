@@ -8,9 +8,19 @@ import json
 
 import numpy as np
 import pygame
+import pygame_gui
 
 from TP1.data_structs.EightState import EightState
+from TP1.main import main
 
+SCREEN_SIZE = (800,600)
+pygame.init()
+BASIC_FONT = pygame.font.Font(None, 120)
+
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+pygame.display.set_caption('8 Number Puzzel - SIA')
+screen = pygame.display.set_mode(SCREEN_SIZE)
+manager = pygame_gui.UIManager(SCREEN_SIZE)
 
 class SlidePuzzle:
     def __init__(self, grid_size, tile_size, margin_size):
@@ -43,6 +53,7 @@ class SlidePuzzle:
             self.state.blank_cell = new_coords
 
     def is_clickable(self,x,y):
+        if x not in range(self.grid_size[0]) or y not in range(self.grid_size[1]): return False
         blank_cell = self.state.blank_cell
         return (x+1,y) == blank_cell or (x-1,y) == blank_cell or (x,y+1) == blank_cell or (x,y-1) == blank_cell
 
@@ -59,51 +70,51 @@ class SlidePuzzle:
                 if number > 0:
                     screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
+
+solve_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((600, 100), (120, 50)),
+                                                text='SOLVE',
+                                                manager=manager,
+                                                )
+
 def main_gui():
-    pygame.init()
-    os.environ['SDL_VIDEO_CENTERED'] = '1'
-    pygame.display.set_caption('8 Number Puzzel - SIA')
-    screen = pygame.display.set_mode((800,600))
     fpaclock = pygame.time.Clock()
     program = SlidePuzzle((3,3), 160, 5)
-
-    #
-    # input_file = open('input.json')
-    # data = json.load(input_file)
-    # matrix_from_json = [data['start_state']['0'], data['start_state']['1'], data['start_state']['2']]
-    # # matrix = [[6, 8, 4], [3, 5, 7], [0, 1, 2]]
-    # matrix = matrix_from_json
-    # if not EightState.is_matrix_solvable(matrix):
-    #     print("This matrix does not correspond to a valid state in the game")
-    #     return
-    # board = EightState(np.matrix(matrix, dtype=int))
-    # searcher = AStarSearcher(fat_heuristic)
-    # searcher.solve(board)
-    #
-
-    # result_path = searcher.analytics.get_path()
-    # state_boards_array = []
-    # for node in result_path:
-    #     state_boards_array.append(node.state.board)
-    #
-    # for state in state_boards_array:
-    #     print(state)
 
     while True:
         dt = fpaclock.tick()/1000
 
         screen.fill((0,0,0))
         program.draw(screen)
-        pygame.display.flip()
+        #
+        # image = pygame.Surface((120, 50));
+        # image.fill((130, 171, 161))
+        # text = pygame.font.Font(None, 50).render("SOLVE", 2, (0, 0, 0)); w,h = text.get_size()
+        # image.blit(text, ((120-w)/2,(50-h)/2))
+        # screen.blit(image, (600,100))
+
+        #
+        # pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-            program.handle_click(pos)
+            if event.type == pygame.USEREVENT:
+                if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                    print("click")
+                    if event.ui_element == solve_button:
+                        print("click")
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                print(pos)
+                program.handle_click(pos)
+
+            manager.process_events(event)
+
+        manager.update(dt)
+        manager.draw_ui(screen)
         program.update(dt)
+        pygame.display.update()
 
 if __name__ == '__main__':
     main_gui()
