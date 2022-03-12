@@ -5,12 +5,24 @@ import math
 import os
 import sys
 import json
+import time
 
 import numpy as np
 import pygame
+import pygame_gui
 
 from TP1.data_structs.EightState import EightState
+from TP1.main import main
+from TP1.utils.searcher_picker import searcher_picker, heuristics_functions
 
+SCREEN_SIZE = (800,600)
+pygame.init()
+BASIC_FONT = pygame.font.Font(None, 120)
+
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+pygame.display.set_caption('8 Number Puzzel - SIA')
+screen = pygame.display.set_mode(SCREEN_SIZE)
+manager = pygame_gui.UIManager(SCREEN_SIZE)
 
 class SlidePuzzle:
     def __init__(self, grid_size, tile_size, margin_size):
@@ -32,7 +44,7 @@ class SlidePuzzle:
 
         self.tiles_class = []
 
-        self.state = EightState(np.matrix([[1,2,0],[4,5,6],[7,8,3]], dtype=int))
+        self.state = EightState(np.matrix([[7,2,4],[5,0,6],[8,3,1]], dtype=int))
 
     def handle_click(self,pos):
         x_idx = math.floor((pos[0]-self.margin_size)/(self.tile_size+self.margin_size)) % 3
@@ -60,50 +72,48 @@ class SlidePuzzle:
                     screen.blit(self.images[number-1], (self.tile_pos[i][0], self.tile_pos[i][1]))
 
 def main_gui():
-    pygame.init()
-    os.environ['SDL_VIDEO_CENTERED'] = '1'
-    pygame.display.set_caption('8 Number Puzzel - SIA')
-    screen = pygame.display.set_mode((800,600))
     fpaclock = pygame.time.Clock()
     program = SlidePuzzle((3,3), 160, 5)
-
-    #
-    # input_file = open('input.json')
-    # data = json.load(input_file)
-    # matrix_from_json = [data['start_state']['0'], data['start_state']['1'], data['start_state']['2']]
-    # # matrix = [[6, 8, 4], [3, 5, 7], [0, 1, 2]]
-    # matrix = matrix_from_json
-    # if not EightState.is_matrix_solvable(matrix):
-    #     print("This matrix does not correspond to a valid state in the game")
-    #     return
-    # board = EightState(np.matrix(matrix, dtype=int))
-    # searcher = AStarSearcher(fat_heuristic)
-    # searcher.solve(board)
-    #
-
-    # result_path = searcher.analytics.get_path()
-    # state_boards_array = []
-    # for node in result_path:
-    #     state_boards_array.append(node.state.board)
-    #
-    # for state in state_boards_array:
-    #     print(state)
 
     while True:
         dt = fpaclock.tick()/1000
 
         screen.fill((0,0,0))
         program.draw(screen)
-        pygame.display.flip()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            pos = pygame.mouse.get_pos()
-            program.handle_click(pos)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_s:
+                    searcher = searcher_picker('a_star', heuristics_functions['basic'])
+                    searcher.solve(program.state)
+                    result_path = searcher.analytics.get_path()
+                    for node in result_path:
+                        program.state = node.state
+                        screen.fill((0, 0, 0))
+                        program.draw(screen)
+                        manager.update(dt)
+                        manager.draw_ui(screen)
+                        program.update(dt)
+                        pygame.display.update()
+                        time.sleep(0.5)
+                        print(node.state)
 
+                    print(searcher.analytics)
+
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                pos = pygame.mouse.get_pos()
+                print(pos)
+                program.handle_click(pos)
+
+            manager.process_events(event)
+
+        manager.update(dt)
+        manager.draw_ui(screen)
         program.update(dt)
+        pygame.display.update()
 
 if __name__ == '__main__':
     main_gui()
