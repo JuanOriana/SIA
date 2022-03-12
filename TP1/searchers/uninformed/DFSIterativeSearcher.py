@@ -22,7 +22,7 @@ class DFSIterativeSearcher(Searcher):
         iterations = self.max_iterations
         solution = None
         while iterations and not solution:
-            solution = self.__solve_internal_limited(limit)
+            solution = self.solve_internal_limited(limit)
             if not solution:
                 limit += self.start_limit
             iterations -= 1

@@ -147,13 +147,16 @@ def main_gui():
                         program.state = node.state
                         refresh_all_gui(program, manager, screen, dt)
                         time.sleep(0.2)
-                        print(node.state)
 
-                    analytics = "<p>End depth: {depth}</p><p>End cost: {cost}</p><p>Time elapsed: {time:.4f}segs</p><p>Expanded count: {expanded_count}</p><p>Frontier count: {frontier_count}</p>"
+                    analytics = "<p>Algoritmo: {algo}</p><p>Profundidad: {depth}</p><p>Costo: {cost}</p><p>Tiempo: {time:.4f}segs</p><p>Nodos expandidos: {expanded_count}</p><p>Nodos forntera: {frontier_count}</p>"
+                    if algorithm not in ["bpa", "bpp", "bppv"]:
+                        analytics = "<p>Heuristica: {heu}</p>" + analytics
                     pygame_gui.windows.ui_confirmation_dialog.UIConfirmationDialog(
-                        rect=pygame.Rect((SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2), (300, 250)),
+                        rect=pygame.Rect((SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2), (300, 300)),
                         manager=manager,
-                        action_long_desc=analytics.format(depth=searcher.analytics.end_node.depth,
+                        action_long_desc=analytics.format(heu=heuristic,
+                                                          algo=algorithm,
+                                                          depth=searcher.analytics.end_node.depth,
                                                           cost=searcher.analytics.end_node.cost,
                                                           time=searcher.analytics.time,
                                                           expanded_count=searcher.analytics.expanded_count,
