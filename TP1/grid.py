@@ -67,7 +67,7 @@ class SlidePuzzle:
     def is_clickable(self, x, y):
         blank_cell = self.state.blank_cell
         return (x + 1, y) == blank_cell or (x - 1, y) == blank_cell or (x, y + 1) == blank_cell or (
-        x, y - 1) == blank_cell
+            x, y - 1) == blank_cell
 
     def update(self, dt):
         pass
@@ -85,7 +85,7 @@ class SlidePuzzle:
 
 ### algorithmOptions DropDown
 dropdown_layout_rect = pygame.Rect((510, 50), (280, 35))
-algorithmOptions = ["bpa", "bpp", "bppv", "a_star", "local_heuristic","global_heuristic"]
+algorithmOptions = ["bpa", "bpp", "bppv", "a_star", "local_heuristic", "global_heuristic"]
 algorithmDropDown = pygame_gui.elements.UIDropDownMenu(options_list=algorithmOptions,
                                                        starting_option=algorithmOptions[0],
                                                        relative_rect=dropdown_layout_rect,
@@ -112,6 +112,15 @@ pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
                                      relative_rect=pygame.Rect((470, 95), (170, 30)))
 
 
+def refresh_all_gui(program,curr_manager, screen, dt):
+    screen.fill((0, 0, 0))
+    program.draw(screen)
+    program.update(dt)
+    curr_manager.update(dt)
+    curr_manager.draw_ui(screen)
+    pygame.display.update()
+
+
 def main_gui():
     algorithm = "bpa"
     heuristic = "basic"
@@ -119,9 +128,6 @@ def main_gui():
     program = SlidePuzzle((3, 3), 160, 5)
     while True:
         dt = fpaclock.tick() / 1000
-
-        screen.fill((0, 0, 0))
-        program.draw(screen)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT: pygame.quit(); sys.exit()
@@ -136,17 +142,12 @@ def main_gui():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
-                    searcher = searcher_picker(algorithm,heuristics_functions[heuristic])
+                    searcher = searcher_picker(algorithm, heuristics_functions[heuristic])
                     searcher.solve(program.state)
                     result_path = searcher.analytics.get_path()
                     for node in result_path:
                         program.state = node.state
-                        screen.fill((0, 0, 0))
-                        program.draw(screen)
-                        manager.update(dt)
-                        manager.draw_ui(screen)
-                        program.update(dt)
-                        pygame.display.update()
+                        refresh_all_gui(program,manager,screen,dt)
                         time.sleep(0.2)
                         print(node.state)
 
@@ -154,15 +155,11 @@ def main_gui():
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
-                print(pos)
                 program.handle_click(pos)
 
             manager.process_events(event)
 
-        manager.update(dt)
-        manager.draw_ui(screen)
-        program.update(dt)
-        pygame.display.update()
+        refresh_all_gui(program, manager, screen, dt)
 
 
 if __name__ == '__main__':
