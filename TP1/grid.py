@@ -149,7 +149,17 @@ def main_gui():
                         time.sleep(0.2)
                         print(node.state)
 
-                    print(searcher.analytics)
+                    analytics = "<p>End depth: {depth}</p><p>End cost: {cost}</p><p>Time elapsed: {time:.4f}segs</p><p>Expanded count: {expanded_count}</p><p>Frontier count: {frontier_count}</p>"
+                    pygame_gui.windows.ui_confirmation_dialog.UIConfirmationDialog(
+                        rect=pygame.Rect((SCREEN_SIZE[0] / 2, SCREEN_SIZE[1] / 2), (300, 250)),
+                        manager=manager,
+                        action_long_desc=analytics.format(depth=searcher.analytics.end_node.depth,
+                                                          cost=searcher.analytics.end_node.cost,
+                                                          time=searcher.analytics.time,
+                                                          expanded_count=searcher.analytics.expanded_count,
+                                                          frontier_count=searcher.analytics.frontier_count),
+                        window_title='Analytics',
+                    )
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
