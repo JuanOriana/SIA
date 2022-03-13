@@ -15,10 +15,17 @@ def main():
     json_information = file_validator(sys.argv[1])
 
     searcher = searcher_picker(json_information['algorithm_name'], heuristics_functions[json_information['heuristic']])
-    print("Thinking...")
+    print("Thinking...\n")
     searcher.solve(EightState(np.matrix(json_information['matrix'], dtype=int)))
     print(searcher.analytics)
-
+    print("Algorithm: " + json_information['algorithm_name'] + "\n")
+    ret = input("Do you wish to see all the steps? y/n")
+    if ret[0] == 'y' or ret[0] == 'Y':
+        path = searcher.analytics.get_path()
+        for idx,step in enumerate(path):
+            print("Step: " + str(idx))
+            print(step.state)
+            print("-------------------------")
 
 if __name__ == "__main__":
     main()
