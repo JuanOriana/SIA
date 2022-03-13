@@ -95,7 +95,7 @@ class EightState(Searchable):
         return '\n'.join([str(self.board[0][:3]),
                           str(self.board[1][:3]),
                           str(self.board[2][:3])]).replace('[', '').replace(']', '').replace(',', '').replace('0',
-                                                                                                              'x') + '\n'
+                                                                                                              'x')
 
     def __cmp__(self, other):
         return np.array_equal(self.board, other.board)

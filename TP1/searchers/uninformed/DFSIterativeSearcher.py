@@ -12,7 +12,7 @@ class DFSIterativeSearcher(Searcher):
     """
     name = "Interative DFS"
 
-    def __init__(self, start_limit = 12, max_iterations = 5):
+    def __init__(self, start_limit = 15, max_iterations = 5):
         super().__init__()
         self.start_limit = start_limit
         self.max_iterations = max_iterations
@@ -36,7 +36,7 @@ class DFSIterativeSearcher(Searcher):
             return self.start_node
         while self.frontier:
             node = self.frontier.pop()
-            if node.state in self.visited:
+            if node in self.visited:
                 continue
             self.visited.add(node)
             self.analytics.expanded_count += 1

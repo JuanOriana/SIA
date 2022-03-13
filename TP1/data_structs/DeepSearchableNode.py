@@ -16,7 +16,7 @@ class DeepSearchableNode(SearchableNode):
         return not self.__cmp__(other)
 
     def __lt__(self, other):
-        return False
+        return other.cost <= self.cost
 
     def __hash__(self):
         return hash((self.state,self.cost))
