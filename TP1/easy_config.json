@@ -1,0 +1,9 @@
+{
+  "start_state": {
+    "0": [1, 2, 3],
+    "1": [4, 6, 8],
+    "2": [5, 7, 0]
+  },
+  "algorithm": "bpa",
+  "heuristic": "basic"
+}
