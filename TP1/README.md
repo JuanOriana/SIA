@@ -6,7 +6,9 @@ mediante el uso de diversos metodos de busqueda, no informados e informados.
 Se implementaron tres estrategias de busqueda no informadas: BPA, BPP y BPPV;
 tres estrategias de busqueda informadas: Heuristica Local,
 Heuristica Global y A*; y ademas se desarrollaron tres heuristicas: dos admisibles y una no admisible.
+
 ##Instalacion y ejecucion
+
 Las dependencias de los ejecutables se encuentran en el archivo requirements.txt
 para instalarlos, ejecutar
 ```shell
