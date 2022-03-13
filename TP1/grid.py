@@ -57,9 +57,10 @@ class SlidePuzzle:
             return
         if self.is_clickable(y_idx, x_idx):
             new_coords = (y_idx, x_idx)
-            self.state.board[self.state.blank_cell], self.state.board[new_coords] = \
+            new_board = np.matrix(self.state.board)
+            new_board[self.state.blank_cell], new_board[new_coords] = \
                 self.state.board[new_coords], self.state.board[self.state.blank_cell]
-            self.state.blank_cell = new_coords
+            self.state = EightState(new_board,new_coords)
 
     def is_clickable(self, x, y):
         blank_cell = self.state.blank_cell
@@ -158,14 +159,13 @@ def refresh_all_gui(program, curr_manager, screen, dt):
 
 
 def main_gui(matrix=None):
-    if matrix is None:
-        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
     input_file = open('input.json')
     data = json.load(input_file)
     json_information = json_validator(data)
     if not json_information['is_valid']:
         print(json_information['error_msg'])
         return
+    matrix = json_information['matrix']
     algorithm = 'bpa'
     heuristic = 'basic'
     fpaclock = pygame.time.Clock()
