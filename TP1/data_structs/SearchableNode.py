@@ -28,7 +28,7 @@ class SearchableNode(Searchable):
         self.estimation = estimation
 
     def possible_moves(self) -> []:
-        return self.state.possible_moves();
+        return self.state.possible_moves()
 
     def is_solved(self) -> bool:
         return self.state.is_solved()
