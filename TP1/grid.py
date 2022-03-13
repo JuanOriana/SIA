@@ -13,7 +13,7 @@ import pygame_gui
 
 from TP1.data_structs.EightState import EightState
 from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
-from TP1.utils.json_validator import json_validator
+from TP1.utils.json_validator import json_validator, file_validator
 from TP1.utils.searcher_picker import searcher_picker
 
 heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
@@ -137,12 +137,12 @@ def refresh_all_gui(program, curr_manager, screen, dt):
 
 
 def main_gui(matrix=None):
-    input_file = open('input.json')
-    data = json.load(input_file)
-    json_information = json_validator(data)
-    if not json_information['is_valid']:
-        print(json_information['error_msg'])
-        return
+
+    if len(sys.argv) != 2:
+        print("Invalid usage: game.py <config.json>")
+        quit(1)
+
+    json_information = file_validator(sys.argv[1])
     matrix = json_information['matrix']
     algorithm = 'bpa'
     heuristic = 'basic'
@@ -189,8 +189,8 @@ def main_gui(matrix=None):
                                                           expanded_count=searcher.analytics.expanded_count,
                                                           frontier_count=searcher.analytics.frontier_count,
                                                           success="Exito" if searcher.analytics.success else "No encontrado"),
-                        window_title='Analytics',
-                    )
+                                                          window_title='Analytics',
+                                                          )
                 if event.key == pygame.K_r:
                     program.repeat = not program.repeat
 
