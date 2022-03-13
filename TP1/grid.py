@@ -13,6 +13,7 @@ import pygame_gui
 
 from TP1.data_structs.EightState import EightState
 from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
+from TP1.utils.json_validator import json_validator
 from TP1.utils.searcher_picker import searcher_picker
 
 heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
@@ -28,18 +29,17 @@ manager = pygame_gui.UIManager(SCREEN_SIZE)
 
 
 class SlidePuzzle:
-    def __init__(self, grid_size, tile_size, margin_size):
+    def __init__(self, grid_size, tile_size, margin_size, matrix):
         self.grid_size, self.tile_size, self.margin_size = grid_size, tile_size, margin_size
         self.is_thinking = False
         self.tiles_len = grid_size[0] * grid_size[1] - 1
         self.tiles = [(x, y) for y in range(grid_size[1]) for x in range(grid_size[0])]
-
         self.tile_pos = [(x * (tile_size + margin_size) + margin_size, y * (tile_size + margin_size) + margin_size) for
                          y in range(grid_size[1]) for x in range(grid_size[0])]
-
         self.font = pygame.font.Font(None, 120)
-
         self.images = []
+        self.repeat = True
+
         for i in range(self.tiles_len):
             image = pygame.Surface((tile_size, tile_size));
             image.fill((110, 130, 255))
@@ -47,10 +47,7 @@ class SlidePuzzle:
             w, h = text.get_size()
             image.blit(text, ((tile_size - w) / 2, (tile_size - h) / 2))
             self.images += [image]
-
-        self.tiles_class = []
-
-        self.state = EightState(np.matrix([[7, 2, 4], [5, 0, 6], [8, 3, 1]], dtype=int))
+        self.state = EightState(np.matrix(matrix, dtype=int))
 
     def handle_click(self, pos):
         x_idx = math.floor((pos[0] - self.margin_size) / (self.tile_size + self.margin_size))
@@ -59,9 +56,8 @@ class SlidePuzzle:
             return
         if self.is_clickable(y_idx, x_idx):
             new_coords = (y_idx, x_idx)
-            self.state.board[self.state.blank_cell], self.state.board[new_coords] = self.state.board[new_coords], \
-                                                                                    self.state.board[
-                                                                                        self.state.blank_cell]
+            self.state.board[self.state.blank_cell], self.state.board[new_coords] = \
+                self.state.board[new_coords], self.state.board[self.state.blank_cell]
             self.state.blank_cell = new_coords
 
     def is_clickable(self, x, y):
@@ -112,10 +108,22 @@ pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
                                      relative_rect=pygame.Rect((470, 95), (170, 30)))
 
 ### HotKeys label
-hot_keys_text = "Teclas - s: Resolver"
+hot_keys_text = "Teclas:"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
-                              text=hot_keys_text,
-                              relative_rect=pygame.Rect((510, 200), (170, 30)))
+                                     text=hot_keys_text,
+                                     relative_rect=pygame.Rect((510, 200), (170, 30)))
+
+### HotKeys label
+hot_keys_text = "s: Resolver"
+pygame_gui.elements.ui_label.UILabel(manager=manager,
+                                     text=hot_keys_text,
+                                     relative_rect=pygame.Rect((211, 230), (700, 30)))
+
+### HotKeys label
+hot_keys_text = "r: hab/deshab solucion en tablero"
+pygame_gui.elements.ui_label.UILabel(manager=manager,
+                                     text=hot_keys_text,
+                                     relative_rect=pygame.Rect((300, 250), (700, 30)))
 
 
 def refresh_all_gui(program, curr_manager, screen, dt):
@@ -128,10 +136,18 @@ def refresh_all_gui(program, curr_manager, screen, dt):
 
 
 def main_gui():
-    algorithm = "bpa"
-    heuristic = "basic"
+    input_file = open('input.json')
+    data = json.load(input_file)
+    json_information = json_validator(data)
+    if not json_information['is_valid']:
+        print(json_information['error_msg'])
+        return
+    matrix = json_information['matrix']
+    algorithm = 'bpa'
+    heuristic = 'basic'
     fpaclock = pygame.time.Clock()
-    program = SlidePuzzle((3, 3), 160, 5)
+    program = SlidePuzzle((3, 3), 160, 5, matrix)
+
     while True:
         dt = fpaclock.tick() / 1000
 
@@ -146,30 +162,36 @@ def main_gui():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
+                    program.last_start_state = program.state
                     searcher = searcher_picker(algorithm, heuristics_functions[heuristic])
                     searcher.solve(program.state)
-                    result_path = searcher.analytics.get_path()
-                    for node in result_path:
-                        program.state = node.state
-                        refresh_all_gui(program, manager, screen, dt)
-                        time.sleep(0.2)
-
-                    analytics = "<p>Algoritmo: {algo}</p><p>Profundidad: {depth}</p><p>Costo: {cost}</p><p>Tiempo: {time:.4f}segs</p><p>Nodos expandidos: {expanded_count}</p><p>Nodos forntera: {frontier_count}</p>"
+                    if program.repeat:
+                        for node in searcher.analytics.get_path():
+                            program.state = node.state
+                            refresh_all_gui(program, manager, screen, dt)
+                            time.sleep(0.2)
+                    analytics = "<p>Algoritmo: {algo}</p><p>Tiempo: {time:.4f}segs</p>"
+                    if searcher.analytics.success:
+                        analytics = analytics + "<p>Profundidad: {depth}</p><p>Costo: {cost}</p><p>Nodos expandidos: {expanded_count}</p><p>Nodos frontera: {frontier_count}</p>"
                     if algorithm not in ["bpa", "bpp", "bppv"]:
                         analytics = "<p>Heuristica: {heu}</p>" + analytics
+                    analytics = "<p>Resultado: {success}</p>" + analytics
                     pygame_gui.windows.ui_confirmation_dialog.UIConfirmationDialog(
                         rect=pygame.Rect((0, 0), (300, 300)),
                         manager=manager,
                         blocking=False,
                         action_long_desc=analytics.format(heu=heuristic,
                                                           algo=algorithm,
-                                                          depth=searcher.analytics.end_node.depth,
-                                                          cost=searcher.analytics.end_node.cost,
+                                                          depth=searcher.analytics.end_node and searcher.analytics.end_node.depth,
+                                                          cost=searcher.analytics.end_node and searcher.analytics.end_node.cost,
                                                           time=searcher.analytics.time,
                                                           expanded_count=searcher.analytics.expanded_count,
-                                                          frontier_count=searcher.analytics.frontier_count),
+                                                          frontier_count=searcher.analytics.frontier_count,
+                                                          success="Exito" if searcher.analytics.success else "No encontrado"),
                         window_title='Analytics',
                     )
+                if event.key == pygame.K_r:
+                    program.repeat = not program.repeat
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()

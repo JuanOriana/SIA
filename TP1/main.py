@@ -19,7 +19,6 @@ def main():
 
     matrix = json_information['matrix']
     board = EightState(np.matrix(matrix, dtype=int))
-
     searcher = searcher_picker(json_information['algorithm_name'], heuristics_functions[json_information['heuristic']])
     searcher.solve(board)
     print(searcher.analytics)
