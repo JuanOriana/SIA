@@ -3,15 +3,15 @@ from TP1.utils.searcher_picker import not_informed_algorithms, informed_algorith
 
 
 def json_validator(data):
-    return_value = {'is_valid': True, 'matrix': None, 'algorithm_name': '', 'heuristic': 'basic', 'error_msg':""}
+    return_value = {'is_valid': True, 'matrix': None, 'algorithm_name': '', 'heuristic': 'basic', 'error_msg': ""}
     if 'algorithm' not in data or 'start_state' not in data:
-        print("Invalid JSON.Fields algorithm and start_state must be on json")
+        return_value['error_msg'] = "Invalid JSON.Fields algorithm and start_state must be on json"
         return_value['is_valid'] = False
         return return_value
 
     if not EightState.is_matrix_solvable(
             [data['start_state']['0'], data['start_state']['1'], data['start_state']['2']]):
-        return_value['error_msg'] ="Invalid JSON: This matrix does not correspond to a valid state in the game"
+        return_value['error_msg'] = "Invalid JSON: This matrix does not correspond to a valid state in the game"
         return_value['is_valid'] = False
         return return_value
 
