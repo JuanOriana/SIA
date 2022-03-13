@@ -23,7 +23,7 @@ pygame.init()
 BASIC_FONT = pygame.font.Font(None, 120)
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
-pygame.display.set_caption('8 Number Puzzel - SIA')
+pygame.display.set_caption('8 Number Puzzle - SIA')
 screen = pygame.display.set_mode(SCREEN_SIZE)
 manager = pygame_gui.UIManager(SCREEN_SIZE)
 
@@ -135,14 +135,15 @@ def refresh_all_gui(program, curr_manager, screen, dt):
     pygame.display.update()
 
 
-def main_gui():
+def main_gui(matrix=None):
+    if matrix is None:
+        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
     input_file = open('input.json')
     data = json.load(input_file)
     json_information = json_validator(data)
     if not json_information['is_valid']:
         print(json_information['error_msg'])
         return
-    matrix = json_information['matrix']
     algorithm = 'bpa'
     heuristic = 'basic'
     fpaclock = pygame.time.Clock()

@@ -10,9 +10,7 @@ def main():
 
     input_file = open('input.json')
     data = json.load(input_file)
-
     json_information = json_validator(data)
-
     if not json_information['is_valid']:
         print(json_information['error_msg'])
         return
@@ -20,6 +18,7 @@ def main():
     matrix = json_information['matrix']
     board = EightState(np.matrix(matrix, dtype=int))
     searcher = searcher_picker(json_information['algorithm_name'], heuristics_functions[json_information['heuristic']])
+    print("Thinking...")
     searcher.solve(board)
     print(searcher.analytics)
 
