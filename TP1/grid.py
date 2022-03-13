@@ -48,6 +48,7 @@ class SlidePuzzle:
             image.blit(text, ((tile_size - w) / 2, (tile_size - h) / 2))
             self.images += [image]
         self.state = EightState(np.matrix(matrix, dtype=int))
+        self.saved_state = self.state
 
     def handle_click(self, pos):
         x_idx = math.floor((pos[0] - self.margin_size) / (self.tile_size + self.margin_size))
@@ -67,6 +68,12 @@ class SlidePuzzle:
 
     def update(self, dt):
         pass
+
+    def save_state(self):
+        self.saved_state = self.state
+
+    def reset_to_save_state(self):
+        self.state = self.saved_state
 
     def draw(self, screen):
         if self.is_thinking:
@@ -119,11 +126,26 @@ pygame_gui.elements.ui_label.UILabel(manager=manager,
                                      text=hot_keys_text,
                                      relative_rect=pygame.Rect((211, 230), (700, 30)))
 
+### HotKeys label restart
+hot_keys_text = "r: Resetear"
+pygame_gui.elements.ui_label.UILabel(manager=manager,
+                              text=hot_keys_text,
+                              relative_rect=pygame.Rect((510, 250), (170, 30)))
+
+### HotKeys label save
+hot_keys_text = "g: Guardar"
+pygame_gui.elements.ui_label.UILabel(manager=manager,
+                              text=hot_keys_text,
+                              relative_rect=pygame.Rect((510, 300), (170, 30)))
+
+
 ### HotKeys label
-hot_keys_text = "r: hab/deshab solucion en tablero"
+hot_keys_text = "d: hab/deshab solucion en tablero"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
                                      text=hot_keys_text,
-                                     relative_rect=pygame.Rect((300, 250), (700, 30)))
+                                     relative_rect=pygame.Rect((300, 350), (700, 30)))
+
+
 
 
 def refresh_all_gui(program, curr_manager, screen, dt):
@@ -191,8 +213,13 @@ def main_gui(matrix=None):
                                                           success="Exito" if searcher.analytics.success else "No encontrado"),
                         window_title='Analytics',
                     )
-                if event.key == pygame.K_r:
+                if event.key == pygame.K_d:
                     program.repeat = not program.repeat
+                if event.key == pygame.K_r:
+                    program.reset_to_save_state()
+                    refresh_all_gui(program, manager, screen, dt)
+                if event.key == pygame.K_g:
+                    program.save_state()
 
             if event.type == pygame.MOUSEBUTTONUP:
                 pos = pygame.mouse.get_pos()
