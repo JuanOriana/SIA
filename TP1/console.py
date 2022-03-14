@@ -1,9 +1,8 @@
 import numpy as np
-import json
 import sys
 
 from TP1.data_structs.EightState import EightState
-from TP1.utils.json_validator import json_validator, file_validator
+from TP1.utils.json_validator import file_validator
 from TP1.utils.searcher_picker import heuristics_functions, searcher_picker
 
 
@@ -22,10 +21,11 @@ def main():
     ret = input("Do you wish to see all the steps? y/n")
     if ret[0] == 'y' or ret[0] == 'Y':
         path = searcher.analytics.get_path()
-        for idx,step in enumerate(path):
+        for idx, step in enumerate(path):
             print("Step: " + str(idx))
             print(step.state)
             print("-------------------------")
+
 
 if __name__ == "__main__":
     main()

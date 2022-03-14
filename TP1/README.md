@@ -46,6 +46,11 @@ se incluye un archivo de configuracion a modo de ejemplo con la siguiente forma:
   "heuristic": "deep"
 }
 ```
+
+Ademas del ejemplo **config.json** hay un archivo **hard_config.json** con un
+problema que se resuelve en 30 pasos y un **easy_config.json** que tiene un problema
+mas sencillo que se resuelve en 12 pasos.
+
 A continuacion se detallan las propiedades a pasar y sus valores posibles:
 
 | Propiedad   | Obligatoria?             | Valores posibles                                                                                                                                                    |
