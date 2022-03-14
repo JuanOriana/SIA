@@ -144,7 +144,7 @@ def main_gui(matrix=None):
                                                           expanded_count=searcher.analytics.expanded_count,
                                                           frontier_count=searcher.analytics.frontier_count,
                                                           success="Exito" if searcher.analytics.success else "No encontrado"),
-                        window_title='Analytics',
+                        window_title='Resultados',
                     )
                 if event.key == pygame.K_d:
                     program.repeat = not program.repeat
