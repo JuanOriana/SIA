@@ -28,8 +28,8 @@ PYTHONPATH=`pwd`/.. python3 console.py <config.json>
 ```shell
 PYTHONPATH=`pwd`/.. python3 game.py <config.json>
 ```
-La definicion de la variable de entorno PYTHONPATH para la ejecucion es necesaria
-para que se resuelvan apropiadamente los modulos locales
+*La definicion de la variable de entorno PYTHONPATH para la ejecucion es necesaria
+para que se resuelvan apropiadamente los modulos locales*
 
 La primera hace una resolucion **one shot**, donde corre el algoritmo
 con los parametros especificados y luego muestra los resultados.
@@ -38,7 +38,7 @@ y guardar estados anteriores.
 
 ## Archivo de configuracion
 El archivo de configuracion a pasar es un json, en el proyecto
-se incluye un archivo de configuracion a modo de ejemplo con la siguiente forma:
+se incluye un archivo de configuracion **config.json** a modo de ejemplo con la siguiente forma:
 ```json
 {
   "start_state": {
