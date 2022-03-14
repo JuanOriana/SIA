@@ -7,6 +7,7 @@ import time
 
 import pygame
 import pygame_gui
+print(sys.path)
 
 from TP1.gui.SlidePuzzle import SlidePuzzle
 from TP1.utils.heuristics import deep_heuristic, basic_heuristic, fat_heuristic
@@ -14,7 +15,6 @@ from TP1.utils.json_validator import json_validator, file_validator
 from TP1.utils.searcher_picker import searcher_picker
 
 heuristics_functions = {'basic': basic_heuristic, 'deep': deep_heuristic, 'fat': fat_heuristic}
-
 SCREEN_SIZE = (800, 500)
 pygame.init()
 BASIC_FONT = pygame.font.Font(None, 120)

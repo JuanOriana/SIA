@@ -21,11 +21,13 @@ ambos acompañados de un archivo de configuracion (ver más adelante): Una opcio
 de display en terminal, para testeos más rapidos y especificos, y una opcion interactiva con GUI usando pygame.
 La forma de correr cada uno, respectivamente, es:
 ```shell
-console.py <config.json>
+PYTHONPATH=`pwd`/.. python3 console.py <config.json>
 ```
 ```shell
-game.py <config.json>
+PYTHONPATH=`pwd`/.. python3 game.py <config.json>
 ```
+La definicion de la variable de entorno PYTHONPATH para la ejecucion es necesaria
+para que se resuelvan apropiadamente los modulos locales
 
 La primera hace una resolucion **one shot**, donde corre el algoritmo
 con los parametros especificados y luego muestra los resultados.
