@@ -56,7 +56,7 @@ pygame_gui.elements.ui_label.UILabel(parent_element=heuristicDropDown,
 hot_keys_text = "Teclas:"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
                                      text=hot_keys_text,
-                                     relative_rect=pygame.Rect((510, 200), (170, 30)))
+                                     relative_rect=pygame.Rect((460, 185), (170, 30)))
 
 ### HotKeys label
 hot_keys_text = "s: Resolver"
@@ -65,22 +65,22 @@ pygame_gui.elements.ui_label.UILabel(manager=manager,
                                      relative_rect=pygame.Rect((211, 220), (700, 30)))
 
 ### HotKeys label
-hot_keys_text = "d: hab/deshab solucion en tablero"
+hot_keys_text = "d: Hab/deshab solucion en tablero"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
                                      text=hot_keys_text,
                                      relative_rect=pygame.Rect((300, 240), (700, 30)))
 
 ### HotKeys label restart
-hot_keys_text = "r: Resetear"
+hot_keys_text = "r: Restablecer tablero"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
                               text=hot_keys_text,
-                              relative_rect=pygame.Rect((510, 260), (170, 30)))
+                              relative_rect=pygame.Rect((257, 260), (700, 30)))
 
 ### HotKeys label save
-hot_keys_text = "g: Guardar"
+hot_keys_text = "g: Guardar tablero"
 pygame_gui.elements.ui_label.UILabel(manager=manager,
                               text=hot_keys_text,
-                              relative_rect=pygame.Rect((510, 280), (170, 30)))
+                              relative_rect=pygame.Rect((242, 280), (700, 30)))
 
 
 def refresh_all_gui(program, curr_manager, screen, dt):
@@ -133,7 +133,7 @@ def main_gui(matrix=None):
                         analytics = "<p>Heuristica: {heu}</p>" + analytics
                     analytics = "<p>Resultado: {success}</p>" + analytics
                     pygame_gui.windows.ui_confirmation_dialog.UIConfirmationDialog(
-                        rect=pygame.Rect((0, 0), (300, 300)),
+                        rect=pygame.Rect((0, 0), (300, 330)),
                         manager=manager,
                         blocking=False,
                         action_long_desc=analytics.format(heu=heuristic,
