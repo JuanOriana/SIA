@@ -21,10 +21,15 @@ def main():
     ret = input("Do you wish to see all the steps? y/n")
     if ret[0] == 'y' or ret[0] == 'Y':
         path = searcher.analytics.get_path()
+        if len(path) == 0:
+            print("No solution found :( No steps to show.")
+            return
         for idx, step in enumerate(path):
             print("Step: " + str(idx))
             print(step.state)
             print("-------------------------")
+        print("Solved!")
+
 
 
 if __name__ == "__main__":
