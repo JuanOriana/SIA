@@ -26,6 +26,7 @@ class SlidePuzzle:
             image.blit(text, ((tile_size - w) / 2, (tile_size - h) / 2))
             self.images += [image]
         self.state = EightState(np.matrix(matrix, dtype=int))
+        self.saved_state = self.state
 
     def handle_click(self, pos):
         x_idx = math.floor((pos[0] - self.margin_size) / (self.tile_size + self.margin_size))
@@ -37,7 +38,7 @@ class SlidePuzzle:
             new_board = np.matrix(self.state.board)
             new_board[self.state.blank_cell], new_board[new_coords] = \
                 self.state.board[new_coords], self.state.board[self.state.blank_cell]
-            self.state = EightState(new_board,new_coords)
+            self.state = EightState(new_board, new_coords)
 
     def is_clickable(self, x, y):
         blank_cell = self.state.blank_cell
@@ -46,6 +47,12 @@ class SlidePuzzle:
 
     def update(self, dt):
         pass
+
+    def reset_to_save_state(self):
+        self.state = self.saved_state
+
+    def save_state(self):
+        self.saved_state = self.state
 
     def draw(self, screen):
         if self.is_thinking:
