@@ -29,7 +29,7 @@ PYTHONPATH=`pwd`/.. python3 console.py <config.json>
 PYTHONPATH=`pwd`/.. python3 game.py <config.json>
 ```
 *La definicion de la variable de entorno PYTHONPATH para la ejecucion es necesaria
-para que se resuelvan apropiadamente los modulos locales*
+para que se resuelvan apropiadamente los modulos locales. Para una shell no bash como en windows, la variable de entorno se debe settear apropiadamente*
 
 La primera hace una resolucion **one shot**, donde corre el algoritmo
 con los parametros especificados y luego muestra los resultados.
