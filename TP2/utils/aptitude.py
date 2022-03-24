@@ -18,3 +18,5 @@ def aptitude(indiv: np.ndarray, params):
     x = 0
     for u in range(1, 3):
         x += pow(params.result - big_f(indiv, params.values), 2)
+        
+    return x
