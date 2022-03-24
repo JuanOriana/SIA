@@ -30,10 +30,10 @@ def double_cross(indiv1: Individual, indiv2: Individual) -> list[Individual]:
     return [Individual(new_indiv1_arr,indiv1.aptitude), Individual(new_indiv2_arr,indiv1.aptitude)]
 
 
-def rand_cross(indiv1: np.ndarray, indiv2: np.ndarray) -> list[np.ndarray]:
-    new_indiv1 = np.copy(indiv1)
-    new_indiv2 = np.copy(indiv2)
-    for i in range(len(indiv1)):
+def rand_cross(indiv1: Individual, indiv2: Individual) -> list[Individual]:
+    new_indiv1_arr = np.copy(indiv1.get_state())
+    new_indiv2_arr = np.copy(indiv2.get_state())
+    for i in range(len(new_indiv1_arr)):
         if np.random.uniform(0, 1) < 0.5:
-            new_indiv1[i], new_indiv2[i] = new_indiv2[i], new_indiv1[i]
-    return [new_indiv1, new_indiv2]
+            new_indiv1_arr[i], new_indiv2_arr[i] = new_indiv2_arr[i], new_indiv1_arr[i]
+    return [Individual(new_indiv1_arr, indiv1.aptitude), Individual(new_indiv2_arr, indiv1.aptitude)]
