@@ -21,7 +21,7 @@ def truncated_selection(population: list[Individual], size, k):
     selection = []
     population.sort(key=lambda indiv: indiv.aptitude_concrete, reverse=True)
     visible_population = population[:len(population) - k]
-    for i in range(len(population) // 2):
+    for i in range(size):
         selection.append(visible_population[np.random.choice(len(visible_population))])
     return selection
 
