@@ -58,7 +58,7 @@ class GeneticSolver():
         limit = min(self.current_gen_number + n, self.max_generations)
         while self.current_gen_number <= limit:
             self.next_gen()
-        return self.max_aptitude, self.avg_aptitude
+        return self.max_aptitude, self.avg_aptitude, self.current_gen
 
     def evolve(self):
         return self.evolve_limited(self.max_generations)
