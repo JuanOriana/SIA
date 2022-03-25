@@ -19,12 +19,16 @@ class GeneticSolver():
         self.mutation_prob = mutation_prob
         self.mutation_std = mutation_std
         self.max_aptitude = -1
+        self.avg_aptitude = -1
 
     def init_gen(self) -> list[Individual]:
         gen = []
+        sum_apt = 0
         for i in range(self.gen_size):
             gen.append(Individual(np.random.rand(self.indiv_size), self.aptitude_fun))
+            sum_apt += gen[-1].aptitude_concrete
         self.max_aptitude = max([indiv.aptitude_concrete for indiv in gen])
+        self.avg_aptitude = sum_apt / self.gen_size;
         return gen
 
     def next_gen(self):
@@ -38,13 +42,23 @@ class GeneticSolver():
             self.current_gen.append(self.mutation_fun(new_indivs[0], self.mutation_prob, self.mutation_std))
             self.current_gen.append(self.mutation_fun(new_indivs[1], self.mutation_prob, self.mutation_std))
         self.current_gen = self.selection_fun(self.current_gen, self.gen_size)
-        self.max_aptitude = np.max([indiv.aptitude_concrete for indiv in self.current_gen])
+        sum_apt = 0
+        max_apt = 0
+
+        for indiv in self.current_gen:
+            sum_apt += indiv.aptitude_concrete
+            max_apt = max(max_apt,indiv.aptitude_concrete)
+
+        self.max_aptitude = max_apt
+        self.avg_aptitude = sum_apt/self.gen_size
+
         self.current_gen_number += 1
 
-    def evolve(self):
-        while self.current_gen_number <= self.max_generations:
-            if abs(self.max_aptitude - 3) < 0.0000001:
-                break
+    def evolve_limited(self, n):
+        limit = min(self.current_gen_number + n, self.max_generations)
+        while self.current_gen_number <= limit:
             self.next_gen()
-        print(self.current_gen_number)
-        print(self.max_aptitude)
+        return self.max_aptitude, self.avg_aptitude
+
+    def evolve(self):
+        return self.evolve_limited(self.max_generations)
