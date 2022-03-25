@@ -48,3 +48,8 @@ class Parameters(object):
         data = json.load(input_file)
         self.load_parameters(data['gen_size'], data['max_generations'], data['crossing_fun'], data['selection_fun'], data['mutation_prob'], data['mutation_std'])
         input_file.close()
+
+    def __str__(self) -> str:
+        toRet = "Parameters: \n - mutation_std = {mutation_std}\n - mutation_prob = {mutation_prob}\n - aptitude_fun = {aptitude_fun}\n - selection_fun = {selection_fun}\n - mutation_fun = {mutation_fun}\n - crossing_fun = {crossing_fun}\n - gen_size = {gen_size}\n - max_generations = {max_generations}\n"
+        return toRet.format(mutation_std=self.mutation_std, mutation_prob=self.mutation_prob, aptitude_fun=self.aptitude_fun, selection_fun=self.selection_fun, mutation_fun=self.mutation_fun, crossing_fun=self.crossing_fun, gen_size=self.gen_size, max_generations=self.max_generations)
+
