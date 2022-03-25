@@ -8,13 +8,31 @@ def elite_selection(population: list[Individual], size):
     return population[:size]
 
 
-def roulette_selection(population: list[Individual], size):
+# def roulette_selection(population: list[Individual], size):
+#     selection = []
+#     total_aptitude = sum([c.aptitude_concrete for c in population])
+#     selection_probs = [c.aptitude_concrete / total_aptitude for c in population]
+#     for i in range(size):
+#         selection.append(np.random.choice(population, p=selection_probs))
+#     return selection
+
+
+def roulette_selection(population: list[Individual], size, fitness_func=lambda indiv: indiv.aptitude_concrete):
     selection = []
-    total_aptitude = sum([c.aptitude_concrete for c in population])
-    selection_probs = [c.aptitude_concrete / total_aptitude for c in population]
+    total_aptitude = sum([fitness_func(c) for c in population])
+    selection_probs = [fitness_func(c) / total_aptitude for c in population]
     for i in range(size):
         selection.append(np.random.choice(population, p=selection_probs))
     return selection
+
+
+def boltzmann_selection(population: list[Individual], size, temp):
+    return roulette_selection(population, size, fitness_func=lambda indiv: np.exp(indiv.aptitude(indiv) / temp))
+
+
+# TODO: Ver como manejar los parametros desde geneticSolver para esta funcion
+def boltzmann_temperature(initial_temp, change_factor, gen_num, decrease_factor):
+    return change_factor + (initial_temp - change_factor) * np.exp(-decrease_factor * gen_num)
 
 
 def truncated_selection(population: list[Individual], size, k):
@@ -24,11 +42,6 @@ def truncated_selection(population: list[Individual], size, k):
     for i in range(size):
         selection.append(visible_population[np.random.choice(len(visible_population))])
     return selection
-
-
-# def boltzmann_selection(population: list[Individual], size, temp):
-#     new_fitness_func = lambda indiv: np.exp(fitness_func(indiv) / temp)
-#     return roulette_selection(population, new_fitness_func)
 
 
 def rank_selection(population: list[Individual], size):
