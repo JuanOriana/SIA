@@ -10,7 +10,18 @@ selection_functions = { 'elite_selection':elite_selection , 'roulette_selection'
 
 class Parameters(object):
 
-    def __init__(self, gen_size, max_generations, crossing_fun, selection_fun, mutation_prob, mutation_std):
+    def __init__(self, input_json_file_name):
+        self.mutation_std = None
+        self.mutation_prob = None
+        self.aptitude_fun = None
+        self.selection_fun = None
+        self.mutation_fun = None
+        self.crossing_fun = None
+        self.gen_size = None
+        self.max_generations = None
+        self.from_json(input_json_file_name)
+
+    def load_parameters(self, gen_size, max_generations, crossing_fun, selection_fun, mutation_prob, mutation_std):
         if not gen_size: raise Exception("ERROR: A generation size must be defined.")
         elif not max_generations: raise Exception("ERROR: A maximum number of generation must be defined.")
         elif not mutation_prob: raise Exception("ERROR: A mutation probability must be defined.")
@@ -35,5 +46,5 @@ class Parameters(object):
             print("File error: Invalid json file passed as config")
             quit(1)
         data = json.load(input_file)
-        self.__init__(data['gen_size'], data['max_generations'], data['crossing_fun'], data['selection_fun'], data['mutation_prob'], data['mutation_std'])
+        self.load_parameters(data['gen_size'], data['max_generations'], data['crossing_fun'], data['selection_fun'], data['mutation_prob'], data['mutation_std'])
         input_file.close()
