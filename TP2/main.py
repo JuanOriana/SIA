@@ -6,7 +6,7 @@ from TP2.genetic_solvers.crossing.crossing_algos import rand_cross, simple_cross
 from TP2.genetic_solvers.mutation.mutation_algo import mutate
 from TP2.genetic_solvers.selection.selection_algos import tournament_selection, elite_selection, roulette_selection, \
     truncated_selection, rank_selection
-from TP2.utils.aptitude import loaded_aptitude
+from TP2.utils.aptitude import loaded_aptitude, big_f
 
 
 def main():
@@ -56,8 +56,8 @@ def main():
     # print(rand_cross(indiv1, indiv2))
     # print(tournament_selection([indiv1, indiv2, indiv3, indiv4], lambda indiv: sum(indiv)))
 
-    genetic_solver = GeneticSolver(gen_size=100,indiv_size=11,max_generations=10,crossing_fun=rand_cross,mutation_fun=mutate,
-                            selection_fun=rank_selection,apitude_fun=loaded_aptitude,mutation_prob=0.09,mutation_std=1)
+    genetic_solver = GeneticSolver(gen_size=10,indiv_size=11,max_generations=1000,crossing_fun=double_cross,mutation_fun=mutate,
+                            selection_fun=tournament_selection,apitude_fun=loaded_aptitude,mutation_prob=0.4,mutation_std=2)
     genetic_solver.evolve()
 
 if __name__ == "__main__":

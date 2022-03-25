@@ -44,5 +44,9 @@ class GeneticSolver():
 
     def evolve(self):
         while self.current_gen_number <= self.max_generations:
+            if abs(self.max_aptitude - 3) < 0.00001:
+                break
             self.next_gen()
-            print("max ap: " + str(self.max_aptitude))
+        print(self.current_gen_number)
+        print(self.max_aptitude)
+

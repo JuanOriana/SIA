@@ -10,10 +10,10 @@ def elite_selection(population: list[Individual], size):
 
 def roulette_selection(population: list[Individual], size):
     selection = []
-    max = sum([c.aptitude_concrete for c in population])
-    selection_probs = [c.aptitude_concrete / max for c in population]
+    total_aptitude = sum([c.aptitude_concrete for c in population])
+    selection_probs = [c.aptitude_concrete / total_aptitude for c in population]
     for i in range(size):
-        selection.append(population[np.random.choice(len(population), p=selection_probs)])
+        selection.append(np.random.choice(population, p=selection_probs))
     return selection
 
 
@@ -37,7 +37,7 @@ def rank_selection(population: list[Individual], size):
     max = sum([idx + 1 for idx, c in enumerate(population)])
     selection_probs = [(len(population) - idx) / max for idx, c in enumerate(population)]
     for i in range(size):
-        selection.append(population[np.random.choice(len(population), p=selection_probs)])
+        selection.append(np.random.choice(population, p=selection_probs))
     return selection
 
 

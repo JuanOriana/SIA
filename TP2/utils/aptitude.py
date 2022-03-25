@@ -1,4 +1,3 @@
-
 from TP2.data_structs.Individual import Individual
 from TP2.data_structs.TestCase import TestCase
 from TP2.utils.logistic_function import logistic_function
@@ -21,12 +20,15 @@ def aproximation_error(indiv: Individual, test_cases: list[TestCase]):
         err += pow(test_cases[u].result - big_f(indiv, test_cases[u]), 2)
     return err
 
+
+# worst value = 0. best value = amount of test_cases
 def aptitude(indiv: Individual, test_cases: list[TestCase]):
-    e = aproximation_error(indiv,test_cases)
-    return -e
+    e = aproximation_error(indiv, test_cases)
+    return len(test_cases) - e
 
 
 def loaded_aptitude(indiv: Individual):
-    test_cases = [TestCase(1, [-3.9429, -0.7689, 4.8830]), TestCase(1, [4.1793, -4.9218, 1.7664]), TestCase(0, [4.4793, -4.0765, -4.0765])]
+    test_cases = [TestCase(1, [-3.9429, -0.7689, 4.8830]), TestCase(1, [4.1793, -4.9218, 1.7664]),
+                  TestCase(0, [4.4793, -4.0765, -4.0765])]
 
     return aptitude(indiv, test_cases)
