@@ -54,13 +54,21 @@ def rank_selection(population: list[Individual], size):
     return selection
 
 
-def tournament_selection(population: list[Individual], size):
+def tournament_selection(population: list[Individual], size, threshold=0.7):
     selection = []
     for i in range(size):
-        indexes = np.random.choice(len(population), size=4, replace=False)
-        winner_idx_1 = 0 if population[indexes[0]].aptitude_concrete > population[indexes[1]].aptitude_concrete else 1
-        winner_idx_2 = 2 if population[indexes[2]].aptitude_concrete > population[indexes[3]].aptitude_concrete else 3
-        winner_idx = winner_idx_1 if population[indexes[winner_idx_1]].aptitude_concrete > population[
-            indexes[winner_idx_2]].aptitude_concrete else winner_idx_2
-        selection.append(population[indexes[winner_idx]])
+        picked = np.random.choice(len(population), size=4, replace=False)
+        winner1 = choose_winner(population[picked[0]],population[picked[1]],threshold)
+        winner2 = choose_winner(population[picked[2]],population[picked[3]],threshold)
+        selection.append(choose_winner(winner1,winner2,threshold))
     return selection
+
+
+def choose_winner(indiv1: Individual, indiv2: Individual, threshold: float):
+    if indiv1.aptitude_concrete > indiv2.aptitude_concrete:
+        best_indiv, worst_indiv = indiv1, indiv2
+    else:
+        best_indiv, worst_indiv = indiv2, indiv1
+
+    r = np.random.uniform(0, 1)
+    return best_indiv if r < threshold else worst_indiv
