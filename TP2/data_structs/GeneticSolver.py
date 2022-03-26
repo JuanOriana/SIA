@@ -7,7 +7,8 @@ from TP2.data_structs.Individual import Individual
 class GeneticSolver():
 
     def __init__(self, gen_size: int, indiv_size: int, max_generations: int, crossing_fun,
-                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k, threshold):
+                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k, threshold,
+                 inital_temp:float, change_factor:float,decrease_factor:float):
         self.gen_size = gen_size
         self.indiv_size = indiv_size
         self.max_generations = max_generations
@@ -21,7 +22,7 @@ class GeneticSolver():
         self.mutation_std = mutation_std
         self.max_aptitude = -1
         self.avg_aptitude = -1
-        self.selection_params = GeneticSelectionParams(gen_size,k,threshold)
+        self.selection_params = GeneticSelectionParams(k,threshold,inital_temp,change_factor,decrease_factor)
 
     def init_gen(self) -> list[Individual]:
         gen = []
@@ -43,6 +44,7 @@ class GeneticSolver():
             new_indivs = self.crossing_fun(self.current_gen[indexes[0]], self.current_gen[indexes[1]])
             self.current_gen.append(self.mutation_fun(new_indivs[0], self.mutation_prob, self.mutation_std))
             self.current_gen.append(self.mutation_fun(new_indivs[1], self.mutation_prob, self.mutation_std))
+        self.selection_params.current_gen_number = self.current_gen_number
         self.current_gen = self.selection_fun(self.current_gen, self.gen_size,self.selection_params)
         sum_apt = 0
         max_apt = 0
