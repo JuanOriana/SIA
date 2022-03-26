@@ -29,7 +29,8 @@ def roulette_selection(population: list[Individual], size: int, selection_params
 
 
 def boltzmann_selection(population: list[Individual], size: int, selection_params: GeneticSelectionParams):
-    temp = selection_params.gen_size
+    temp = boltzmann_temperature(selection_params.initial_temp,selection_params.change_factor,
+                                 selection_params.current_gen_number,selection_params.decrease_factor)
     return roulette_selection(population, size, selection_params,
                               fitness_func=lambda indiv: np.exp(indiv.aptitude(indiv) / temp))
 
@@ -60,7 +61,7 @@ def rank_selection(population: list[Individual], size:int, selection_params: Gen
 
 
 def tournament_selection(population: list[Individual], size:int, selection_params: GeneticSelectionParams):
-    threshold = selection_params.threshold
+    threshold = selection_params.threshold1
     selection = []
     for i in range(size):
         picked = np.random.choice(len(population), size=4, replace=False)
