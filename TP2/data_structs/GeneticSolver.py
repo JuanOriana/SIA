@@ -7,8 +7,8 @@ from TP2.data_structs.Individual import Individual
 class GeneticSolver():
 
     def __init__(self, gen_size: int, indiv_size: int, max_generations: int, crossing_fun,
-                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k, threshold,
-                 inital_temp:float, change_factor:float,decrease_factor:float):
+                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k = None, threshold = None,
+                 inital_temp:float = None, change_factor:float = None, decrease_factor:float = None):
         self.gen_size = gen_size
         self.indiv_size = indiv_size
         self.max_generations = max_generations
@@ -22,6 +22,8 @@ class GeneticSolver():
         self.mutation_std = mutation_std
         self.max_aptitude = -1
         self.avg_aptitude = -1
+        print(selection_fun.__name__)
+        if selection_fun.__name__ == 'boltzmann_selection' and (k is None or threshold is None or inital_temp is None or change_factor is None or decrease_factor is None): raise Exception("ERROR: Required parameters for boltzmann_selection are not passed.")
         self.selection_params = GeneticSelectionParams(k,threshold,inital_temp,change_factor,decrease_factor)
 
     def init_gen(self) -> list[Individual]:
