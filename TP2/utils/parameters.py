@@ -30,10 +30,10 @@ class Parameters(object):
             self.gen_size = gen_size
             self.max_generations = max_generations
             if not crossing_functions.__contains__(crossing_fun): raise Exception("ERROR: Crossing function: " + crossing_fun + " - is not a valid one")
-            else: self.crossing_fun = crossing_fun
+            else: self.crossing_fun = crossing_functions[crossing_fun]
             self.mutation_fun = mutate
             if not selection_functions.__contains__(selection_fun): raise Exception("ERROR: Selection function: " + selection_fun + " - is not a valid one")
-            else: self.selection_fun = selection_fun
+            else: self.selection_fun = selection_functions[selection_fun]
             self.aptitude_fun = loaded_aptitude
             self.mutation_prob = mutation_prob
             self.mutation_std = mutation_std

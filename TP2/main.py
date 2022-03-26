@@ -1,15 +1,20 @@
 import numpy as np
 
 from TP2.data_structs.GeneticSolver import GeneticSolver
-from TP2.data_structs.Individual import Individual
+import sys
 from TP2.genetic_solvers.crossing.crossing_algos import rand_cross, simple_cross, double_cross
 from TP2.genetic_solvers.mutation.mutation_algo import mutate
 from TP2.genetic_solvers.selection.selection_algos import tournament_selection, elite_selection, roulette_selection, \
     truncated_selection, rank_selection
+from TP2.utils import parameters
 from TP2.utils.aptitude import loaded_aptitude, big_f
+from TP2.utils.parameters import Parameters
 
 
 def main():
+    if len(sys.argv) != 2:
+        print("Invalid usage: main.py <config.json>")
+        quit(1)
     # indiv1_arr = np.array([0.51, 0.31, 0.11, 1.1, 6.41, 1.11, 3.11, 1.91, 2.51, 0.21, 0.31])
     # indiv2_arr = np.array([2.62, 4.32, 1.22, 5.02, 1.92, 0.62, 0.72, 0.52, 1.12, 0.22, 0.32])
     # indiv3_arr = np.array([4.13, 8.23, 1.23, 1.03, 0.93, 3.23, 0.33, 0.73, 0.13, 0.23, 5.33])
@@ -56,9 +61,14 @@ def main():
     # print(rand_cross(indiv1, indiv2))
     # print(tournament_selection([indiv1, indiv2, indiv3, indiv4], lambda indiv: sum(indiv)))
 
-    genetic_solver = GeneticSolver(gen_size=10,indiv_size=11,max_generations=1000,crossing_fun=double_cross,mutation_fun=mutate,
-                            selection_fun=tournament_selection,apitude_fun=loaded_aptitude,mutation_prob=0.4,mutation_std=2)
+    values = Parameters(sys.argv[1])
+    print(values.selection_fun)
+    genetic_solver = GeneticSolver(gen_size=values.gen_size, indiv_size=11, max_generations=values.max_generations, crossing_fun=values.crossing_fun,
+                                   mutation_fun=values.mutation_fun,
+                                   selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun, mutation_prob=values.mutation_prob,
+                                   mutation_std=values.mutation_std)
     genetic_solver.evolve()
+
 
 if __name__ == "__main__":
     main()
