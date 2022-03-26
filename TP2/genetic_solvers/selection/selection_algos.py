@@ -1,9 +1,10 @@
 import numpy as np
 
+from TP2.data_structs.GeneticSelectionParams import GeneticSelectionParams
 from TP2.data_structs.Individual import Individual
 
 
-def elite_selection(population: list[Individual], size):
+def elite_selection(population: list[Individual], size: int, selection_params: GeneticSelectionParams):
     population.sort(key=lambda indiv: indiv.aptitude_concrete, reverse=True)
     return population[:size]
 
@@ -17,7 +18,8 @@ def elite_selection(population: list[Individual], size):
 #     return selection
 
 
-def roulette_selection(population: list[Individual], size, fitness_func=lambda indiv: indiv.aptitude_concrete):
+def roulette_selection(population: list[Individual], size: int, selection_params: GeneticSelectionParams,
+                       fitness_func=lambda indiv: indiv.aptitude_concrete):
     selection = []
     total_aptitude = sum([fitness_func(c) for c in population])
     selection_probs = [fitness_func(c) / total_aptitude for c in population]
@@ -26,8 +28,10 @@ def roulette_selection(population: list[Individual], size, fitness_func=lambda i
     return selection
 
 
-def boltzmann_selection(population: list[Individual], size, temp):
-    return roulette_selection(population, size, fitness_func=lambda indiv: np.exp(indiv.aptitude(indiv) / temp))
+def boltzmann_selection(population: list[Individual], size: int, selection_params: GeneticSelectionParams):
+    temp = selection_params.gen_size
+    return roulette_selection(population, size, selection_params,
+                              fitness_func=lambda indiv: np.exp(indiv.aptitude(indiv) / temp))
 
 
 # TODO: Ver como manejar los parametros desde geneticSolver para esta funcion
@@ -35,7 +39,8 @@ def boltzmann_temperature(initial_temp, change_factor, gen_num, decrease_factor)
     return change_factor + (initial_temp - change_factor) * np.exp(-decrease_factor * gen_num)
 
 
-def truncated_selection(population: list[Individual], size, k):
+def truncated_selection(population: list[Individual], size: int, selection_params: GeneticSelectionParams):
+    k = selection_params.k
     selection = []
     population.sort(key=lambda indiv: indiv.aptitude_concrete, reverse=True)
     visible_population = population[:len(population) - k]
@@ -44,7 +49,7 @@ def truncated_selection(population: list[Individual], size, k):
     return selection
 
 
-def rank_selection(population: list[Individual], size):
+def rank_selection(population: list[Individual], size:int, selection_params: GeneticSelectionParams):
     selection = []
     population.sort(key=lambda indiv: indiv.aptitude_concrete, reverse=True)
     max = sum([idx + 1 for idx, c in enumerate(population)])
@@ -54,13 +59,14 @@ def rank_selection(population: list[Individual], size):
     return selection
 
 
-def tournament_selection(population: list[Individual], size, threshold=0.7):
+def tournament_selection(population: list[Individual], size:int, selection_params: GeneticSelectionParams):
+    threshold = selection_params.threshold
     selection = []
     for i in range(size):
         picked = np.random.choice(len(population), size=4, replace=False)
-        winner1 = choose_winner(population[picked[0]],population[picked[1]],threshold)
-        winner2 = choose_winner(population[picked[2]],population[picked[3]],threshold)
-        selection.append(choose_winner(winner1,winner2,threshold))
+        winner1 = choose_winner(population[picked[0]], population[picked[1]], threshold)
+        winner2 = choose_winner(population[picked[2]], population[picked[3]], threshold)
+        selection.append(choose_winner(winner1, winner2, threshold))
     return selection
 
 

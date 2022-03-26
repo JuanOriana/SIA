@@ -66,7 +66,7 @@ def main():
     genetic_solver = GeneticSolver(gen_size=values.gen_size, indiv_size=11, max_generations=values.max_generations, crossing_fun=values.crossing_fun,
                                    mutation_fun=values.mutation_fun,
                                    selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun, mutation_prob=values.mutation_prob,
-                                   mutation_std=values.mutation_std)
+                                   mutation_std=values.mutation_std, k=4, threshold=0.7)
     genetic_solver.evolve()
 
 
