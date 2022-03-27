@@ -22,6 +22,7 @@ class GeneticSolver():
         self.mutation_std = mutation_std
         self.max_aptitude = -1
         self.avg_aptitude = -1
+        self.max_individual = None
         # TODO: En vez de fijarnos si el nombre de la funcion es tal, pq no seteamos valores default para los parametros
         if selection_fun.__name__ == 'boltzmann_selection' and (
                 k is None or threshold is None or inital_temp is None or change_factor is None or decrease_factor is None): raise Exception(
@@ -55,7 +56,9 @@ class GeneticSolver():
 
         for indiv in self.current_gen:
             sum_apt += indiv.aptitude_concrete
-            max_apt = max_apt if max_apt > indiv.aptitude_concrete else indiv.aptitude_concrete
+            if indiv.aptitude_concrete > max_apt:
+                self.max_individual = indiv
+                max_apt = indiv.aptitude_concrete
 
         self.max_aptitude = max_apt
         self.avg_aptitude = sum_apt / self.gen_size
@@ -66,7 +69,7 @@ class GeneticSolver():
         limit = min(self.current_gen_number + n, self.max_generations)
         while self.current_gen_number <= limit:
             self.next_gen()
-        return self.max_aptitude, self.avg_aptitude, self.current_gen
+        return self.max_aptitude, self.avg_aptitude, self.current_gen_number, self.max_individual
 
     def evolve(self):
         return self.evolve_limited(self.max_generations)
@@ -74,7 +77,7 @@ class GeneticSolver():
     def evolve_until_error_bound(self, error_bound):
         while abs(self.max_aptitude - 3) < error_bound:
             self.next_gen()
-        return self.max_aptitude, self.avg_aptitude, self.current_gen_number, self.current_gen
+        return self.max_aptitude, self.avg_aptitude, self.current_gen_number, self.max_individual
 
     def restart_solver(self):
         self.avg_aptitude = -1

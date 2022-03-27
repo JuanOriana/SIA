@@ -1,1 +1,1 @@
-{"gen_size": 200, "max_generations": 500, "crossing_fun": "double_cross", "selection_fun": "tournament_selection", "mutation_prob": 0.5, "mutation_std": 1}
+{"gen_size": 200, "max_generations": 200, "crossing_fun": "double_cross", "selection_fun": "tournament_selection", "mutation_prob": 0.5, "mutation_std": 1}

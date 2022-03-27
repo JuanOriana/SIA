@@ -62,12 +62,16 @@ def main():
     # print(tournament_selection([indiv1, indiv2, indiv3, indiv4], lambda indiv: sum(indiv)))
 
     values = Parameters(sys.argv[1])
-    print(values.selection_fun)
     genetic_solver = GeneticSolver(gen_size=values.gen_size, indiv_size=11, max_generations=values.max_generations, crossing_fun=values.crossing_fun,
                                    mutation_fun=values.mutation_fun,
                                    selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun, mutation_prob=values.mutation_prob,
                                    mutation_std=values.mutation_std, k=4, threshold=0.7)
-    genetic_solver.evolve()
+    max_apt, avg_apt, gen, max_indiv = genetic_solver.evolve();
+    print("Finished at generation: " + str(gen-1));
+    print("The average aptitude at this generation was: " + str(avg_apt))
+    print("The max aptitude at this generation was: " + str(max_apt))
+    print("And it was obtained by: " + str(max_indiv))
+
 
 
 if __name__ == "__main__":

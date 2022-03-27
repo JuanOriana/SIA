@@ -61,7 +61,7 @@ def rank_selection(population: list[Individual], size:int, selection_params: Gen
 
 
 def tournament_selection(population: list[Individual], size:int, selection_params: GeneticSelectionParams):
-    threshold = selection_params.threshold1
+    threshold = selection_params.threshold
     selection = []
     for i in range(size):
         picked = np.random.choice(len(population), size=4, replace=False)
