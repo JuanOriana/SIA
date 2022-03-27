@@ -7,7 +7,7 @@ from TP2.genetic_solvers.mutation.mutation_algo import mutate
 from TP2.genetic_solvers.selection.selection_algos import tournament_selection, elite_selection, roulette_selection, \
     truncated_selection, rank_selection
 from TP2.utils import parameters
-from TP2.utils.aptitude import loaded_aptitude, big_f
+from TP2.utils.aptitude import loaded_aptitude, big_f, test_cases, aproximation_error
 from TP2.utils.parameters import Parameters
 
 
@@ -15,6 +15,7 @@ def main():
     if len(sys.argv) != 2:
         print("Invalid usage: main.py <config.json>")
         quit(1)
+    np.set_printoptions(precision=15)
     # indiv1_arr = np.array([0.51, 0.31, 0.11, 1.1, 6.41, 1.11, 3.11, 1.91, 2.51, 0.21, 0.31])
     # indiv2_arr = np.array([2.62, 4.32, 1.22, 5.02, 1.92, 0.62, 0.72, 0.52, 1.12, 0.22, 0.32])
     # indiv3_arr = np.array([4.13, 8.23, 1.23, 1.03, 0.93, 3.23, 0.33, 0.73, 0.13, 0.23, 5.33])
@@ -62,15 +63,18 @@ def main():
     # print(tournament_selection([indiv1, indiv2, indiv3, indiv4], lambda indiv: sum(indiv)))
 
     values = Parameters(sys.argv[1])
-    genetic_solver = GeneticSolver(gen_size=values.gen_size, indiv_size=11, max_generations=values.max_generations, crossing_fun=values.crossing_fun,
+    genetic_solver = GeneticSolver(gen_size=values.gen_size, indiv_size=11, max_generations=values.max_generations,
+                                   crossing_fun=values.crossing_fun,
                                    mutation_fun=values.mutation_fun,
-                                   selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun, mutation_prob=values.mutation_prob,
+                                   selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun,
+                                   mutation_prob=values.mutation_prob,
                                    mutation_std=values.mutation_std, k=4, threshold=0.7)
     max_apt, avg_apt, gen, max_indiv = genetic_solver.evolve();
-    print("Finished at generation: " + str(gen-1));
-    print("The average aptitude at this generation was: " + str(avg_apt))
-    print("The max aptitude at this generation was: " + str(max_apt))
+    print("Finished at generation: " + str(gen - 1));
+    print("The average aptitude at this generation was: " + avg_apt.astype(str))
+    print("The max aptitude at this generation was: " + max_apt.astype(str))
     print("And it was obtained by: " + str(max_indiv))
+    print("The error for this individual was: " + str(aproximation_error(max_indiv,test_cases)))
 
 
 

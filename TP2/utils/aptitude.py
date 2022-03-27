@@ -2,6 +2,8 @@ from TP2.data_structs.Individual import Individual
 from TP2.data_structs.TestCase import TestCase
 from TP2.utils.logistic_function import logistic_function
 
+test_cases = [TestCase(1, [-3.9429, -0.7689, 4.8830]), TestCase(1, [4.1793, -4.9218, 1.7664]),
+              TestCase(0, [4.4793, -4.0765, -4.0765])]
 
 def big_f(indiv: Individual, case: TestCase):
     x = 0
@@ -28,7 +30,4 @@ def aptitude(indiv: Individual, test_cases: list[TestCase]):
 
 
 def loaded_aptitude(indiv: Individual):
-    test_cases = [TestCase(1, [-3.9429, -0.7689, 4.8830]), TestCase(1, [4.1793, -4.9218, 1.7664]),
-                  TestCase(0, [4.4793, -4.0765, -4.0765])]
-
     return aptitude(indiv, test_cases)
