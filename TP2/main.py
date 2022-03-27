@@ -2,12 +2,8 @@ import numpy as np
 
 from TP2.data_structs.GeneticSolver import GeneticSolver
 import sys
-from TP2.genetic_solvers.crossing.crossing_algos import rand_cross, simple_cross, double_cross
-from TP2.genetic_solvers.mutation.mutation_algo import mutate
-from TP2.genetic_solvers.selection.selection_algos import tournament_selection, elite_selection, roulette_selection, \
-    truncated_selection, rank_selection
-from TP2.utils import parameters
-from TP2.utils.aptitude import loaded_aptitude, big_f, test_cases, aproximation_error
+
+from TP2.utils.aptitude import  test_cases, aproximation_error
 from TP2.utils.parameters import Parameters
 
 
@@ -33,7 +29,7 @@ def main():
     # print(simple_cross(indiv1, indiv2))
     # print()
     # print("cross")
-    # print(double_cross(indiv1, indiv2))
+    # print(multi_point(indiv1, indiv2,1))
     # print()
     # print("rand")
     # print(rand_cross(indiv1, indiv2))
