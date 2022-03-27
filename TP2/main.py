@@ -69,8 +69,17 @@ def main():
                                    selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun,
                                    mutation_prob=values.mutation_prob,
                                    mutation_std=values.mutation_std, k=4, threshold=0.7)
-    max_apt, avg_apt, gen, max_indiv = genetic_solver.evolve();
-    print("Finished at generation: " + str(gen - 1));
+    print("PARAMS:")
+    print("Gen size: "  +str(values.gen_size))
+    print("Max generations: "  +str(values.max_generations))
+    print("Crossing function: "  + values.crossing_fun.__name__)
+    print("Mutation function: "  + values.mutation_fun.__name__)
+    print("Selection function: "  + values.selection_fun.__name__)
+    print("Mutation probability: "  + str(values.mutation_prob))
+    print("Mutation deviation: "  + str(values.mutation_std))
+    print("\nThinking... \n")
+    max_apt, avg_apt, gen, max_indiv = genetic_solver.evolve()
+    print("Finished at generation: " + str(gen - 1))
     print("The average aptitude at this generation was: " + avg_apt.astype(str))
     print("The max aptitude at this generation was: " + max_apt.astype(str))
     print("And it was obtained by: " + str(max_indiv))
