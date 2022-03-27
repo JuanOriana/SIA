@@ -7,8 +7,8 @@ from TP2.data_structs.Individual import Individual
 class GeneticSolver():
 
     def __init__(self, gen_size: int, indiv_size: int, max_generations: int, crossing_fun,
-                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k = None, threshold = None,
-                 inital_temp:float = None, change_factor:float = None, decrease_factor:float = None):
+                 mutation_fun, selection_fun, apitude_fun, mutation_prob, mutation_std, k=None, threshold=None,
+                 inital_temp: float = None, change_factor: float = None, decrease_factor: float = None):
         self.gen_size = gen_size
         self.indiv_size = indiv_size
         self.max_generations = max_generations
@@ -22,9 +22,11 @@ class GeneticSolver():
         self.mutation_std = mutation_std
         self.max_aptitude = -1
         self.avg_aptitude = -1
-        print(selection_fun.__name__)
-        if selection_fun.__name__ == 'boltzmann_selection' and (k is None or threshold is None or inital_temp is None or change_factor is None or decrease_factor is None): raise Exception("ERROR: Required parameters for boltzmann_selection are not passed.")
-        self.selection_params = GeneticSelectionParams(k,threshold,inital_temp,change_factor,decrease_factor)
+        # TODO: En vez de fijarnos si el nombre de la funcion es tal, pq no seteamos valores default para los parametros
+        if selection_fun.__name__ == 'boltzmann_selection' and (
+                k is None or threshold is None or inital_temp is None or change_factor is None or decrease_factor is None): raise Exception(
+            "ERROR: Required parameters for boltzmann_selection are not passed.")
+        self.selection_params = GeneticSelectionParams(k, threshold, inital_temp, change_factor, decrease_factor)
 
     def init_gen(self) -> list[Individual]:
         gen = []
@@ -47,7 +49,7 @@ class GeneticSolver():
             self.current_gen.append(self.mutation_fun(new_indivs[0], self.mutation_prob, self.mutation_std))
             self.current_gen.append(self.mutation_fun(new_indivs[1], self.mutation_prob, self.mutation_std))
         self.selection_params.current_gen_number = self.current_gen_number
-        self.current_gen = self.selection_fun(self.current_gen, self.gen_size,self.selection_params)
+        self.current_gen = self.selection_fun(self.current_gen, self.gen_size, self.selection_params)
         sum_apt = 0
         max_apt = 0
 
@@ -56,7 +58,7 @@ class GeneticSolver():
             max_apt = max_apt if max_apt > indiv.aptitude_concrete else indiv.aptitude_concrete
 
         self.max_aptitude = max_apt
-        self.avg_aptitude = sum_apt/self.gen_size
+        self.avg_aptitude = sum_apt / self.gen_size
 
         self.current_gen_number += 1
 
@@ -69,3 +71,12 @@ class GeneticSolver():
     def evolve(self):
         return self.evolve_limited(self.max_generations)
 
+    def evolve_until_error_bound(self, error_bound):
+        while abs(self.max_aptitude - 3) < error_bound:
+            self.next_gen()
+        return self.max_aptitude, self.avg_aptitude, self.current_gen_number, self.current_gen
+
+    def restart_solver(self):
+        self.avg_aptitude = -1
+        self.max_aptitude = -1
+        self.current_gen_number = 0
