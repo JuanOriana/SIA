@@ -11,8 +11,8 @@ def big_f(indiv: Individual, case: TestCase):
         y = 0
         for k in range(0, 3):
             y += indiv.get_little_w(j)[k] * case.params[k]
-        y -= indiv.get_w_0()[j]  # TODO: Preguntar si es w0 a lo que se refiere
-        x += indiv.get_big_w()[j] * logistic_function(y)
+        y -= indiv.get_w_0()[j]
+        x += indiv.get_big_w()[j+1] * logistic_function(y)
     return logistic_function(x - indiv.get_big_w()[0])
 
 
