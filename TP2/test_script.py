@@ -15,12 +15,13 @@ if __name__ == '__main__':
     default_gen_size = 50
     default_mutation_prob = 0.09
     default_mutation_std = 1
-    chunked_generations = np.array([5, 10, 30])
-    chunked_generations_positions = np.array([0.85,1.85,2.85])
-    chunked_generations_str = ['5','10','30']
+    runs = 3.0
+    chunked_generations = np.array([5, 10, 30, 105, 150, 200])
+    chunked_generations_positions = np.array([0.85, 1.85, 2.85, 3.85, 4.85, 5.85])
+    chunked_generations_str = ['5', '15', '45', '150', '300', '500']
 
     # chunked_generations = [5, 10]
-    crossing_functions = {'simple_cross': simple_cross,'rand_cross': rand_cross}
+    crossing_functions = {'simple_cross': simple_cross, 'rand_cross': rand_cross}
     selection_functions = {'elite_selection': elite_selection, 'roulette_selection': roulette_selection,
                            'boltzmann_selection': boltzmann_selection, 'truncated_selection': truncated_selection,
                            'rank_selection': rank_selection, 'tournament_selection': tournament_selection}
@@ -42,55 +43,91 @@ if __name__ == '__main__':
 
     # Crossing usando el chunked max_gens y dejando tod fijo  max_gen[5,5,10,30,450,500](con estos chunk)con rank y  roulete
     crossing_tests = {}
-    # for select_fun in ['rank_selection', 'roulette_selection']:
-    for select_fun in ['rank_selection']:
-        crossing_tests.update({select_fun: {}})
-        genetic_solver.selection_fun = selection_functions[select_fun]
-        for cross_func in crossing_functions:
-            crossing_tests[select_fun].update({cross_func: list()})
-            genetic_solver.crossing_fun = crossing_functions[cross_func]
-            for i in chunked_generations:
-                crossing_tests[select_fun][cross_func].append(genetic_solver.evolve_limited(i))
-            genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
-                                   max_generations=500,
-                                   crossing_fun=crossing_functions[cross_func],
-                                   mutation_fun=mutate,
-                                   selection_fun=selection_functions[select_fun],
-                                   apitude_fun=loaded_aptitude,
-                                   mutation_prob=default_mutation_prob,
-                                   mutation_std=default_mutation_std, k=1, threshold=2, change_factor=1,
-                                   decrease_factor=2)
-
-    average_aptitudes = {}
     max_aptitudes = {}
+    average_aptitudes = {}
+    # for run in range(runs):
+    #     crossing_tests.clear()
+    #     # for select_fun in ['rank_selection', 'roulette_selection']:
+    #     for select_fun in ['rank_selection']:
+    #         crossing_tests.update({select_fun: {}})
+    #         genetic_solver.selection_fun = selection_functions[select_fun]
+    #         for cross_func in crossing_functions:
+    #             if run == 0:average_aptitudes.update({cross_func: list()})
+    #             if run == 0:max_aptitudes.update({cross_func: list()})
+    #             crossing_tests[select_fun].update({cross_func: list()})
+    #             genetic_solver.crossing_fun = crossing_functions[cross_func]
+    #             for i in range(len(chunked_generations)):
+    #                 crossing_tests[select_fun][cross_func].append(genetic_solver.evolve_limited(chunked_generations[i]))
+    #                 if run > 0:
+    #                     average_aptitudes[cross_func][i] += (crossing_tests[select_fun][cross_func][i][1])/runs
+    #                     max_aptitudes[cross_func][i] += (crossing_tests[select_fun][cross_func][i][0])/runs
+    #                 else:
+    #                     average_aptitudes[cross_func].append(crossing_tests[select_fun][cross_func][i][1]/runs)
+    #                     max_aptitudes[cross_func].append(crossing_tests[select_fun][cross_func][i][0]/runs)
+    #             genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
+    #                                            max_generations=500,
+    #                                            crossing_fun=crossing_functions[cross_func],
+    #                                            mutation_fun=mutate,
+    #                                            selection_fun=selection_functions[select_fun],
+    #                                            apitude_fun=loaded_aptitude,
+    #                                            mutation_prob=default_mutation_prob,
+    #                                            mutation_std=default_mutation_std, k=1, threshold=2, change_factor=1,
+    #                                            decrease_factor=2)
+
     for select_fun in ['rank_selection']:
         for cross_func in crossing_functions:
-            average_aptitudes.update({cross_func: list()})
-            max_aptitudes.update({cross_func: list()})
-            for i in range(len(chunked_generations)):
-                average_aptitudes[cross_func].append(crossing_tests[select_fun][cross_func][i][1])
-                max_aptitudes[cross_func].append(crossing_tests[select_fun][cross_func][i][0])
-
             plt.suptitle("Generation change test " + select_fun + " y " + cross_func)
             plt.ylabel("AVG aptitude")
             plt.xlabel("Gen size")
-            plt.bar(chunked_generations_positions+0.3, max_aptitudes[cross_func],color='b', width=0.3,align='center')
-            plt.bar(chunked_generations_positions, average_aptitudes[cross_func],color='g', width=0.3,align='center')
-            x1,x2,_,_ = plt.axis()
-            plt.axis([x1,x2, 2.0, 3.0])
-            plt.xticks(np.array([1,2,3]),chunked_generations_str)
+            plt.bar(chunked_generations_positions + 0.3, max_aptitudes[cross_func], color='b', width=0.3,
+                    align='center')
+            plt.bar(chunked_generations_positions, average_aptitudes[cross_func], color='g', width=0.3, align='center')
+            x1, x2, _, _ = plt.axis()
+            plt.axis([x1, x2, 2.0, 3.0])
+            plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
             plt.show()
     #
     #
     # # selection usando el chunked max_gens y dejando tod fijo  max_gen[5,5,10,30,450,500](con estos chunk) con simple_cross
-    # selection_tests = {}
-    # genetic_solver.crossing_fun = crossing_functions['simple_cross']
-    # for select_fun in selection_functions:
-    #     genetic_solver.selection_fun = selection_functions[select_fun]
-    #     selection_tests.update({select_fun: list()})
-    #     for i in chunked_generations:
-    #         selection_tests[select_fun].append(genetic_solver.evolve_limited(i))
-    #     genetic_solver.restart_solver()
+    selection_tests = {}
+    max_aptitudes.clear()
+    average_aptitudes.clear()
+
+    for run in range(int(runs)):
+        selection_tests.clear()
+        for select_fun in selection_functions:
+            genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
+                                           max_generations=500,
+                                           crossing_fun=crossing_functions['simple_cross'],
+                                           mutation_fun=mutate,
+                                           selection_fun=selection_functions[select_fun],
+                                           apitude_fun=loaded_aptitude,
+                                           mutation_prob=default_mutation_prob,
+                                           mutation_std=default_mutation_std, k=1, threshold=2, change_factor=1,
+                                           decrease_factor=2)
+            selection_tests.update({select_fun: list()})
+            if run == 0: average_aptitudes.update({select_fun: list()})
+            if run == 0: max_aptitudes.update({select_fun: list()})
+            for i in range(len(chunked_generations)):
+                selection_tests[select_fun].append(genetic_solver.evolve_limited(chunked_generations[i]))
+                if run > 0:
+                    max_aptitudes[select_fun][i] += (selection_tests[select_fun][i][0]) / runs
+                    average_aptitudes[select_fun][i] += (selection_tests[select_fun][i][1]) / runs
+                else:
+                    average_aptitudes[select_fun].append(selection_tests[select_fun][i][1] / runs)
+                    max_aptitudes[select_fun].append(selection_tests[select_fun][i][0] / runs)
+
+    for select_fun in selection_functions:
+        plt.suptitle("Generation change test " + select_fun)
+        plt.ylabel("AVG aptitude")
+        plt.xlabel("Gen size")
+        plt.bar(chunked_generations_positions + 0.3, max_aptitudes[select_fun], color='b', width=0.3,
+                align='center')
+        plt.bar(chunked_generations_positions, average_aptitudes[select_fun], color='g', width=0.3, align='center')
+        x1, x2, _, _ = plt.axis()
+        plt.axis([x1, x2, 2.0, 3.0])
+        plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+        plt.show()
     #
     # # mutation usando el chunked max_gens y con select fun (rank,roulete,boltzman) (0.01, 1)
     # mutation_prob_tests = {}
