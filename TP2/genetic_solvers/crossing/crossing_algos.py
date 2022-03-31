@@ -25,7 +25,6 @@ def multi_point(indiv1: Individual, indiv2: Individual, points: int) -> list[Ind
     for i in range(0, len(indexes) - 1, 2):
         change_idx1 = indexes[i]
         change_idx2 = indexes[i + 1]
-        print(change_idx1, change_idx2)
         new_indiv1_arr[change_idx1:change_idx2 + 1] = indiv2_arr[change_idx1:change_idx2 + 1]
         new_indiv2_arr[change_idx1:change_idx2 + 1] = indiv1_arr[change_idx1:change_idx2 + 1]
 
@@ -33,7 +32,6 @@ def multi_point(indiv1: Individual, indiv2: Individual, points: int) -> list[Ind
     if points % 2 == 1:
         change_idx1 = indexes[-1]
         change_idx2 = len(indiv1_arr) - 1
-        print(change_idx1)
 
         new_indiv1_arr[change_idx1:change_idx2 + 1] = indiv2_arr[change_idx1:change_idx2 + 1]
         new_indiv2_arr[change_idx1:change_idx2 + 1] = indiv1_arr[change_idx1:change_idx2 + 1]
@@ -42,7 +40,7 @@ def multi_point(indiv1: Individual, indiv2: Individual, points: int) -> list[Ind
 
 
 def double_cross(indiv1: Individual, indiv2: Individual) -> list[Individual]:
-    multi_point(indiv1, indiv2, 2)
+    return multi_point(indiv1, indiv2, 2)
 
 
 def rand_cross(indiv1: Individual, indiv2: Individual) -> list[Individual]:
