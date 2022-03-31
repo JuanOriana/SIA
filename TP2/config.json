@@ -1,1 +1,3 @@
-{"gen_size": 32, "max_generations": 1000, "crossing_fun": "rand_cross", "selection_fun": "elite_selection", "mutation_prob": 0.1, "mutation_std": 1}
+{"gen_size": 100, "max_generations": 500, "crossing_fun": "double_cross", "selection_fun": "roulette_selection", "mutation_prob": 0.1, "mutation_std": 1,
+  "k": 30
+}
