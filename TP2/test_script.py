@@ -15,13 +15,14 @@ if __name__ == '__main__':
     default_gen_size = 50
     default_mutation_prob = 0.09
     default_mutation_std = 1
-    runs = 1.0
-    chunked_generations = np.array([5, 10, 30, 105, 150, 200])
+    runs = 5.0
+    chunked_generations = np.array([5, 10, 35, 100, 150, 200])
     chunked_generations_positions = np.array([0.85, 1.85, 2.85, 3.85, 4.85, 5.85])
-    chunked_generations_str = ['5', '15', '45', '150', '300', '500']
+    chunked_generations_str = ['5', '15', '50', '150', '300', '500']
+    colors = {'max apt': 'blue', 'avg apt': 'green'}
 
     # chunked_generations = [5, 10]
-    crossing_functions = {'simple_cross': simple_cross, 'rand_cross': rand_cross}
+    crossing_functions = {'simple_cross': simple_cross, 'multiple_cross': double_cross, 'rand_cross': rand_cross}
     selection_functions = {'elite_selection': elite_selection, 'roulette_selection': roulette_selection,
                            'boltzmann_selection': boltzmann_selection, 'truncated_selection': truncated_selection,
                            'rank_selection': rank_selection, 'tournament_selection': tournament_selection}
@@ -41,12 +42,12 @@ if __name__ == '__main__':
     #                                decrease_factor=2)
     #
     # # Crossing usando el chunked max_gens y dejando tod fijo  max_gen[5,5,10,30,450,500](con estos chunk)con rank y  roulete
-    # crossing_tests = {}
+    crossing_tests = {}
     max_aptitudes = {}
     average_aptitudes = {}
     # for run in range(int(runs)):
     #     crossing_tests.clear()
-    #     for select_fun in ['rank_selection', 'roulette_selection']:
+    #     for select_fun in ['roulette_selection']:
     #         crossing_tests.update({select_fun: {}})
     #         if run == 0: average_aptitudes.update({select_fun: {}})
     #         if run == 0: max_aptitudes.update({select_fun: {}})
@@ -81,7 +82,7 @@ if __name__ == '__main__':
     #                                            mutation_std=default_mutation_std, k=1, threshold=2, change_factor=1,
     #                                            decrease_factor=2)
     #
-    # for select_fun in ['rank_selection', 'roulette_selection']:
+    # for select_fun in ['roulette_selection']:
     #     for cross_func in crossing_functions:
     #         plt.suptitle("Generation change test " + select_fun + " y " + cross_func)
     #         plt.ylabel("aptitude")
@@ -90,11 +91,14 @@ if __name__ == '__main__':
     #                 align='center')
     #         plt.bar(chunked_generations_positions, average_aptitudes[select_fun][cross_func], color='g', width=0.3, align='center')
     #         x1, x2, _, _ = plt.axis()
-    #         plt.axis([x1, x2, 2.0, 3.0])
+    #         plt.axis([x1, x2, 6, 9.0])
     #         plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #         labels = list(colors.keys())
+    #         handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
+    #         plt.legend(handles, labels)
     #         plt.show()
-    #
-    #
+
+
     # # selection usando el chunked max_gens y dejando tod fijo  max_gen[5,5,10,30,450,500](con estos chunk) con simple_cross
     # selection_tests = {}
     # max_aptitudes.clear()
@@ -132,22 +136,24 @@ if __name__ == '__main__':
     #             align='center')
     #     plt.bar(chunked_generations_positions, average_aptitudes[select_fun], color='g', width=0.3, align='center')
     #     x1, x2, _, _ = plt.axis()
-    #     plt.axis([x1, x2, 2.0, 3.0])
+    #     plt.axis([x1, x2, 6, 9.0])
     #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #     labels = list(colors.keys())
+    #     handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
+    #     plt.legend(handles, labels)
     #     plt.show()
-    # #
+    #
     # # # mutation usando el chunked max_gens y con select fun (rank,roulete,boltzman) (0.01, 1)
     # mutation_prob_tests = {}
     # max_aptitudes.clear()
     # average_aptitudes.clear()
     # for run in range(int(runs)):
     #     mutation_prob_tests.clear()
-    #     # for select_fun in ['rank_selection', 'roulette_selection']:
-    #     for select_fun in ['rank_selection']:
+    #     for select_fun in ['roulette_selection']:
     #         mutation_prob_tests.update({select_fun: {}})
     #         if run == 0: average_aptitudes.update({select_fun: {}})
     #         if run == 0: max_aptitudes.update({select_fun: {}})
-    #         for mutation_prob in [0.01, 1]:
+    #         for mutation_prob in [0.01,0.09, 0.5]:
     #             genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
     #                                            max_generations=500,
     #                                            crossing_fun=crossing_functions['simple_cross'],
@@ -174,10 +180,9 @@ if __name__ == '__main__':
     #                         mutation_prob_tests[select_fun][mutation_prob][i][1] / runs)
     #                     max_aptitudes[select_fun][mutation_prob].append(
     #                         mutation_prob_tests[select_fun][mutation_prob][i][0] / runs)
-    # #
-    # # for select_fun in ['rank_selection', 'roulette_selection']:
-    # for select_fun in ['rank_selection']:
-    #     for mutation_prob in [0.01, 1]:
+    #
+    # for select_fun in ['roulette_selection']:
+    #     for mutation_prob in [0.01, 0.09,0.5]:
     #         plt.suptitle("Generation change test " + select_fun + " mutation prob:" + str(mutation_prob))
     #         plt.ylabel("aptitude")
     #         plt.xlabel("Gen size")
@@ -186,60 +191,66 @@ if __name__ == '__main__':
     #         plt.bar(chunked_generations_positions, average_aptitudes[select_fun][mutation_prob], color='g', width=0.3,
     #                 align='center')
     #         x1, x2, _, _ = plt.axis()
-    #         plt.axis([x1, x2, 2.0, 10.0])
+    #         plt.axis([x1, x2, 6.5, 9.0])
     #         plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #         labels = list(colors.keys())
+    #         handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
+    #         plt.legend(handles, labels)
     #         plt.show()
 
     ##
+
+    mutation_std_tests = {}
+    max_aptitudes.clear()
+    average_aptitudes.clear()
+    # genetic_solver.selection_fun = selection_functions['elite_selection']
     #
-    # mutation_std_tests = {}
-    # max_aptitudes.clear()
-    # average_aptitudes.clear()
-    # # genetic_solver.selection_fun = selection_functions['elite_selection']
-    # #
-    # for run in range(int(runs)):
-    #     mutation_std_tests.clear()
-    #     for std in [0.1, 4]:
-    #         genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
-    #                                        max_generations=500,
-    #                                        crossing_fun=crossing_functions['simple_cross'],
-    #                                        mutation_fun=mutate,
-    #                                        selection_fun=selection_functions['rank_selection'],
-    #                                        apitude_fun=loaded_aptitude,
-    #                                        mutation_prob=default_mutation_prob,
-    #                                        mutation_std=std, k=1, threshold=2, change_factor=1,
-    #                                        decrease_factor=2)
-    #         mutation_std_tests.update({std: list()})
-    #         if run == 0:
-    #             average_aptitudes.update({std: list()})
-    #             max_aptitudes.update({std: list()})
-    #
-    #         for i in range(len(chunked_generations)):
-    #             mutation_std_tests[std].append(genetic_solver.evolve_limited(chunked_generations[i]))
-    #             if run > 0:
-    #                 max_aptitudes[std][i] += (
-    #                             mutation_std_tests[std][i][0] / runs)
-    #                 average_aptitudes[std][i] += (
-    #                             mutation_std_tests[std][i][1] / runs)
-    #             else:
-    #                 average_aptitudes[std].append(
-    #                     mutation_std_tests[std][i][1] / runs)
-    #                 max_aptitudes[std].append(
-    #                     mutation_std_tests[std][i][0] / runs)
-    #
-    #
-    # for std in [0.1, 4]:
-    #     plt.suptitle("Generation change test mutation std:" + str(std))
-    #     plt.ylabel("aptitude")
-    #     plt.xlabel("Gen size")
-    #     plt.bar(chunked_generations_positions + 0.3, max_aptitudes[std], color='b', width=0.3,
-    #             align='center')
-    #     plt.bar(chunked_generations_positions, average_aptitudes[std], color='g', width=0.3,
-    #             align='center')
-    #     x1, x2, _, _ = plt.axis()
-    #     plt.axis([x1, x2, 2.0, 3.0])
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-    #     plt.show()
+    for run in range(int(runs)):
+        mutation_std_tests.clear()
+        for std in [0.01, 0.5, 4]:
+            genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
+                                           max_generations=500,
+                                           crossing_fun=crossing_functions['simple_cross'],
+                                           mutation_fun=mutate,
+                                           selection_fun=selection_functions['rank_selection'],
+                                           apitude_fun=loaded_aptitude,
+                                           mutation_prob=default_mutation_prob,
+                                           mutation_std=std, k=1, threshold=2, change_factor=1,
+                                           decrease_factor=2)
+            mutation_std_tests.update({std: list()})
+            if run == 0:
+                average_aptitudes.update({std: list()})
+                max_aptitudes.update({std: list()})
+
+            for i in range(len(chunked_generations)):
+                mutation_std_tests[std].append(genetic_solver.evolve_limited(chunked_generations[i]))
+                if run > 0:
+                    max_aptitudes[std][i] += (
+                                mutation_std_tests[std][i][0] / runs)
+                    average_aptitudes[std][i] += (
+                                mutation_std_tests[std][i][1] / runs)
+                else:
+                    average_aptitudes[std].append(
+                        mutation_std_tests[std][i][1] / runs)
+                    max_aptitudes[std].append(
+                        mutation_std_tests[std][i][0] / runs)
+
+
+    for std in [0.01, 0.5, 4]:
+        plt.suptitle("Generation change test mutation std:" + str(std))
+        plt.ylabel("aptitude")
+        plt.xlabel("Gen size")
+        plt.bar(chunked_generations_positions + 0.3, max_aptitudes[std], color='b', width=0.3,
+                align='center')
+        plt.bar(chunked_generations_positions, average_aptitudes[std], color='g', width=0.3,
+                align='center')
+        x1, x2, _, _ = plt.axis()
+        plt.axis([x1, x2, 7.2, 9.0])
+        plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+        labels = list(colors.keys())
+        handles = [plt.Rectangle((0, 0), 0.2, 0, 2, color=colors[label]) for label in labels]
+        plt.legend(handles, labels)
+        plt.show()
 
     # Limited variando el k ( Por alguna razon esta fallando el truncate la segunda vez)
     #
