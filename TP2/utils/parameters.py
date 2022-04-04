@@ -19,9 +19,14 @@ class Parameters(object):
         self.crossing_fun = None
         self.gen_size = None
         self.max_generations = None
+        self.k = None
+        self.initial_temp = None
+        self.decrease_factor = None
+        self.change_factor = None
+        self.threshold=None
         self.from_json(input_json_file_name)
 
-    def load_parameters(self, gen_size, max_generations, crossing_fun, selection_fun, mutation_prob, mutation_std):
+    def load_parameters(self, gen_size, max_generations, crossing_fun, selection_fun, mutation_prob, mutation_std,k,inital_temp,decrease_factor,change_factor,threshold):
         if not gen_size: raise Exception("ERROR: A generation size must be defined.")
         elif not max_generations: raise Exception("ERROR: A maximum number of generation must be defined.")
         elif not mutation_prob: raise Exception("ERROR: A mutation probability must be defined.")
@@ -37,6 +42,19 @@ class Parameters(object):
             self.aptitude_fun = loaded_aptitude
             self.mutation_prob = mutation_prob
             self.mutation_std = mutation_std
+        if k:
+            self.k = k
+        if inital_temp:
+            self.initial_temp= inital_temp
+        if decrease_factor:
+            self.decrease_factor= decrease_factor
+        if change_factor:
+            self.change_factor= change_factor
+        if threshold:
+            self.threshold= threshold
+
+
+
 
     def from_json(self, input_json_file_name):
         input_file = ""
@@ -46,7 +64,7 @@ class Parameters(object):
             print("File error: Invalid json file passed as config")
             quit(1)
         data = json.load(input_file)
-        self.load_parameters(data['gen_size'], data['max_generations'], data['crossing_fun'], data['selection_fun'], data['mutation_prob'], data['mutation_std'])
+        self.load_parameters(data['gen_size'], data['max_generations'], data['crossing_fun'], data['selection_fun'], data['mutation_prob'], data['mutation_std'],data['k'],data['initial_temp'],data['decrease_factor'],data['change_factor'],data['threshold'])
         input_file.close()
 
     def __str__(self) -> str:

@@ -65,7 +65,7 @@ def main():
                                    mutation_fun=values.mutation_fun,
                                    selection_fun=values.selection_fun, apitude_fun=values.aptitude_fun,
                                    mutation_prob=values.mutation_prob,
-                                   mutation_std=values.mutation_std, k=4, threshold=0.7)
+                                   mutation_std=values.mutation_std,inital_temp=values.initial_temp,decrease_factor=values.decrease_factor,change_factor=values.change_factor,k=values.k,threshold=values.threshold)
     print("PARAMS:")
     print("Gen size: "  +str(values.gen_size))
     print("Max generations: "  +str(values.max_generations))
