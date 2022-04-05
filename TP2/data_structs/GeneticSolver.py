@@ -25,7 +25,7 @@ class GeneticSolver():
         self.max_individual = None
         # TODO: En vez de fijarnos si el nombre de la funcion es tal, pq no seteamos valores default para los parametros
         if selection_fun.__name__ == 'boltzmann_selection' and (
-                threshold is None or inital_temp is None or change_factor is None or decrease_factor is None ): raise Exception(
+                inital_temp is None or change_factor is None or decrease_factor is None ): raise Exception(
             "ERROR: Required parameters for boltzmann_selection are not passed.")
         if selection_fun.__name__ == 'truncated_selection' and ( k is None ): raise Exception(
             "ERROR: Required parameters for truncated_selection are not passed.")

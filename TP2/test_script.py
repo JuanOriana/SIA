@@ -28,7 +28,7 @@ if __name__ == '__main__':
                            'rank_selection': rank_selection, 'tournament_selection': tournament_selection}
 
     # Medir :
-    # gen_size_default 100 . mutation_prob_default = 0.09 , mutation_std=1
+    # gen_size_default 50 . mutation_prob_default = 0.09 , mutation_std=1
     # gen_size mostrar como aumentar el gen_size no afecta linealemnte a la convergencia [16,64,128,256,512]
     # Boltzmann variando parametros de temparutra
     # genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     average_aptitudes = {}
     # for run in range(int(runs)):
     #     crossing_tests.clear()
-    #     for select_fun in ['roulette_selection']:
+    #     for select_fun in ['roulette_selection','rank_selection']:
     #         crossing_tests.update({select_fun: {}})
     #         if run == 0: average_aptitudes.update({select_fun: {}})
     #         if run == 0: max_aptitudes.update({select_fun: {}})
@@ -82,17 +82,12 @@ if __name__ == '__main__':
     #                                            mutation_std=default_mutation_std, k=1, threshold=2, change_factor=1,
     #                                            decrease_factor=2)
     #
-    # for select_fun in ['roulette_selection']:
+    # for select_fun in ['roulette_selection','rank_selection']:
     #     for cross_func in crossing_functions:
-    #         plt.suptitle("Generation change test " + select_fun + " y " + cross_func)
-    #         plt.ylabel("aptitude")
+    #         plt.suptitle("Generation change test " + select_fun + " and " + cross_func)
+    #         plt.ylabel("Max aptitude")
     #         plt.xlabel("Gen size")
-    #         plt.plot(range(500), max_aptitudes[select_fun][cross_func],'bo', markersize=3)
-    #         x1, x2, _, _ = plt.axis()
-    #         plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-    #         labels = list(colors.keys())
-    #         handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
-    #         plt.legend(handles, labels)
+    #         plt.plot(range(500), max_aptitudes[select_fun][cross_func],'bo', markersize=2)
     #         plt.show()
 
 
@@ -127,14 +122,9 @@ if __name__ == '__main__':
     #
     # for select_fun in selection_functions:
     #     plt.suptitle("Generation change test " + select_fun)
-    #     plt.ylabel("AVG aptitude")
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
-    #     plt.plot(range(500), max_aptitudes[select_fun],'bo', markersize=3)
-    #     x1, x2, _, _ = plt.axis()
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-    #     labels = list(colors.keys())
-    #     handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
-    #     plt.legend(handles, labels)
+    #     plt.plot(range(500), max_aptitudes[select_fun],'bo', markersize=2)
     #     plt.show()
     #
     # # # mutation usando el chunked max_gens y con select fun (rank,roulete,boltzman) (0.01, 1)
@@ -147,7 +137,7 @@ if __name__ == '__main__':
     #         mutation_prob_tests.update({select_fun: {}})
     #         if run == 0: average_aptitudes.update({select_fun: {}})
     #         if run == 0: max_aptitudes.update({select_fun: {}})
-    #         for mutation_prob in [0.01,0.09, 0.5]:
+    #         for mutation_prob in [0.01]:
     #             genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
     #                                            max_generations=500,
     #                                            crossing_fun=crossing_functions['simple_cross'],
@@ -176,25 +166,20 @@ if __name__ == '__main__':
     #                         mutation_prob_tests[select_fun][mutation_prob][i][0] / runs)
     #
     # for select_fun in ['roulette_selection']:
-    #     for mutation_prob in [0.01, 0.09,0.5]:
+    #     for mutation_prob in [0.01]:
     #         plt.suptitle("Generation change test " + select_fun + " mutation prob:" + str(mutation_prob))
-    #         plt.ylabel("aptitude")
+    #         plt.ylabel("Max aptitude")
     #         plt.xlabel("Gen size")
-    #         plt.plot(range(500), max_aptitudes[select_fun][mutation_prob],'bo', markersize=3)
-    #         x1, x2, _, _ = plt.axis()
-    #         plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-    #         labels = list(colors.keys())
-    #         handles = [plt.Rectangle((0, 0), 0.2, 0,2, color=colors[label]) for label in labels]
-    #         plt.legend(handles, labels)
+    #         plt.plot(range(500), max_aptitudes[select_fun][mutation_prob],'bo', markersize=2)
     #         plt.show()
 
     ##
 
-    # mutation_std_tests = {}
-    # max_aptitudes.clear()
-    # average_aptitudes.clear()
-    # # genetic_solver.selection_fun = selection_functions['elite_selection']
-    # #
+    mutation_std_tests = {}
+    max_aptitudes.clear()
+    average_aptitudes.clear()
+    # genetic_solver.selection_fun = selection_functions['elite_selection']
+    #
     # for run in range(int(runs)):
     #     mutation_std_tests.clear()
     #     for std in [0.01, 0.5, 4]:
@@ -227,15 +212,10 @@ if __name__ == '__main__':
     #
     #
     # for std in [0.01, 0.5, 4]:
-    #     plt.suptitle("Generation change test mutation std:" + str(std))
-    #     plt.ylabel("aptitude")
+    #     plt.suptitle("Generation change test mutation std using rank:" + str(std))
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
     #     plt.plot(range(500), max_aptitudes[std],'bo', markersize=3)
-    #     x1, x2, _, _ = plt.axis()
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-    #     labels = list(colors.keys())
-    #     handles = [plt.Rectangle((0, 0), 0.2, 0, 2, color=colors[label]) for label in labels]
-    #     plt.legend(handles, labels)
     #     plt.show()
 
     # Limited variando el k ( Por alguna razon esta fallando el truncate la segunda vez)
@@ -246,7 +226,7 @@ if __name__ == '__main__':
     #
     # for run in range(int(runs)):
     #     truncated_k_test.clear()
-    #     for k in [0,int(default_gen_size/10),int(default_gen_size/6),int(default_gen_size/2)]:
+    #     for k in [0]:
     #         genetic_solver = GeneticSolver(gen_size=default_gen_size, indiv_size=11,
     #                                        max_generations=500,
     #                                        crossing_fun=crossing_functions['simple_cross'],
@@ -269,14 +249,11 @@ if __name__ == '__main__':
     #                 max_aptitudes[k][i] += (truncated_k_test[k][i][0] / runs)
     #                 average_aptitudes[k][i]+= (truncated_k_test[k][i][1] / runs)
     #
-    # for k in [0, int(default_gen_size / 10), int(default_gen_size / 6), int(default_gen_size / 2)]:
-    #     plt.suptitle("Generation change test chunked size:" + str(k))
-    #     plt.ylabel("aptitude")
+    # for k in [0]:
+    #     plt.suptitle("Generation change test chunked size truncated using k:" + str(k))
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
-    #     plt.plot(range(500), max_aptitudes[k],'bo', markersize=3)
-    #     x1, x2, _, _ = plt.axis()
-    #     plt.axis([x1, x2, 6.50, 9.0])
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #     plt.plot(range(500), max_aptitudes[k],'bo', markersize=2)
     #     plt.show()
 
     # tournament varios el umbral
@@ -307,23 +284,20 @@ if __name__ == '__main__':
     #             else:
     #                 max_aptitudes[threshold][i] += (tournament_test[threshold][i][0] / runs)
     #                 average_aptitudes[threshold][i] += (tournament_test[threshold][i][1] / runs)
-    
+    #
     # for threshold in [0.5,0.75, 0.9]:
     #     plt.suptitle("Generation change test tournament distinct thresholds:" + str(threshold))
-    #     plt.ylabel("aptitude")
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
-    #     plt.plot(range(500), max_aptitudes[threshold],'bo', markersize=3)
-    #     x1, x2, _, _ = plt.axis()
-    #     plt.axis([x1, x2, 2.0, 9.0])
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #     plt.plot(range(500), max_aptitudes[threshold],'bo', markersize=2)
     #     plt.show()
 
 
     ## Boltzman variando la temp inicial
 
     #
-    # boltzman_test = {}
-    # max_aptitudes.clear()
+    boltzman_test = {}
+    max_aptitudes.clear()
     # average_aptitudes.clear()
     #
     # for initial_temp in [5, 10, 20, 30, 50]:
@@ -359,11 +333,11 @@ if __name__ == '__main__':
     #     plt.show()
 
     # ## Boltzman variando el factor de decrecimiento
-    #
+
     # boltzman_test.clear()
     # max_aptitudes.clear()
     # average_aptitudes.clear()
-    # for decrease_factor in [1, 0.5 , 0.1]:
+    # for decrease_factor in [1, 0.5 , 0.1,3,10]:
     #     boltzman_test.update({decrease_factor: list()})
     #     max_aptitudes.update({decrease_factor: list()})
     #     average_aptitudes.update({decrease_factor: list()})
@@ -375,25 +349,19 @@ if __name__ == '__main__':
     #                                    apitude_fun=loaded_aptitude,
     #                                    mutation_prob=default_mutation_prob,
     #                                    mutation_std=default_mutation_std, change_factor=10,
-    #                                    decrease_factor=decrease_factor, inital_temp=10)
+    #                                    decrease_factor=decrease_factor, inital_temp=50)
     #     for i in range(500):
     #         boltzman_test[decrease_factor].append(genetic_solver.evolve_limited(1))
     #         max_aptitudes[decrease_factor].append(boltzman_test[decrease_factor][i][0])
     #         average_aptitudes[decrease_factor].append(boltzman_test[decrease_factor][i][1])
     #
     # for decrease_factor in [1, 0.5 , 0.1]:
-    #     plt.suptitle("Generation change test Boltzman distinct decrease_factor:" + str(decrease_factor))
-    #     plt.ylabel("aptitude")
+    #     plt.suptitle("Boltz,To: 50,Tc: 10, decrease_factor:" + str(decrease_factor))
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
-    #     plt.plot(range(500), max_aptitudes[decrease_factor],'bo', markersize=3)
-    #     plt.plot(range(500), average_aptitudes[decrease_factor],'gx', markersize=3)
-    #     x1, x2, _, _ = plt.axis()
-    #     labels = list(colors.keys())
-    #     handles = [plt.Rectangle((0, 0), 0.2, 0, 2, color=colors[label]) for label in labels]
-    #     plt.legend(handles, labels)
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #     plt.plot(range(500), max_aptitudes[decrease_factor],'bo', markersize=2)
     #     plt.show()
-    #
+
     # ## Boltzman variando el factor de cambio
     # boltzman_test.clear()
     # max_aptitudes.clear()
@@ -410,72 +378,58 @@ if __name__ == '__main__':
     #                                    apitude_fun=loaded_aptitude,
     #                                    mutation_prob=default_mutation_prob,
     #                                    mutation_std=default_mutation_std, change_factor=change_factor,
-    #                                    decrease_factor=0.5, inital_temp=10)
+    #                                    decrease_factor=0.5, inital_temp=70)
     #     for i in range(500):
     #         boltzman_test[change_factor].append(genetic_solver.evolve_limited(1))
     #         max_aptitudes[change_factor].append(boltzman_test[change_factor][i][0])
     #         average_aptitudes[change_factor].append(boltzman_test[change_factor][i][1])
     #
     # for change_factor in [10, 20, 50]:
-    #     plt.suptitle("Generation change test Boltzman distinct change_factor:" + str(change_factor))
-    #     plt.ylabel("aptitude")
+    #     plt.suptitle("Boltz,To: 70, change_factor:" + str(change_factor))
+    #     plt.ylabel("Max aptitude")
     #     plt.xlabel("Gen size")
-    #     plt.plot(range(500), max_aptitudes[change_factor],'bo', markersize=3)
-    #     plt.plot(range(500), average_aptitudes[change_factor],'gx', markersize=3)
-    #     plt.bar(chunked_generations_positions, average_aptitudes[change_factor], color='g', width=0.3,
-    #             align='center')
-    #     x1, x2, _, _ = plt.axis()
-    #     labels = list(colors.keys())
-    #     handles = [plt.Rectangle((0, 0), 0.2, 0, 2, color=colors[label]) for label in labels]
-    #     plt.legend(handles, labels)
-    #     plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
+    #     plt.plot(range(500), max_aptitudes[change_factor],'bo', markersize=2)
     #     plt.show()
 
-    gen_size_test = {}
-    max_aptitudes.clear()
-    average_aptitudes.clear()
-
-    for run in range(int(runs)):
-        gen_size_test.clear()
-        for gen_size_iter in [8, 16, 64, 128]:
-            gen_size_test.update({gen_size_iter:{}})
-            if run ==0: average_aptitudes.update({gen_size_iter: {}})
-            if run ==0:  max_aptitudes.update({gen_size_iter: {}})
-            for select_fun in ['rank_selection']:
-                gen_size_test[gen_size_iter].update({select_fun: list()})
-                if run == 0: average_aptitudes[gen_size_iter].update({select_fun:list()})
-                if run == 0: max_aptitudes[gen_size_iter].update({select_fun: list()})
-                genetic_solver = GeneticSolver(gen_size=gen_size_iter, indiv_size=11,
-                                               max_generations=500,
-                                               crossing_fun=crossing_functions["simple_cross"],
-                                               mutation_fun=mutate,
-                                               selection_fun=selection_functions[select_fun],
-                                               apitude_fun=loaded_aptitude,
-                                               mutation_prob=default_mutation_prob,
-                                               mutation_std=default_mutation_std)
-                for i in range(500):
-                    gen_size_test[gen_size_iter][select_fun].append(genetic_solver.evolve_limited(1))
-                    if run == 0:
-                        max_aptitudes[gen_size_iter][select_fun].append((gen_size_test[gen_size_iter][select_fun][i][0] / runs))
-                        average_aptitudes[gen_size_iter][select_fun].append(gen_size_test[gen_size_iter][select_fun][i][1] / runs)
-                    else:
-                        max_aptitudes[gen_size_iter][select_fun][i] += (gen_size_test[gen_size_iter][select_fun][i][0] / runs)
-                        average_aptitudes[gen_size_iter][select_fun][i] += (gen_size_test[gen_size_iter][select_fun][i][1] / runs)
-
-    for gen_size_iter in [8,16, 64, 128]:
-        for select_fun in ['rank_selection']:
-            plt.suptitle("Generation change test " + select_fun + " distinct gen_size:" + str(gen_size_iter))
-            plt.ylabel("aptitude")
-            plt.xlabel("Gen size")
-            plt.plot(range(500),max_aptitudes[gen_size_iter][select_fun],'bo',markersize=3)
-            plt.plot(range(500),average_aptitudes[gen_size_iter][select_fun],'rx',markersize=3)
-            x1, x2, _, _ = plt.axis()
-            labels = list(colors.keys())
-            handles = [plt.Rectangle((0, 0), 0.2, 0, 2, color=colors[label]) for label in labels]
-            plt.legend(handles, labels)
-            plt.xticks(np.array([1, 2, 3, 4, 5, 6]), chunked_generations_str)
-            plt.show()
-
+    # gen_size_test = {}
+    # max_aptitudes.clear()
+    # average_aptitudes.clear()
+    #
+    # for run in range(int(runs)):
+    #     gen_size_test.clear()
+    #     for gen_size_iter in [8, 16, 64, 128]:
+    #         gen_size_test.update({gen_size_iter:{}})
+    #         if run ==0: average_aptitudes.update({gen_size_iter: {}})
+    #         if run ==0:  max_aptitudes.update({gen_size_iter: {}})
+    #         for select_fun in ['rank_selection']:
+    #             gen_size_test[gen_size_iter].update({select_fun: list()})
+    #             if run == 0: average_aptitudes[gen_size_iter].update({select_fun:list()})
+    #             if run == 0: max_aptitudes[gen_size_iter].update({select_fun: list()})
+    #             genetic_solver = GeneticSolver(gen_size=gen_size_iter, indiv_size=11,
+    #                                            max_generations=500,
+    #                                            crossing_fun=crossing_functions["simple_cross"],
+    #                                            mutation_fun=mutate,
+    #                                            selection_fun=selection_functions[select_fun],
+    #                                            apitude_fun=loaded_aptitude,
+    #                                            mutation_prob=default_mutation_prob,
+    #                                            mutation_std=default_mutation_std)
+    #             for i in range(500):
+    #                 gen_size_test[gen_size_iter][select_fun].append(genetic_solver.evolve_limited(1))
+    #                 if run == 0:
+    #                     max_aptitudes[gen_size_iter][select_fun].append((gen_size_test[gen_size_iter][select_fun][i][0] / runs))
+    #                     average_aptitudes[gen_size_iter][select_fun].append(gen_size_test[gen_size_iter][select_fun][i][1] / runs)
+    #                 else:
+    #                     max_aptitudes[gen_size_iter][select_fun][i] += (gen_size_test[gen_size_iter][select_fun][i][0] / runs)
+    #                     average_aptitudes[gen_size_iter][select_fun][i] += (gen_size_test[gen_size_iter][select_fun][i][1] / runs)
+    #
+    # for gen_size_iter in [8,16, 64, 128]:
+    #     for select_fun in ['rank_selection']:
+    #         plt.suptitle("Generation change test " + select_fun + " distinct gen_size:" + str(gen_size_iter))
+    #         plt.ylabel("Max aptitude")
+    #         plt.xlabel("Gen size")
+    #         plt.plot(range(500),max_aptitudes[gen_size_iter][select_fun],'bo',markersize=2)
+    #         plt.show()
+    #
 
 
 
