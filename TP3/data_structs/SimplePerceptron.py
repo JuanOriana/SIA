@@ -3,35 +3,56 @@ import numpy as np
 
 class SimplePerceptron:
 
-    def solve(self, inputs: np.ndarray, expected_outputs: np.ndarray, max_gen: int, learning_rate: float,
-              error_f, activation_f):
-        test_count = inputs.shape[0]
+    def __init__(self,error_f, activation_f,learning_rate: float):
+        self.error_f = error_f
+        self.activation_f = activation_f
+        self.learning_rate = learning_rate
+        self.current_gen = 0
+        self.w = np.zeros(1)
+        self.error = 1
+        self.min_error = 1
+        self.min_w = None
+        self.min_gen = -1
+
+    def learn(self, learn_set: np.ndarray, expected_outputs: np.ndarray, max_gen: int):
+
+        test_count = learn_set.shape[0]
         if test_count != expected_outputs.shape[0]:
             raise Exception("Not enough outputs for the given inputs")
 
-        current_gen = 0
-        w = np.zeros(inputs[0].size + 1)
-        error = 1
+        self.reset(test_count,learn_set[0].size)
 
-        # Ideal values
-        min_error = test_count * 2
-        min_w = None
-        min_gen = -1
         # Adding constant value to the end of each input for threshold
-        inputs = np.append(inputs, np.zeros((test_count, 1)) + 1, axis=1)
+        learn_set = np.append(learn_set, np.zeros((test_count, 1)) + 1, axis=1)
 
-        while current_gen < max_gen and error > 0:
+        while self.current_gen < max_gen and self.error > 0:
             chosen_idx = np.random.choice(np.arange(test_count))
-            h = np.dot(inputs[chosen_idx], w)
-            O = activation_f(h)
-            delta_w = learning_rate * (expected_outputs[chosen_idx] - O) * inputs[chosen_idx]
-            w += delta_w
-            error = error_f(inputs, expected_outputs, w)
-            if error < min_error:
-                min_error = error
-                min_w = w
-                min_gen = current_gen
+            h = np.dot(learn_set[chosen_idx], self.w)
+            estimation = self.activation_f(h)
+            delta_w = self.learning_rate * (expected_outputs[chosen_idx] - estimation) * learn_set[chosen_idx]
+            self.w += delta_w
+            self.error = self.error_f(learn_set, expected_outputs, self.w)
+            if self.error < self.min_error:
+                self.min_error = self.error
+                self.min_w = self.w
+                self.min_gen = self.current_gen
 
-            current_gen += 1
+            self.current_gen += 1
 
-        return [w, min_w, min_error, min_gen]
+        return self.w, self.min_w, self.min_error, self.min_gen
+
+    def evaluate(self,test):
+        if self.current_gen == 0:
+            raise Exception("Has not learnt yet!")
+        if test.size != (self.w.size - 1):
+            raise Exception("Wrong input size")
+        test = np.append(test,1)
+        return self.activation_f(np.dot(test,self.w))
+
+    def reset(self,test_count:int,dimension:int):
+        self.current_gen = 0
+        self.w = np.zeros(dimension + 1)
+        self.error = 1
+        self.min_error = test_count * 2
+        self.min_w = None
+        self.min_gen = -1

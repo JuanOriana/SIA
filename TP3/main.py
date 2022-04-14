@@ -9,11 +9,11 @@ def main():
 
     inputs_y = np.array([[-1, 1], [1, -1], [-1, -1], [1, 1]])
     expected_outputs_y = np.array([-1, -1, -1, 1])
-    # expected_outputs_o = np.array(1, 1, -1, -1)
+    #expected_outputs_o = np.array([1, 1, -1, -1])
 
-    perceptron = SimplePerceptron()
+    perceptron = SimplePerceptron(step_error, step_activation,0.1)
 
-    print(perceptron.solve(inputs_y,expected_outputs_y,10000,0.1,step_error, step_activation))
+    print(perceptron.learn(inputs_y,expected_outputs_y,10000))
 
 
 
