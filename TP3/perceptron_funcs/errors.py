@@ -5,6 +5,6 @@ def step_error(inputs: np.ndarray, expected_outputs: np.ndarray, w: np.ndarray):
     error = 0
     for i in range(inputs.shape[0]):
         h = np.dot(inputs[i], w)
-        O = np.sign(h) * 2 - 1
+        O = np.sign(h)
         error += (expected_outputs[i] - O) ** 2
     return error / 2
