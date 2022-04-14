@@ -20,7 +20,7 @@ class SimplePerceptron:
         if test_count != expected_outputs.shape[0]:
             raise Exception("Not enough outputs for the given inputs")
 
-        self.reset(test_count,learn_set[0].size)
+        self.reset(learn_set[0].size)
 
         # Adding constant value to the end of each input for threshold
         learn_set = np.append(learn_set, np.zeros((test_count, 1)) + 1, axis=1)
@@ -49,10 +49,10 @@ class SimplePerceptron:
         test = np.append(test,1)
         return self.activation_f(np.dot(test,self.w))
 
-    def reset(self,test_count:int,dimension:int):
+    def reset(self,dimension:int):
         self.current_gen = 0
         self.w = np.zeros(dimension + 1)
         self.error = 1
-        self.min_error = test_count * 2
+        self.min_error = float("inf")
         self.min_w = None
         self.min_gen = -1
