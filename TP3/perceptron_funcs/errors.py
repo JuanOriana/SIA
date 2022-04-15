@@ -7,14 +7,8 @@ def activation_based_error(inputs: np.ndarray, expected_outputs: np.ndarray, w: 
     error = 0
     for i in range(inputs.shape[0]):
         h = np.dot(inputs[i], w)
-        O = activation(h)
-        error += (expected_outputs[i] - O) ** 2
+        estimation = activation(h)
+        print(i,expected_outputs[i],estimation)
+        error += (expected_outputs[i] - estimation)*(expected_outputs[i] - estimation)
     return error / 2
 
-
-def step_error(inputs: np.ndarray, expected_outputs: np.ndarray, w: np.ndarray):
-    return activation_based_error(inputs, expected_outputs, w, step_activation)
-
-
-def linear_error(inputs: np.ndarray, expected_outputs: np.ndarray, w: np.ndarray):
-    return activation_based_error(inputs, expected_outputs, w, linear_activation)
