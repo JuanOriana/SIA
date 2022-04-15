@@ -8,7 +8,6 @@ def activation_based_error(inputs: np.ndarray, expected_outputs: np.ndarray, w: 
     for i in range(inputs.shape[0]):
         h = np.dot(inputs[i], w)
         estimation = activation(h)
-        print(i,expected_outputs[i],estimation)
         error += (expected_outputs[i] - estimation)*(expected_outputs[i] - estimation)
     return error / 2
 
