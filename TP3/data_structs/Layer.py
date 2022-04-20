@@ -33,11 +33,10 @@ class NeuralNetwork:
             # Pass the training set through our neural network
             activations = self.activate(training_set_inputs)
             self.layers[-1].calc_delta(training_set_outputs - activations[-1], self.learn_d, activations[-2])
-            for i in range(len(self.layers)-1, 0, -1):
-                print(i)
+            for i in range(len(self.layers)-2,-1, -1):
                 next_layer = self.layers[i + 1]
-                error = next_layer.delta.dot(next_layer.synaptic_weights.T)
-                self.layers[i].calc_delta(error * self.learn_d(activations[i + 1],self.learn_d,activations[i]))
+                error = next_layer.delta.dot(next_layer.synaptic_weights)
+                self.layers[i].calc_delta(error * self.learn_d(activations[i + 1]),self.learn_d,activations[i])
 
             for i in range(len(self.layers)):
                 curr_layer = self.layers[i]
@@ -49,7 +48,7 @@ class NeuralNetwork:
         activations = []
         activations.append(inputs)
         last = inputs
-        for i in range(len(activations)):
+        for i in range(len(self.layers)):
             activations.append(self.learn_f(np.dot(last, self.layers[i].synaptic_weights)))
             last = activations[-1]
         return activations
