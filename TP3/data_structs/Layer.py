@@ -2,8 +2,8 @@ import numpy as np
 
 
 class Layer():
-    def __init__(self, neuron_count, input_size):
-        self.synaptic_weights = 2 * np.random.random((input_size, neuron_count)) - 1
+    def __init__(self, neuron_count, input_size, isFirst=False):
+        self.synaptic_weights = 2 * np.random.random((input_size + (1 if isFirst else 0), neuron_count ))
         self.error_d = None
         self.delta = None
 
@@ -32,6 +32,8 @@ class NeuralNetwork:
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, max_iteration):
+
+        training_set_inputs = np.append(training_set_inputs, np.zeros((training_set_inputs.shape[0], 1)) + 1, axis=1)
         for iteration in range(max_iteration):
             for i in range(len(training_set_inputs)):
                 # Pass the training set through our neural network

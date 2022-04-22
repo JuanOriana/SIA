@@ -20,7 +20,7 @@ def main():
 
 
     # Create layer 1 (8 neurons, each with 3 inputs)
-    layer1 = Layer(8, 3)
+    layer1 = Layer(8, 2, isFirst=True)
 
     # Create layer 2 (4 neurons with 8 inputs)
     layer2 = Layer(4, 8)
@@ -36,8 +36,8 @@ def main():
 
     # The training set. We have 7 examples, each consisting of 3 input values
     # and 1 output value.
-    training_set_inputs = np.array([[0, 0, 1], [0, 1, 1], [1, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1], [0, 0, 0]])
-    training_set_outputs = np.array([[0, 1, 1, 1, 1, 0, 0]]).T
+    training_set_inputs = np.array([[1, 0], [0,1],[1,1],[0,0]])
+    training_set_outputs = np.array([[0,0,1,0]]).T
 
     # Train the neural network using the training set.
     # Do it 60,000 times and make small adjustments each time.
@@ -48,7 +48,7 @@ def main():
 
     # Test the neural network with a new situation.
     "Stage 3) Considering a new situation [1, 1, 0] -> ?: "
-    outputs = neural_network.activate(np.array([0, 0, 0]))
+    outputs = neural_network.activate(np.array([1, 1,1]))
     print (outputs[-1])
 
 
