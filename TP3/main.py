@@ -19,16 +19,18 @@ def main():
     # perceptron = SimplePerceptron(inputs_y[0].size,step_activation ,0.01)
 
 
-    # Create layer 1 (4 neurons, each with 3 inputs)
-    layer1 = Layer(4, 3)
+    # Create layer 1 (8 neurons, each with 3 inputs)
+    layer1 = Layer(8, 3)
 
-    # Create layer 2 (a single neuron with 4 inputs)
-    layer2 = Layer(1, 4)
+    # Create layer 2 (4 neurons with 8 inputs)
+    layer2 = Layer(4, 8)
+
+    # Create layer 3 (a single neuron with 4 inputs)
+    layer3 = Layer(1,4)
 
     # Combine the layers to create a neural network
-    neural_network = NeuralNetwork([layer1, layer2],sigmoid_tanh_activation,sigmoid_tanh_activation_derivative)
+    neural_network = NeuralNetwork([layer1, layer2,layer3],sigmoid_tanh_activation,sigmoid_tanh_activation_derivative,1)
 
-    print
     "Stage 1) Random starting synaptic weights: "
     neural_network.print_weights()
 
@@ -39,18 +41,15 @@ def main():
 
     # Train the neural network using the training set.
     # Do it 60,000 times and make small adjustments each time.
-    neural_network.train(training_set_inputs, training_set_outputs, 60000)
+    neural_network.train(training_set_inputs, training_set_outputs, 10000)
 
-    print
     "Stage 2) New synaptic weights after training: "
     neural_network.print_weights()
 
     # Test the neural network with a new situation.
-    print
     "Stage 3) Considering a new situation [1, 1, 0] -> ?: "
-    hidden_state, output = neural_network.think(np.array([1, 1, 0]))
-    print
-    output
+    outputs = neural_network.activate(np.array([0, 0, 0]))
+    print (outputs[-1])
 
 
 if __name__ == "__main__":

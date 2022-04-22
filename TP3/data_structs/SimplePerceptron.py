@@ -22,7 +22,6 @@ class SimplePerceptron:
             raise Exception("Not enough outputs for the given inputs")
 
         self.reset(learn_set[0].size)
-
         # Adding constant value to the end of each input for threshold
         learn_set = np.append(learn_set, np.zeros((test_count, 1)) + 1, axis=1)
 
