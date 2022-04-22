@@ -16,7 +16,7 @@ class SimplePerceptron:
         learn_count = learn_set.shape[0]
         if learn_count != expected_outputs.shape[0]:
             raise Exception("Not enough outputs for the given inputs")
-        self.reset()
+
         # Adding constant value to the end of each input for threshold
         learn_set = np.append(learn_set, np.zeros((learn_count, 1)) + 1, axis=1)
 
@@ -39,6 +39,9 @@ class SimplePerceptron:
             self.current_gen += 1
 
         return self.w, self.min_w, self.min_error, self.min_gen
+
+    def learn_by_batch(self, learn_set: np.ndarray, expected_outputs: np.ndarray, batch_size:int):
+        return self.learn(learn_set, expected_outputs, self.current_gen + batch_size)
 
     def evaluate(self, test):
         if self.current_gen == 0:
