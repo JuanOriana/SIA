@@ -5,44 +5,49 @@ from TP3.perceptron_funcs.errors import activation_based_error
 
 class SimplePerceptron:
 
-    def __init__(self,input_size, activation_f, learning_rate: float, derivative=None):
+    def __init__(self, input_size, activation_f, learning_rate: float, derivative=None):
         self.activation_f = activation_f
         self.derivative = derivative
         self.learning_rate = learning_rate
         self.input_size = input_size
         self.reset()
 
-    def learn(self, learn_set: np.ndarray, expected_outputs: np.ndarray, max_gen: int):
+    def train(self, learn_set: np.ndarray, expected_outputs: np.ndarray, max_gen: int, learning_function):
+        learn_count = learn_set.shape[0]
+        # Adding constant value to the end of each input for threshold
+        learn_set = np.append(learn_set, np.zeros((learn_count, 1)) + 1, axis=1)
+        while self.current_gen < max_gen and self.error > 0:
+            learning_function(learn_count, learn_set, expected_outputs)
+        return self.w, self.min_w, self.min_error, self.min_gen
+
+    def random_learn(self,learn_count,learn_set,expected_outputs):
+        chosen_idx = np.random.choice(np.arange(learn_count))
+        self.learn(learn_set, expected_outputs, chosen_idx)
+
+    def secuencially_learn(self,learn_count,learn_set,expected_outputs):
+        for chosen_idx in range(learn_count):
+            self.learn(learn_set, expected_outputs, chosen_idx)
+
+    def learn(self, learn_set: np.ndarray, expected_outputs: np.ndarray, chosen_idx: int):
+        h = np.dot(learn_set[chosen_idx], self.w)
+        estimation = self.activation_f(h)
+        delta_w = self.learning_rate * (expected_outputs[chosen_idx] - estimation) * learn_set[chosen_idx]
+        if self.derivative is not None:
+            delta_w *= self.derivative(estimation)
+        self.w += delta_w
+        self.error = activation_based_error(learn_set, expected_outputs, self.w, self.activation_f)
+        if self.error < self.min_error:
+            self.min_error = self.error
+            self.min_w = self.w
+            self.min_gen = self.current_gen
+        self.current_gen += 1
+
+    def train_by_batch(self, learn_set: np.ndarray, expected_outputs: np.ndarray, batch_size: int,
+                       learning_function):
         learn_count = learn_set.shape[0]
         if learn_count != expected_outputs.shape[0]:
             raise Exception("Not enough outputs for the given inputs")
-
-        self.reset(learn_set[0].size)
-        # Adding constant value to the end of each input for threshold
-        learn_set = np.append(learn_set, np.zeros((learn_count, 1)) + 1, axis=1)
-
-        while self.current_gen < max_gen and self.error > 0:
-            #Iterate over every test case
-            for chosen_idx in range(learn_count):
-                h = np.dot(learn_set[chosen_idx], self.w)
-                estimation = self.activation_f(h)
-                delta_w = self.learning_rate * (expected_outputs[chosen_idx] - estimation) * learn_set[chosen_idx]
-                if self.derivative is not None:
-                    delta_w *= self.derivative(estimation)
-                self.w += delta_w
-
-            self.error = activation_based_error(learn_set, expected_outputs, self.w, self.activation_f)
-            if self.error < self.min_error:
-                self.min_error = self.error
-                self.min_w = self.w
-                self.min_gen = self.current_gen
-
-            self.current_gen += 1
-
-        return self.w, self.min_w, self.min_error, self.min_gen
-
-    def learn_by_batch(self, learn_set: np.ndarray, expected_outputs: np.ndarray, batch_size:int):
-        return self.learn(learn_set, expected_outputs, self.current_gen + batch_size)
+        return self.train(learn_set=learn_set, expected_outputs=expected_outputs, max_gen=self.current_gen + batch_size, learning_function=learning_function)
 
     def evaluate(self, test):
         if self.current_gen == 0:
