@@ -2,28 +2,30 @@ import numpy as np
 
 
 class Layer():
-    def __init__(self, neuron_count, input_size, isFirst=False):
-        self.synaptic_weights = 2 * np.random.random((input_size + (1 if isFirst else 0), neuron_count ))
+
+    def __init__(self, neuron_count, input_size):
+        self.synaptic_weights = 2 * np.random.random((input_size, neuron_count)) - 1
+        self.bias = 2 * np.random.random(neuron_count) - 1
         self.error_d = None
-        self.delta = None
 
     def calc_error_d(self, inherited_error, derivative, activation):
         self.error_d = inherited_error * derivative(activation)
 
-    def calc_delta(self, last_activation,learn_rate):
+    def apply_delta(self, last_activation, learn_rate):
         act_mat = np.matrix(last_activation)
         err_mat = np.matrix(self.error_d)
-        self.delta = learn_rate*act_mat.T.dot(err_mat)
+        self.synaptic_weights += learn_rate * act_mat.T.dot(err_mat)
+        self.bias += learn_rate*self.error_d
 
-    def apply_delta(self):
-        self.synaptic_weights += self.delta
+    def activate(self, feed, learn_f):
+        return learn_f(np.dot(feed, self.synaptic_weights) + self.bias)
 
     def __str__(self):
         return str(self.synaptic_weights)
 
 
 class NeuralNetwork:
-    def __init__(self, layers, learn_f, learn_d,learn_rate):
+    def __init__(self, layers, learn_f, learn_d, learn_rate):
         self.layers = layers
         self.learn_f = learn_f
         self.learn_d = learn_d
@@ -32,8 +34,6 @@ class NeuralNetwork:
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, max_iteration):
-
-        training_set_inputs = np.append(training_set_inputs, np.zeros((training_set_inputs.shape[0], 1)) + 1, axis=1)
         for iteration in range(max_iteration):
             for i in range(len(training_set_inputs)):
                 # Pass the training set through our neural network
@@ -45,15 +45,13 @@ class NeuralNetwork:
                                                 activations[i + 1])
 
                 for i in range(len(self.layers)):
-                    curr_layer = self.layers[i]
-                    curr_layer.calc_delta(activations[i],self.learn_rate)
-                    curr_layer.apply_delta()
+                    self.layers[i].apply_delta(activations[i], self.learn_rate)
 
     # The neural network thinks.
     def activate(self, init_input):
         activations = [init_input]
         for i in range(len(self.layers)):
-            activations.append(self.learn_f(np.dot(activations[-1], self.layers[i].synaptic_weights)))
+            activations.append(self.layers[i].activate(activations[-1],self.learn_f))
         return activations
 
     # The neural network prints its weights
