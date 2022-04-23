@@ -59,3 +59,12 @@ class NeuralNetwork:
         for i in range(len(self.layers)):
             print("   Layer " + str(i))
             print(self.layers[i])
+
+    def accuracy(self,test_set,expected_out,out_classes):
+        matches = 0
+        for case_idx in range(len(test_set)):
+            guess = self.activate(test_set[case_idx])[-1][0]
+            closest_idx = (np.abs(out_classes-guess)).argmin()
+            matches += 1 if out_classes[closest_idx] == expected_out[case_idx] else 0
+        return len(test_set)/matches
+
