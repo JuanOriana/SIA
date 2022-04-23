@@ -24,4 +24,4 @@ def sigmoid_classic_activation_derivative(g: float):
 
 
 def sigmoid_tanh_activation_derivative(g: float):
-    return betha * (1 - fg * g)
+    return betha * (1 - g * g)
