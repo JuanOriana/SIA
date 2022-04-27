@@ -60,6 +60,13 @@ class NeuralNetwork:
             print("   Layer " + str(i))
             print(self.layers[i])
 
+    def eval_error(self,test_set,expected_out):
+        error = 0
+        for i in range(test_set.shape[0]):
+            estimation = self.activate(test_set[i])[-1]
+            error += (expected_out[i] - estimation) * (expected_out[i] - estimation)
+        return error / test_set.shape[0]
+
     def accuracy(self,test_set,expected_out,out_classes):
         matches = 0
         for case_idx in range(len(test_set)):
