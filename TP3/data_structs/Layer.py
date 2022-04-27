@@ -65,7 +65,7 @@ class NeuralNetwork:
         for i in range(test_set.shape[0]):
             estimation = self.activate(test_set[i])[-1]
             error += (expected_out[i] - estimation) * (expected_out[i] - estimation)
-        return error / test_set.shape[0]
+        return np.sum(error) / test_set.shape[0]
 
     def accuracy(self,test_set,expected_out,out_classes):
         matches = 0

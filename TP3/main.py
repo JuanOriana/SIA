@@ -20,7 +20,6 @@ def main():
 
     numbers = parse_nums("assets/numbers.txt",7)
     numbers_o = nums_out_arr()
-    print(numbers_o)
 
     # Create layer 1 (8 neurons, each with 3 inputs)
     layer1 = Layer(4, 2)
@@ -50,6 +49,8 @@ def main():
     "Stage 3) Considering a new situation [1, 1, 0] -> ?: "
     outputs = neural_network.activate([-1,-1])
     print (outputs[-1])
+    print(neural_network.eval_error(inputs_y,inputs_y))
+
 
 
 if __name__ == "__main__":
