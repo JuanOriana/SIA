@@ -1,0 +1,8 @@
+{
+  "inputs_data_file": "assets/train_set.txt",
+  "normalize": "true",
+  "expected_data_file": "assets/expected.txt",
+  "activation_function": "linear_activation",
+  "learning_rate": 0.01,
+  "batch_size": 1000
+}

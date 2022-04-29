@@ -32,8 +32,8 @@ def parse_nums(file_name: str, height: int):
     return np.array(chunked)
 
 
-def nums_out_float():
-    return np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
+def nums_out_parity():
+    return np.array([0,1,0,1,0,1,0,1,0,1])
 
 
 def nums_out_arr():
