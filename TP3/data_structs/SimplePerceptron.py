@@ -1,6 +1,6 @@
 import numpy as np
 
-from TP3.perceptron_funcs.errors import activation_based_error
+from TP3.perceptron_funcs.errors import activation_based_error, scaling_identity
 
 
 class SimplePerceptron:
@@ -12,30 +12,30 @@ class SimplePerceptron:
         self.input_size = input_size
         self.reset()
 
-    def train(self, learn_set: np.ndarray, expected_outputs: np.ndarray, max_gen: int, learning_function):
+    def train(self, learn_set: np.ndarray, expected_outputs: np.ndarray, max_gen: int, learning_function,scaling_function, max_value , min_value):
         learn_count = learn_set.shape[0]
         # Adding constant value to the end of each input for threshold
         learn_set = np.append(learn_set, np.zeros((learn_count, 1)) + 1, axis=1)
         while self.current_gen < max_gen and self.error > 0:
-            learning_function(learn_count, learn_set, expected_outputs)
+            learning_function(learn_count, learn_set, expected_outputs,scaling_function,max_value,min_value)
         return self.w, self.min_w, self.min_error, self.min_gen
 
-    def random_learn(self,learn_count,learn_set,expected_outputs):
+    def random_learn(self,learn_count,learn_set,expected_outputs,scaling_function,max_value,min_value):
         chosen_idx = np.random.choice(np.arange(learn_count))
-        self.learn(learn_set, expected_outputs, chosen_idx)
+        self.learn(learn_set, expected_outputs, chosen_idx,scaling_function,max_value,min_value)
 
-    def secuencially_learn(self,learn_count,learn_set,expected_outputs):
+    def secuencially_learn(self,learn_count,learn_set,expected_outputs,scaling_function,max_value,min_value):
         for chosen_idx in range(learn_count):
-            self.learn(learn_set, expected_outputs, chosen_idx)
+            self.learn(learn_set, expected_outputs, chosen_idx,scaling_function,max_value,min_value)
 
-    def learn(self, learn_set: np.ndarray, expected_outputs: np.ndarray, chosen_idx: int):
+    def learn(self, learn_set: np.ndarray, expected_outputs: np.ndarray, chosen_idx: int,scaling_function,max_value,min_value):
         h = np.dot(learn_set[chosen_idx], self.w)
         estimation = self.activation_f(h)
         delta_w = self.learning_rate * (expected_outputs[chosen_idx] - estimation) * learn_set[chosen_idx]
         if self.derivative is not None:
             delta_w *= self.derivative(estimation)
         self.w += delta_w
-        self.error = activation_based_error(learn_set, expected_outputs, self.w, self.activation_f)
+        self.error = activation_based_error(learn_set, expected_outputs, self.w, self.activation_f,scaling_function,max_value,min_value)
         if self.error < self.min_error:
             self.min_error = self.error
             self.min_w = self.w
@@ -43,11 +43,11 @@ class SimplePerceptron:
         self.current_gen += 1
 
     def train_by_batch(self, learn_set: np.ndarray, expected_outputs: np.ndarray, batch_size: int,
-                       learning_function):
+                       learning_function,scaling_error_function=scaling_identity,max_value = 0, min_value = 0):
         learn_count = learn_set.shape[0]
         if learn_count != expected_outputs.shape[0]:
             raise Exception("Not enough outputs for the given inputs")
-        return self.train(learn_set=learn_set, expected_outputs=expected_outputs, max_gen=self.current_gen + batch_size, learning_function=learning_function)
+        return self.train(learn_set=learn_set, expected_outputs=expected_outputs, max_gen=self.current_gen + batch_size, learning_function=learning_function,scaling_function=scaling_error_function,max_value= max_value , min_value= min_value)
 
     def evaluate(self, test):
         if self.current_gen == 0:
