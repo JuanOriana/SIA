@@ -2,16 +2,19 @@ import numpy as np
 import pandas as pd
 
 
-def parse(file_name: str, normalize=False):
+def parse(file_name: str, normalize= None):
     df = pd.read_csv(file_name, sep=' +', engine='python', header=None)
+    max_num = df.values.max()
+    min_num = df.values.min()
     if normalize:
-        max_num = df.values.max()
-        min_num = df.values.min()
-        for i in range(len(df.values)):
-            df.values[i] = 2 * (df.values[i] - min_num) / (max_num - min_num) - 1
-            print(df.values[i])
+        if normalize == "TANH":
+            for i in range(len(df.values)):
+                df.values[i] = 2 * (df.values[i] - min_num) / (max_num - min_num) - 1
+        else:
+            for i in range(len(df.values)):
+                df.values[i] = (df.values[i] - min_num) / (max_num - min_num)
 
-    return df.to_numpy()
+    return df.to_numpy(), max_num , min_num
 
 
 def parse_nums(file_name: str, height: int):
