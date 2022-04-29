@@ -1,5 +1,9 @@
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
+
+from TP3.utils.parameters import Parameters
 from TP3.utils.parser import parse
 from TP3.data_structs.SimplePerceptron import SimplePerceptron
 from TP3.perceptron_funcs.activations import step_activation, linear_activation
@@ -33,6 +37,11 @@ def helper_plot_1(perceptron,inputs_h,expected_h, batch, alpha):
 
 
 if __name__ == "__main__":
+
+    # Para cargar los parametros del json
+    # values = Parameters(sys.argv[1])
+    # print(values)
+
     inputs = parse("assets/train_set.txt")
     expected = parse("assets/expected.txt").flatten()
 
