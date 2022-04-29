@@ -73,5 +73,5 @@ class NeuralNetwork:
             guess = self.activate(test_set[case_idx])[-1][0]
             closest_idx = (np.abs(out_classes-guess)).argmin()
             matches += 1 if out_classes[closest_idx] == expected_out[case_idx] else 0
-        return len(test_set)/matches
+        return matches/len(test_set)
 

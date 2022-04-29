@@ -63,7 +63,7 @@ class SimplePerceptron:
             guess = self.evaluate(test_set[case_idx])
             if np.absolute(guess - expected_out[case_idx]) < tolerance:
                 matches += 1
-        return len(test_set)/matches
+        return matches/len(test_set)
 
     def reset(self):
         self.current_gen = 0
