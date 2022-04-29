@@ -57,6 +57,14 @@ class SimplePerceptron:
         test = np.append(test, 1)
         return self.activation_f(np.dot(test, self.w))
 
+    def accuracy(self,test_set,expected_out,tolerance:float):
+        matches = 0
+        for case_idx in range(len(test_set)):
+            guess = self.evaluate(test_set[case_idx])
+            if np.absolute(guess - expected_out[case_idx]) < tolerance:
+                matches += 1
+        return matches/len(test_set)
+
     def reset(self):
         self.current_gen = 0
         self.w = np.zeros(self.input_size + 1)
