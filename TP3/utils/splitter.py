@@ -19,7 +19,6 @@ def k_splitting(raw_in: np.ndarray, raw_out: np.ndarray, k: int):
     split_size = raw_in.shape[0] // k
     indexes = np.arange(0, raw_in.shape[0], dtype=int)
     np.random.shuffle(indexes)
-    print(indexes)
     train_sets_idx = []
     test_sets_idx = []
     for i in range(k):
@@ -29,8 +28,6 @@ def k_splitting(raw_in: np.ndarray, raw_out: np.ndarray, k: int):
         train = np.concatenate((before,after))
         train_sets_idx.append(train)
         test_sets_idx.append(test)
-    print(np.take(raw_in,test_sets_idx, axis=0)[0])
-    print(np.take(raw_out,test_sets_idx, axis=0)[0])
     # Train sets X,Y  then test sets, X and Y
     return np.take(raw_in,train_sets_idx, axis=0),np.take(raw_out,train_sets_idx, axis=0), \
            np.take(raw_in,test_sets_idx, axis=0),np.take(raw_out,test_sets_idx, axis=0)

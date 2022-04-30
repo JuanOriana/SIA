@@ -10,7 +10,7 @@ def parse(file_name: str, normalize= None):
         if normalize == "TANH":
             for i in range(len(df.values)):
                 df.values[i] = 2 * (df.values[i] - min_num) / (max_num - min_num) - 1
-        else:
+        elif normalize == "SIGMOID":
             for i in range(len(df.values)):
                 df.values[i] = (df.values[i] - min_num) / (max_num - min_num)
 
@@ -33,7 +33,7 @@ def parse_nums(file_name: str, height: int):
 
 
 def nums_out_parity():
-    return np.array([0,1,0,1,0,1,0,1,0,1])
+    return np.array([-1,1,-1,1,-1,1,-1,1,-1,1])
 
 
 def nums_out_arr():
