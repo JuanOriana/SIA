@@ -4,7 +4,7 @@ from TP3.data_structs.Layer import Layer, NeuralNetwork
 from TP3.data_structs.SimplePerceptron import SimplePerceptron
 from TP3.perceptron_funcs.activations import step_activation, linear_activation, sigmoid_classic_activation, \
     sigmoid_classic_activation_derivative, sigmoid_tanh_activation, sigmoid_tanh_activation_derivative
-from TP3.utils.parser import parse, parse_nums, nums_out_float, nums_out_arr
+from TP3.utils.parser import parse, parse_nums, nums_out_arr
 
 
 def main():
