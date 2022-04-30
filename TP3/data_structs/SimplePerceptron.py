@@ -18,6 +18,7 @@ class SimplePerceptron:
         learn_set = np.append(learn_set, np.zeros((learn_count, 1)) + 1, axis=1)
         while self.current_gen < max_gen and self.error > 0:
             learning_function(learn_count, learn_set, expected_outputs,scaling_function,max_value,min_value)
+            self.current_gen += 1
         return self.w, self.min_w, self.min_error, self.min_gen
 
     def random_learn(self,learn_count,learn_set,expected_outputs,scaling_function,max_value,min_value):
@@ -40,7 +41,6 @@ class SimplePerceptron:
             self.min_error = self.error
             self.min_w = self.w
             self.min_gen = self.current_gen
-        self.current_gen += 1
 
     def train_by_batch(self, learn_set: np.ndarray, expected_outputs: np.ndarray, batch_size: int,
                        learning_function,scaling_error_function=scaling_identity,max_value = 0, min_value = 0):
