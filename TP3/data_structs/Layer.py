@@ -75,3 +75,11 @@ class NeuralNetwork:
             matches += 1 if out_classes[closest_idx] == expected_out[case_idx] else 0
         return matches/len(test_set)
 
+    def accuracy_by_node(self,test_set,expected_out):
+        matches = 0
+        for case_idx in range(len(test_set)):
+            guess = self.activate(test_set[case_idx])[-1]
+            max_idx = guess.argmax()
+            matches += 1 if expected_out[case_idx][max_idx] == 1 else 0
+        return matches/len(test_set)
+
