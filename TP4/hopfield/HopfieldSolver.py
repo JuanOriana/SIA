@@ -1,5 +1,7 @@
 import numpy as np
 
+from TP4.show_letters import parse, printLetter
+
 
 class HopfieldSolver:
 
@@ -28,5 +30,24 @@ class HopfieldSolver:
 
 if __name__ == "__main__":
     solver = HopfieldSolver()
-    inputs = np.array([[1, 1, -1, -1], [-1, -1, 1, 1]])
-    solver.solve(np.array([1, -1, -1, -1]), inputs)
+    letters = parse('../letters_matrix.txt')
+
+    inputs = np.array([letters[0], letters[6], letters[8], letters[11]])
+
+    print("\nInput letters: \n")
+    for input in inputs:
+        printLetter(input)
+        print()
+
+    print("\n ------------------ \n")
+
+    # print(inputs)
+    #inputs = np.array([[1, 1, -1, -1], [-1, -1, 1, 1]])
+    predict_letter = letters[6]
+    # letters[9] es un estado espureo
+    bitmap_solved, iterations = solver.solve(np.array(predict_letter), inputs)
+    print("Letter to predict: \n")
+    printLetter(predict_letter)
+    print("\nLetter predicted: \n")
+    printLetter(bitmap_solved)
+
