@@ -24,7 +24,7 @@ def parse(path_to_file):
     return letters
 
 
-def printLetter(letter):
+def print_letter(letter):
     edited = []
     if letter is False:
         return False
@@ -40,7 +40,7 @@ def main():
     letters = parse('letters_matrix.txt')
     print(letters)
     for letter in letters:
-        printLetter(letter)
+        print_letter(letter)
         print()
 
 

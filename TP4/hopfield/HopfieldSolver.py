@@ -1,6 +1,6 @@
 import numpy as np
 
-from TP4.show_letters import parse, printLetter
+from TP4.show_letters import parse, print_letter
 
 
 class HopfieldSolver:
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     # letters[9] es un estado espureo
     bitmap_solved, iterations = solver.solve(np.array(predict_letter), inputs)
     print("Letter to predict: \n")
-    printLetter(predict_letter)
+    print_letter(predict_letter)
     print("\nLetter predicted: \n")
-    printLetter(bitmap_solved)
+    print_letter(bitmap_solved)
 
