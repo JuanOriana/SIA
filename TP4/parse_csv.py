@@ -57,10 +57,10 @@ def getInputsStandard():
 
         data_standard = []
         for row in csv_file:
-            data_standard.append([row['Country'],(row['Area']-medium_area)/desv_area,(row['GDP']-medium_GDP)/desv_GDP,(row['Inflation']-medium_inflation)/desv_inflation,(row['Life.expect']-medium_life_expec)/desv_life_expec,row['Military'],(row['Pop.growth']-medium_pop_growth)/desv_pop_growth,(row['Unemployment']-medium_unemployment)/desv_unemployment])
+            data_standard.append([row['Country'],(row['Area']-medium_area)/desv_area,(row['GDP']-medium_GDP)/desv_GDP,(row['Inflation']-medium_inflation)/desv_inflation,(row['Life.expect']-medium_life_expec)/desv_life_expec,(row['Military']-medium_militray)/desv_militray,(row['Pop.growth']-medium_pop_growth)/desv_pop_growth,(row['Unemployment']-medium_unemployment)/desv_unemployment])
 
     return data_standard
 
 
 if __name__ == "__main__":
-    read()
+    getInputsStandard()
