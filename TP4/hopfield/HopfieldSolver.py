@@ -24,8 +24,6 @@ class HopfieldSolver:
         return S, t
 
 
-1
-
 if __name__ == "__main__":
     solver = HopfieldSolver()
     inputs = np.array([[1, 1, -1, -1], [-1, -1, 1, 1]])
