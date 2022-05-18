@@ -1,4 +1,9 @@
 import numpy as np
+import collections
+import seaborn as sn
+import matplotlib.pyplot as plt
+
+from TP4.parse_csv import getInputsStandard
 
 
 class KohonenSolver:
@@ -17,46 +22,70 @@ class KohonenSolver:
         for i in range(self.k):
             for j in range(self.k):
                 random_idx = np.random.choice(np.arange(len(data)))
-                self.weights[i, j,:] = data[random_idx]
+                self.weights[i, j, :] = data[random_idx]
         self.setup_state = True
 
-    def find_closest(self,choice,data):
+    def find_closest(self, choice, data):
         flattened = self.weights.reshape(self.k ** 2, len(data[0]))
         mean_dist = np.square(flattened - choice).sum(axis=1)
         return np.unravel_index(np.argmin(mean_dist), (self.k, self.k))
 
-    def is_coord_valid(self,i,j):
+    def is_coord_valid(self, i, j):
         return 0 <= i < self.k and 0 <= j < self.k
 
-    def get_neighbours(self,indices):
-        base_i,base_j = indices
+    def get_neighbours(self, indices):
+        base_i, base_j = indices
         neighbours = []
-        for i in range (int(base_i-self.radius),int(base_i+self.radius+1)):
+        for i in range(int(base_i - self.radius), int(base_i + self.radius + 1)):
             for j in range(int(base_j - self.radius), int(base_j + self.radius + 1)):
-                if (i-base_i)**2 + (j-base_j)**2 <= self.radius**2 and self.is_coord_valid(i,j):
-                    neighbours.append((i,j))
+                if (i - base_i) ** 2 + (j - base_j) ** 2 <= self.radius ** 2 and self.is_coord_valid(i, j):
+                    neighbours.append((i, j))
 
         return neighbours
 
-    def update_weights(self,indices,choice):
+    def update_weights(self, indices, choice):
         neighbours = self.get_neighbours(indices)
-        for (i,j) in neighbours:
-            self.weights[i,j] += self.learn_rate*(choice - self.weights[i,j])
+        for (i, j) in neighbours:
+            self.weights[i, j] += self.learn_rate * (choice - self.weights[i, j])
         self.learn_rate /= self.decrease_rate
 
     def solve(self, data: np.ndarray, epochs: int):
         while self.epochs < epochs:
             random_idx = np.random.choice(np.arange(len(data)))
             choice = data[random_idx]
-            i,j = self.find_closest(choice,data)
-            self.update_weights((i,j),choice)
-            self.epochs+=1
+            i, j = self.find_closest(choice, data)
+            self.update_weights((i, j), choice)
+            self.epochs += 1
 
 
 if __name__ == "__main__":
-    solver = KohonenSolver(3, 0.2, 1.5,2)
-    inputs = np.array([[1,2,3],[9,0,0],[3,3,3],[5,6,7],[2,2,3],[9,0,1]])
+    k = 3
+    solver = KohonenSolver(k, 0.2, 1.5, 2)
+    data, countries = getInputsStandard()
+    inputs = np.array(data)
     solver.setup(inputs)
-    solver.solve(np.array(inputs),10000)
-    print(solver.weights)
+    solver.solve(np.array(inputs), 10000)
 
+
+
+
+def plot_heatmap():
+    results = []
+
+    for i in inputs:
+        results.append(solver.find_closest(i, inputs))
+
+    matrix = np.zeros((k, k))
+    set_values = collections.Counter(results)
+
+    result_to_country = {}
+    for i in range(len(results)):
+        if results[i] not in result_to_country.keys():
+            result_to_country.update({results[i]:[]})
+        result_to_country[results[i]].append(countries[i])
+        matrix[results[i]] += 1
+
+    sn.heatmap(matrix,cmap= 'YlGnBu',annot = True)
+    print(result_to_country)
+
+    plt.show()

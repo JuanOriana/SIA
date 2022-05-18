@@ -3,6 +3,7 @@ import csv
 
 def getInputsStandard():
     data = []
+    countries = []
     sum_area = 0
     sum_GDP = 0
     sum_inflation =0
@@ -11,9 +12,11 @@ def getInputsStandard():
     sum_pop_growth=0
     sum_unemployment =0
     lines =0
-    with open('europe.csv','r') as file:
+    with open('../europe.csv','r') as file:
         csv_file = csv.DictReader(file)
+
         for row in csv_file:
+            countries.append(row['Country'])
             data.append([row['Country'],float(row['Area']),float(row['GDP']),float(row['Inflation']),float(row['Life.expect']),float(row['Military']),float(row['Pop.growth']),float(row['Unemployment'])])
             sum_area += float(row['Area'])
             sum_GDP += float(row['GDP'])
@@ -56,9 +59,9 @@ def getInputsStandard():
         desv_unemployment = sum_unemployment / lines
 
         for line in range(lines):
-            data[line] = [data[line][0],(data[line][1]-medium_area)/desv_area,(data[line][2]-medium_GDP)/desv_GDP,(data[line][3]-medium_inflation)/desv_inflation,(data[line][4]-medium_life_expec)/desv_life_expec,(data[line][5]-medium_militray)/desv_militray,(data[line][6]-medium_pop_growth)/desv_pop_growth,(data[line][7]-medium_unemployment)/desv_unemployment]
+            data[line] = [(data[line][1]-medium_area)/desv_area,(data[line][2]-medium_GDP)/desv_GDP,(data[line][3]-medium_inflation)/desv_inflation,(data[line][4]-medium_life_expec)/desv_life_expec,(data[line][5]-medium_militray)/desv_militray,(data[line][6]-medium_pop_growth)/desv_pop_growth,(data[line][7]-medium_unemployment)/desv_unemployment]
 
-    return data
+    return data, countries
 
 
 if __name__ == "__main__":
