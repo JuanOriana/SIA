@@ -1,10 +1,9 @@
+
 import numpy as np
-import collections
-import seaborn as sn
-import matplotlib.pyplot as plt
+
 
 from TP4.parse_csv import getInputsStandard
-
+from TP4.kohonen.test_scripts import *
 
 class KohonenSolver:
 
@@ -58,34 +57,23 @@ class KohonenSolver:
             self.epochs += 1
 
 
+
+
+
 if __name__ == "__main__":
     k = 3
+    area,gdp,inflation,life_expected,military,pop_growth,unemployment = range(0,7)
     solver = KohonenSolver(k, 0.2, 1.5, 2)
-    data, countries = getInputsStandard()
-    inputs = np.array(data)
+    data_standarized, countries, data = getInputsStandard()
+    inputs = np.array(data_standarized)
     solver.setup(inputs)
     solver.solve(np.array(inputs), 10000)
+    # plot_boxplot(data,"Box plot not standarized")
+    # plot_boxplot(data_standarized,"Box plot standarized")
+    # plot_heatmap(inputs,countries,solver,k)
+    plot_single_variable(unemployment,k,data_standarized,solver)
+    plot_single_variable(inflation,k,data_standarized,solver)
 
 
 
 
-def plot_heatmap():
-    results = []
-
-    for i in inputs:
-        results.append(solver.find_closest(i, inputs))
-
-    matrix = np.zeros((k, k))
-    set_values = collections.Counter(results)
-
-    result_to_country = {}
-    for i in range(len(results)):
-        if results[i] not in result_to_country.keys():
-            result_to_country.update({results[i]:[]})
-        result_to_country[results[i]].append(countries[i])
-        matrix[results[i]] += 1
-
-    sn.heatmap(matrix,cmap= 'YlGnBu',annot = True)
-    print(result_to_country)
-
-    plt.show()
