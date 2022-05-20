@@ -64,7 +64,7 @@ if __name__ == "__main__":
     k = 3
     area,gdp,inflation,life_expected,military,pop_growth,unemployment = range(0,7)
     solver = KohonenSolver(k, 0.2, 1.5, 2)
-    data_standarized, countries, data = getInputsStandard()
+    data_standarized, countries, data = getInputsStandard('../europe.csv')
     inputs = np.array(data_standarized)
     solver.setup(inputs)
     solver.solve(np.array(inputs), 10000)

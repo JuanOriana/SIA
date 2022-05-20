@@ -1,7 +1,7 @@
 import csv
 
 
-def getInputsStandard():
+def getInputsStandard(path_to_file):
     data = []
     countries = []
     sum_area = 0
@@ -12,7 +12,7 @@ def getInputsStandard():
     sum_pop_growth=0
     sum_unemployment =0
     lines =0
-    with open('../europe.csv','r') as file:
+    with open(path_to_file,'r') as file:
         csv_file = csv.DictReader(file)
 
         for row in csv_file:
@@ -62,8 +62,8 @@ def getInputsStandard():
         for line in range(lines):
             data_standarized.append([(data[line][0]-medium_area)/desv_area,(data[line][1]-medium_GDP)/desv_GDP,(data[line][2]-medium_inflation)/desv_inflation,(data[line][3]-medium_life_expec)/desv_life_expec,(data[line][4]-medium_militray)/desv_militray,(data[line][5]-medium_pop_growth)/desv_pop_growth,(data[line][6]-medium_unemployment)/desv_unemployment])
 
-    return data_standarized, countries,data
+    return data_standarized, countries, data, ['Area', 'GDP', 'Inflation', 'Life.expect', 'Military', 'Pop.growth', 'Unemployment']
 
 
 if __name__ == "__main__":
-    print(getInputsStandard())
+    print(getInputsStandard('europe.csv'))
