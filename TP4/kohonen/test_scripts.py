@@ -59,6 +59,7 @@ def plot_heatmap(inputs,countries,solver,k,):
         result_to_country[results[i]].append(countries[i])
         matrix[results[i]] += 1
 
+    plt.title("HEAT MAP")
     sn.heatmap(matrix, cmap='YlGnBu', annot=True)
     print(result_to_country)
 
