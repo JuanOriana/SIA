@@ -4,10 +4,11 @@ from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 
 from TP4.parse_csv import getInputsStandard
+from TP4.parse_csv_opt import parse_csv_opt
 
 if __name__ == "__main__":
     pca = PCA()
-    data_standarized, countries, data, labels = getInputsStandard('europe.csv')
+    data_standarized,countries,data, labels = getInputsStandard('europe.csv')
     components = pca.fit_transform(data_standarized)
 
     print(components[:, 0:2][:,0])
