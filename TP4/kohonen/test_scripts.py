@@ -22,7 +22,6 @@ def plot_boxplot(data: [], box_plot_title: str):
         pop_growth.append(data[i][5])
         unemployment.append(data[i][6])
 
-    print(areas)
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111)
     x = np.array(['areas', 'GDP',
