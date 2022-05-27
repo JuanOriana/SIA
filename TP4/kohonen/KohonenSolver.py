@@ -2,7 +2,6 @@
 
 import numpy as np
 from TP4.kohonen.test_scripts import *
-from TP4.parse_csv import getInputsStandard
 from TP4.parse_csv_opt import parse_csv_opt
 
 
@@ -65,8 +64,7 @@ if __name__ == "__main__":
     k = 3
     area,gdp,inflation,life_expected,military,pop_growth,unemployment = range(0,7)
     solver = KohonenSolver(k, 0.2, 1.5, 2)
-    # data_standarized,data,countries,_ = parse_csv_opt("../europe.csv")
-    data_standarized,countries,data,_ = getInputsStandard("../europe.csv")
+    data_standarized, countries, data, labels = parse_csv_opt("../europe.csv")
     inputs = np.array(data_standarized)
     solver.setup(inputs)
     solver.solve(np.array(inputs), 1000 * 28)
