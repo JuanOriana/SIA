@@ -21,4 +21,4 @@ def parse_csv_opt(file_path):
         stdev_aux = stdev(aux)
         data_standarized[:, i] = (data_standarized[:, i] - mean_aux) / stdev_aux
 
-    return data, data_standarized,countries , ['Area', 'GDP', 'Inflation', 'Life.expect', 'Military', 'Pop.growth', 'Unemployment']
+    return data_standarized, countries, data, ['Area', 'GDP', 'Inflation', 'Life.expect', 'Military', 'Pop.growth', 'Unemployment']
