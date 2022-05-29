@@ -46,7 +46,7 @@ class KohonenSolver:
         neighbours = self.get_neighbours(indices)
         for (i, j) in neighbours:
             self.weights[i, j] += self.learn_rate * (choice - self.weights[i, j])
-        self.learn_rate /= self.decrease_rate
+        self.learn_rate /= (1/self.epochs + 1)
 
     def solve(self, data: np.ndarray, epochs: int):
         while self.epochs < epochs:
