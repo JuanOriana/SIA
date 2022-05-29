@@ -2,6 +2,7 @@
 
 import numpy as np
 from TP4.kohonen.test_scripts import *
+from TP4.kohonen.test_scripts import plot_neighbours_distance
 from TP4.parse_csv_opt import parse_csv_opt
 
 
@@ -46,7 +47,8 @@ class KohonenSolver:
         neighbours = self.get_neighbours(indices)
         for (i, j) in neighbours:
             self.weights[i, j] += self.learn_rate * (choice - self.weights[i, j])
-        self.learn_rate /= (1/self.epochs + 1)
+        # self.learn_rate /= (1/(self.epochs + 1))  --> ROMPE
+        self.learn_rate /= self.decrease_rate
 
     def solve(self, data: np.ndarray, epochs: int):
         while self.epochs < epochs:
@@ -73,7 +75,7 @@ if __name__ == "__main__":
     plot_heatmap(inputs,countries,solver,k)
     plot_single_variable(unemployment,k,data_standarized,solver)
     plot_single_variable(inflation,k,data_standarized,solver)
-
+    plot_neighbours_distance(solver,k)
 
 
 

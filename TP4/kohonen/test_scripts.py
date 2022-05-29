@@ -3,6 +3,7 @@ import seaborn as sn
 import matplotlib.pyplot as plt
 import  numpy as np
 from TP4.kohonen.KohonenSolver import *
+from TP4.kohonen.KohonenSolver import KohonenSolver
 
 
 def plot_boxplot(data: [], box_plot_title: str):
@@ -61,5 +62,21 @@ def plot_heatmap(inputs,countries,solver,k,):
     plt.title("HEAT MAP")
     sn.heatmap(matrix, cmap='YlGnBu', annot=True)
     print(result_to_country)
+
+    plt.show()
+
+
+def plot_neighbours_distance(solver:KohonenSolver,k):
+    w_mean = np.zeros((k, k))
+    for i in range(len(solver.weights)):
+        for j in range(len(solver.weights[0])):
+            neighbors = solver.get_neighbours((i, j))
+            aux = []
+            for n in neighbors:
+                if i != n[0] or j != n[1]:
+                    aux.append(np.linalg.norm(np.subtract(solver.weights[i][j], solver.weights[n[0]][n[1]])))
+            w_mean[i][j] = np.mean(aux)
+    plt.title("Neighbours distance")
+    sn.heatmap(w_mean, cmap='Greys', annot=True)
 
     plt.show()
