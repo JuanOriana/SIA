@@ -2,7 +2,6 @@
 
 import numpy as np
 from TP4.kohonen.test_scripts import *
-from TP4.kohonen.test_scripts import plot_neighbours_distance
 from TP4.parse_csv_opt import parse_csv_opt
 
 
@@ -64,17 +63,24 @@ class KohonenSolver:
 
 if __name__ == "__main__":
     k = 3
+    learn_rate = 0.2
+    radius = 1
     area,gdp,inflation,life_expected,military,pop_growth,unemployment = range(0,7)
-    solver = KohonenSolver(k, 0.2, 1.5, 2)
+    solver = KohonenSolver(k,learn_rate,radius, 2)
     data_standarized, countries, data, labels = parse_csv_opt("../europe.csv")
     inputs = np.array(data_standarized)
     solver.setup(inputs)
-    solver.solve(np.array(inputs), 1000 * 28)
-    plot_boxplot(data,"Box plot not standarized")
-    plot_boxplot(data_standarized,"Box plot standarized")
-    plot_heatmap(inputs,countries,solver,k)
-    plot_single_variable(unemployment,k,data_standarized,solver)
-    plot_single_variable(inflation,k,data_standarized,solver)
+    solver.solve(np.array(inputs), 400 * 28)
+    # plot_boxplot(data,"Box plot not standarized")
+    # plot_boxplot(data_standarized,"Box plot standarized")
+    plot_heatmap(inputs,countries,solver,k,learn_rate,radius)
+    plot_single_variable(area,k,data_standarized,solver,"Areas values for each group")
+    plot_single_variable(gdp,k,data_standarized,solver,"GDP values for each group")
+    plot_single_variable(inflation,k,data_standarized,solver,"Inflation values for each group")
+    plot_single_variable(life_expected,k,data_standarized,solver,"Life expected values for each group")
+    plot_single_variable(military,k,data_standarized,solver,"Military values for each group")
+    plot_single_variable(pop_growth,k,data_standarized,solver,"Pop growth values for each group")
+    plot_single_variable(unemployment,k,data_standarized,solver,"Unemployment values for each group")
     plot_neighbours_distance(solver,k)
 
 

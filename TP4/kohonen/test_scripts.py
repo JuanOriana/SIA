@@ -25,25 +25,25 @@ def plot_boxplot(data: [], box_plot_title: str):
 
     fig = plt.figure(figsize=(10, 7))
     ax = fig.add_subplot(111)
-    x = np.array(['areas', 'GDP',
-                  'inflations', 'life_expectations', 'militaries', 'pop_growth', 'unemployment'])
+    x = np.array(['Areas', 'GDP',
+                  'Inflations', 'Life_expectations', 'Military', 'Pop_growth', 'Unemployment'])
     ax.set_xticklabels(x)
     plt.title(box_plot_title)
     plt.boxplot([areas, GDP, inflations, life_expectations, militaries, pop_growth, unemployment])
     plt.show()
 
-def plot_single_variable(var:int,k,data_standarized,solver:KohonenSolver):
+def plot_single_variable(var:int,k,data_standarized,solver:KohonenSolver,descr:str):
     matrix = np.zeros((k, k))
 
 
     for i in range(len(data_standarized)):
         k,j = solver.find_closest(data_standarized[i],data_standarized)
         matrix[k][j] += data_standarized[i][var]
-
+    plt.suptitle(descr)
     sn.heatmap(matrix, cmap='YlGnBu', annot=True)
     plt.show()
 
-def plot_heatmap(inputs,countries,solver,k,):
+def plot_heatmap(inputs,countries,solver,k,learn_rate,radius):
     results = []
 
     for i in inputs:
@@ -59,7 +59,7 @@ def plot_heatmap(inputs,countries,solver,k,):
         result_to_country[results[i]].append(countries[i])
         matrix[results[i]] += 1
 
-    plt.title("HEAT MAP")
+    plt.title("Classification heatmap. Learn_rate: "+ str(learn_rate)+" and radius: "+ str(radius))
     sn.heatmap(matrix, cmap='YlGnBu', annot=True)
     print(result_to_country)
 
