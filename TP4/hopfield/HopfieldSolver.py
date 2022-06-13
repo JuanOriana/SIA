@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     print("\nInput letters: \n")
     for input in inputs:
-        printLetter(input)
+        print_letter(input)
         print()
 
     print("\n ------------------ \n")

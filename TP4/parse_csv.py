@@ -1,5 +1,7 @@
 import csv
 
+import numpy as np
+
 
 def getInputsStandard(path_to_file):
     data = []
@@ -50,14 +52,13 @@ def getInputsStandard(path_to_file):
             sum_pop_growth += ((float(row['Pop.growth']) - medium_pop_growth)**2)
             sum_unemployment += ((float(row['Unemployment']) - medium_unemployment)**2)
 
-        desv_area = sum_area / lines
-        desv_GDP = sum_GDP / lines
-        desv_inflation = sum_inflation / lines
-        desv_life_expec = sum_life_expec / lines
-        desv_militray = sum_militray / lines
-        desv_pop_growth = sum_pop_growth / lines
-        desv_unemployment = sum_unemployment / lines
-
+        desv_area = np.sqrt(sum_area / lines)
+        desv_GDP = np.sqrt(sum_GDP / lines)
+        desv_inflation = np.sqrt(sum_inflation / lines)
+        desv_life_expec = np.sqrt(sum_life_expec / lines)
+        desv_militray = np.sqrt(sum_militray / lines)
+        desv_pop_growth = np.sqrt(sum_pop_growth / lines)
+        desv_unemployment = np.sqrt(sum_unemployment / lines)
         data_standarized = []
         for line in range(lines):
             data_standarized.append([(data[line][0]-medium_area)/desv_area,(data[line][1]-medium_GDP)/desv_GDP,(data[line][2]-medium_inflation)/desv_inflation,(data[line][3]-medium_life_expec)/desv_life_expec,(data[line][4]-medium_militray)/desv_militray,(data[line][5]-medium_pop_growth)/desv_pop_growth,(data[line][6]-medium_unemployment)/desv_unemployment])
