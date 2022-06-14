@@ -68,6 +68,10 @@ class NeuralNetwork:
             error += (expected_out[i] - estimation) * (expected_out[i] - estimation)
         return np.sum(error) / test_set.shape[0]
 
+    def eval_error_uni(self,uni,test_set,expected_out):
+        self.uni_as_net(uni)
+        return self.eval_error(test_set,expected_out)
+
     def accuracy(self,test_set,expected_out,out_classes):
         matches = 0
         for case_idx in range(len(test_set)):

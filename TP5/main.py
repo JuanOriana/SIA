@@ -23,7 +23,7 @@ def main():
 
     # Train the neural network using the training set.
     # Do it 60,000 times and make small adjustments each time.
-    neural_network.train(training_set_inputs, training_set_inputs, 10)
+    neural_network.train(training_set_inputs, training_set_inputs, 1000)
 
     "Stage 2) New synaptic weights after training: "
     neural_network.print_weights()
@@ -34,7 +34,7 @@ def main():
     print (outputs[-1])
     print(neural_network.eval_error(training_set_inputs,training_set_inputs))
 
-    neural_network.uni_as_net((neural_network.net_as_uni()))
+    print(neural_network.eval_error_uni(neural_network.net_as_uni(),training_set_inputs,training_set_inputs))
 
 
 
