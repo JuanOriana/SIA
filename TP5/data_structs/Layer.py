@@ -7,6 +7,7 @@ class Layer():
         self.synaptic_weights = 2 * np.random.random((input_size, neuron_count)) - 1
         self.bias = 2 * np.random.random(neuron_count) - 1
         self.error_d = None
+        self.dim = (input_size,neuron_count)
 
     def calc_error_d(self, inherited_error, derivative, activation):
         self.error_d = inherited_error * derivative(activation)
@@ -83,3 +84,15 @@ class NeuralNetwork:
             matches += 1 if expected_out[case_idx][max_idx] == 1 else 0
         return matches/len(test_set)
 
+    def net_as_uni(self):
+        all_flattened = []
+        for layer in self.layers:
+            all_flattened.append(layer.synaptic_weights.flatten())
+        return np.concatenate(all_flattened)
+
+    def uni_as_net(self,uni:np.ndarray):
+        start = 0
+        for layer in self.layers:
+            end = start + layer.dim[0]*layer.dim[1]
+            layer.synaptic_weights = uni[start:end].reshape(layer.dim)
+            start = end

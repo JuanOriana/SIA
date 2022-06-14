@@ -9,8 +9,8 @@ def main():
 
 
 
-    layer1 = Layer(1, 3)
-    layer2 = Layer(3,1)
+    layer1 = Layer(8, 3)
+    layer2 = Layer(3,8)
 
     # Combine the layers to create a neural network
     neural_network = NeuralNetwork([layer1,layer2],sigmoid_tanh_activation,sigmoid_tanh_activation_derivative,0.1)
@@ -23,7 +23,7 @@ def main():
 
     # Train the neural network using the training set.
     # Do it 60,000 times and make small adjustments each time.
-    neural_network.train(training_set_inputs, training_set_inputs, 10000)
+    neural_network.train(training_set_inputs, training_set_inputs, 10)
 
     "Stage 2) New synaptic weights after training: "
     neural_network.print_weights()
@@ -33,6 +33,8 @@ def main():
     outputs = neural_network.activate([0,1,1])
     print (outputs[-1])
     print(neural_network.eval_error(training_set_inputs,training_set_inputs))
+
+    neural_network.uni_as_net((neural_network.net_as_uni()))
 
 
 
