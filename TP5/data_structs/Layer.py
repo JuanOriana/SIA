@@ -1,5 +1,5 @@
 import numpy as np
-
+from scipy import optimize
 
 class Layer():
 
@@ -31,22 +31,28 @@ class NeuralNetwork:
         self.learn_f = learn_f
         self.learn_d = learn_d
         self.learn_rate = learn_rate
-
+        self.train_in = None
+        self.train_out = None
     # We train the neural network through a process of trial and error.
     # Adjusting the synaptic weights each time.
     def train(self, training_set_inputs, training_set_outputs, max_iteration):
-        for iteration in range(max_iteration):
-            for i in range(len(training_set_inputs)):
-                # Pass the training set through our neural network
-                activations = self.activate(training_set_inputs[i])
-                self.layers[-1].calc_error_d(training_set_outputs[i] - activations[-1], self.learn_d, activations[-1])
-                for i in range(len(self.layers) - 2, -1, -1):
-                    inherit_layer = self.layers[i + 1]
-                    self.layers[i].calc_error_d(inherit_layer.synaptic_weights.dot(inherit_layer.error_d), self.learn_d,
-                                                activations[i + 1])
 
-                for i in range(len(self.layers)):
-                    self.layers[i].apply_delta(activations[i], self.learn_rate)
+        for iteration in range(max_iteration):
+            # Pass the training set through our neural network
+            for i in range(len(training_set_inputs)):
+                self.current_in = training_set_inputs[i]
+                self.current_out = training_set_outputs[i]
+                res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B')
+                # # Pass the training set through our neural network
+                # activations = self.activate(training_set_inputs[i])
+                # self.layers[-1].calc_error_d(training_set_outputs[i] - activations[-1], self.learn_d, activations[-1])
+                # for i in range(len(self.layers) - 2, -1, -1):
+                #     inherit_layer = self.layers[i + 1]
+                #     self.layers[i].calc_error_d(inherit_layer.synaptic_weights.dot(inherit_layer.error_d), self.learn_d,
+                #                                 activations[i + 1])
+                #
+                # for i in range(len(self.layers)):
+                #     self.layers[i].apply_delta(activations[i], self.learn_rate)
 
     # The neural network thinks.
     def activate(self, init_input):
@@ -68,9 +74,10 @@ class NeuralNetwork:
             error += (expected_out[i] - estimation) * (expected_out[i] - estimation)
         return np.sum(error) / test_set.shape[0]
 
-    def eval_error_uni(self,uni,test_set,expected_out):
+    def eval_error_uni(self,uni):
         self.uni_as_net(uni)
-        return self.eval_error(test_set,expected_out)
+        estimation = self.activate(self.current_in)[-1]
+        return np.sum((self.current_out - estimation)**2)
 
     def accuracy(self,test_set,expected_out,out_classes):
         matches = 0
