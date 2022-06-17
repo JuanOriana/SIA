@@ -47,3 +47,9 @@ def get_parsed_fonts():
         fonts_parsed.append(current_font_np.flatten())
     return np.array(fonts_parsed)
 
+
+def print_letter(letter: np.ndarray):
+    letter_formatted = np.reshape(letter,newshape=(7,5))
+    for i in range(7):
+        print(int(letter_formatted[i,0]),int(letter_formatted[i,1]),
+              int(letter_formatted[i,2]),int(letter_formatted[i,3]),int(letter_formatted[i,4]))
