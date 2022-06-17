@@ -5,7 +5,7 @@ import numpy as np
 from TP5.data_structs.Layer import Layer, NeuralNetwork
 from TP5.perceptron_funcs.activations import step_activation, linear_activation, sigmoid_classic_activation, \
     sigmoid_classic_activation_derivative, sigmoid_tanh_activation, sigmoid_tanh_activation_derivative
-from TP5.resources.fonts import get_parsed_fonts, print_letters, create_alphabet
+from TP5.resources.fonts import get_parsed_fonts, print_letters
 
 
 def main():
