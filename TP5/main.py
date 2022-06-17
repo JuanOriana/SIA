@@ -5,6 +5,7 @@ import numpy as np
 from TP5.data_structs.Layer import Layer, NeuralNetwork
 from TP5.perceptron_funcs.activations import step_activation, linear_activation, sigmoid_classic_activation, \
     sigmoid_classic_activation_derivative, sigmoid_tanh_activation, sigmoid_tanh_activation_derivative
+from TP5.plotting_scripts import plot_latent_space_2D
 from TP5.resources.fonts import get_parsed_fonts, print_letters
 
 
@@ -32,16 +33,20 @@ def main():
     # Do it 60,000 times and make small adjustments each time.
     start_time = time.time()
     print("training...")
-    neural_network.train(inputs, inputs, 1)
+    neural_network.train(inputs, inputs, 10)
     end_time = time.time()
     print(end_time - start_time)
 
-    # layer1 = neural_network.layers[0]
-    # layer2 = neural_network.layers[1]
+    layer1 = neural_network.layers[0]
+    layer2 = neural_network.layers[1]
 
-    # neural_network1 = NeuralNetwork([layer1,layer2],sigmoid_tanh_activation,sigmoid_tanh_activation_derivative,0.1)
-    # output = neural_network1.activate(inputs[0])
-    # print(output[-1])
+    neural_network1 = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+
+    list = []
+    for i in range(len(inputs)):
+        list.append(neural_network1.activate(inputs[i])[-1])
+
+    plot_latent_space_2D(np.array(list))
 
     "Stage 2) New synaptic weights after training: "
     #neural_network.print_weights()
