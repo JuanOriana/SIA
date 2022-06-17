@@ -49,7 +49,7 @@ def get_parsed_fonts():
             current_font_list.append([(num // 16) % 2, (num // 8) % 2, (num // 4) % 2, (num // 2) % 2, num % 2])
         current_font_np = np.array(current_font_list)
         fonts_parsed.append(current_font_np.flatten())
-    return fonts_parsed
+    return np.array(fonts_parsed)
 
 rows = 7
 cols = 5
@@ -73,7 +73,7 @@ def create_alphabet(font):
       alphabet.append([0.0 for i in range(cols * rows)])
       for i in range(rows):
          for j in range(cols):
-            if (font[character_count][i] & (mask >> j)) > 0:
+            if (round(font[character_count][i]) & (mask >> j)) > 0:
                alphabet[character_count][i * cols + j] = 1.0
             else:
                alphabet[character_count][i * cols + j] = -1.0

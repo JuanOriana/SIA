@@ -5,7 +5,7 @@ import numpy as np
 from TP5.data_structs.Layer import Layer, NeuralNetwork
 from TP5.perceptron_funcs.activations import step_activation, linear_activation, sigmoid_classic_activation, \
     sigmoid_classic_activation_derivative, sigmoid_tanh_activation, sigmoid_tanh_activation_derivative
-from TP5.resources.fonts import get_parsed_fonts, print_letter
+from TP5.resources.fonts import get_parsed_fonts, print_letters, create_alphabet
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
     # Do it 60,000 times and make small adjustments each time.
     start_time = time.time()
     print("training...")
-    neural_network.train(inputs, inputs, 30)
+    neural_network.train(inputs, inputs, 1)
     end_time = time.time()
     print(end_time - start_time)
 
@@ -50,9 +50,9 @@ def main():
     "Stage 3) Considering a new situation [1, 1, 0] -> ?: "
     for i in range(len(inputs)):
         print("EXPECTED LETTER")
-        print_letter(inputs[i])
+        print_letters(create_alphabet([inputs[i]]))
         print("FINAL LETTER")
-        print_letter(neural_network.activate(inputs[i])[-1])
+        print_letters(create_alphabet([(neural_network.activate(inputs[i])[-1])]))
         print("/////////////////////////////////")
     print(neural_network.eval_error(inputs,inputs))
     # print(neural_network.eval_error(training_set_inputs,training_set_inputs))
