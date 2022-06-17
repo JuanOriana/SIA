@@ -39,10 +39,11 @@ class NeuralNetwork:
 
         for iteration in range(max_iteration):
             # Pass the training set through our neural network
-            for i in range(len(training_set_inputs)):
-                self.current_in = training_set_inputs[i]
-                self.current_out = training_set_outputs[i]
-                res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B')
+            print(iteration)
+            self.train_in = training_set_inputs
+            self.train_out = training_set_outputs
+            res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B')
+            # for i in range(len(training_set_inputs)):
                 # # Pass the training set through our neural network
                 # activations = self.activate(training_set_inputs[i])
                 # self.layers[-1].calc_error_d(training_set_outputs[i] - activations[-1], self.learn_d, activations[-1])
@@ -71,13 +72,12 @@ class NeuralNetwork:
         error = 0
         for i in range(test_set.shape[0]):
             estimation = self.activate(test_set[i])[-1]
-            error += (expected_out[i] - estimation) * (expected_out[i] - estimation)
+            error += (expected_out[i] - estimation) **2
         return np.sum(error) / test_set.shape[0]
 
     def eval_error_uni(self,uni):
         self.uni_as_net(uni)
-        estimation = self.activate(self.current_in)[-1]
-        return np.sum((self.current_out - estimation)**2)
+        return self.eval_error(self.train_in,self.train_out)
 
     def accuracy(self,test_set,expected_out,out_classes):
         matches = 0
