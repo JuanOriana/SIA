@@ -50,9 +50,9 @@ def main():
     "Stage 3) Considering a new situation [1, 1, 0] -> ?: "
     for i in range(len(inputs)):
         print("EXPECTED LETTER")
-        print_letters(create_alphabet([inputs[i]]))
+        print_letters([inputs[i]])
         print("FINAL LETTER")
-        print_letters(create_alphabet([(neural_network.activate(inputs[i])[-1])]))
+        print_letters([(neural_network.activate(inputs[i])[-1])])
         print("/////////////////////////////////")
     print(neural_network.eval_error(inputs,inputs))
     # print(neural_network.eval_error(training_set_inputs,training_set_inputs))

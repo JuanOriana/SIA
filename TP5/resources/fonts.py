@@ -59,7 +59,7 @@ def print_letters(alphabet):
       for row in range(rows):
          row_str = '';
          for col in range(cols):
-            if alphabet[i][row * cols + col] > 0.0:
+            if round(alphabet[i][row * cols + col]) == 1:
                row_str = row_str + '* '
             else:
                row_str = row_str + '  '
