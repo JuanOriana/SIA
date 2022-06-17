@@ -49,7 +49,7 @@ def get_parsed_fonts():
             current_font_list.append([(num // 16) % 2, (num // 8) % 2, (num // 4) % 2, (num // 2) % 2, num % 2])
         current_font_np = np.array(current_font_list)
         fonts_parsed.append(current_font_np.flatten())
-    return fonts_parsed
+    return np.array(fonts_parsed)
 
 rows = 7
 cols = 5
