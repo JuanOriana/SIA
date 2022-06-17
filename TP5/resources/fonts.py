@@ -66,22 +66,3 @@ def print_letters(alphabet):
          print(row_str)
       print('--------------')
 
-def create_alphabet(font):
-   alphabet = []
-   mask = 0x01 << (cols - 1)
-   for character_count in range(len(font)):
-      alphabet.append([0.0 for i in range(cols * rows)])
-      for i in range(rows):
-         for j in range(cols):
-            if (round(font[character_count][i]) & (mask >> j)) > 0:
-               alphabet[character_count][i * cols + j] = 1.0
-            else:
-               alphabet[character_count][i * cols + j] = -1.0
-   return alphabet
-
-if __name__ == "__main__":
-    print(get_parsed_fonts())
-    # font, symbols = create_alphabet(font1), symbols1
-    # print(font[1])
-    # print_letters(font[:len(font)])
-
