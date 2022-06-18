@@ -1,4 +1,5 @@
 import numpy as np
+from qiskit.algorithms.optimizers import ADAM
 from scipy import optimize
 
 class Layer():
@@ -42,7 +43,9 @@ class NeuralNetwork:
             print(iteration)
             self.train_in = training_set_inputs
             self.train_out = training_set_outputs
-            res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B')
+            net_as_uni = self.net_as_uni()
+            print(self.eval_error_uni(net_as_uni))
+            res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B', options={'maxiter':1000})
             # for i in range(len(training_set_inputs)):
                 # # Pass the training set through our neural network
                 # activations = self.activate(training_set_inputs[i])

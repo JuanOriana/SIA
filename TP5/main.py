@@ -32,7 +32,7 @@ def main():
     # Do it 60,000 times and make small adjustments each time.
     start_time = time.time()
     print("training...")
-    neural_network.train(inputs, inputs, 50)
+    neural_network.train(inputs, inputs, 30)
     end_time = time.time()
     print(end_time - start_time)
 
