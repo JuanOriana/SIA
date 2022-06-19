@@ -44,19 +44,18 @@ class NeuralNetwork:
             self.train_in = training_set_inputs
             self.train_out = training_set_outputs
             net_as_uni = self.net_as_uni()
-            print(self.eval_error_uni(net_as_uni))
-            res = optimize.minimize(self.eval_error_uni, self.net_as_uni(), method='L-BFGS-B', options={'maxiter':1000})
+            res = optimize.minimize(self.eval_error_uni, net_as_uni, method='L-BFGS-B',options={'maxiter':100})
             # for i in range(len(training_set_inputs)):
-                # # Pass the training set through our neural network
-                # activations = self.activate(training_set_inputs[i])
-                # self.layers[-1].calc_error_d(training_set_outputs[i] - activations[-1], self.learn_d, activations[-1])
-                # for i in range(len(self.layers) - 2, -1, -1):
-                #     inherit_layer = self.layers[i + 1]
-                #     self.layers[i].calc_error_d(inherit_layer.synaptic_weights.dot(inherit_layer.error_d), self.learn_d,
-                #                                 activations[i + 1])
-                #
-                # for i in range(len(self.layers)):
-                #     self.layers[i].apply_delta(activations[i], self.learn_rate)
+            #     # Pass the training set through our neural network
+            #     activations = self.activate(training_set_inputs[i])
+            #     self.layers[-1].calc_error_d(training_set_outputs[i] - activations[-1], self.learn_d, activations[-1])
+            #     for i in range(len(self.layers) - 2, -1, -1):
+            #         inherit_layer = self.layers[i + 1]
+            #         self.layers[i].calc_error_d(inherit_layer.synaptic_weights.dot(inherit_layer.error_d), self.learn_d,
+            #                                     activations[i + 1])
+            #
+            #     for i in range(len(self.layers)):
+            #         self.layers[i].apply_delta(activations[i], self.learn_rate)
 
     # The neural network thinks.
     def activate(self, init_input):

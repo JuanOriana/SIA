@@ -33,20 +33,29 @@ def main():
     # Do it 60,000 times and make small adjustments each time.
     start_time = time.time()
     print("training...")
-    neural_network.train(inputs, inputs, 30)
+    neural_network.train(inputs, inputs, 100)
     end_time = time.time()
     print("Training time" ,end_time - start_time)
-    print(neural_network.layers)
 
-    # layer1 = neural_network.layers[0]
-    # layer2 = neural_network.layers[1]
-    #
-    # list = []
-    # neural_network1 = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
-    # for i in range(len(inputs)):
-    #     list.append(neural_network1.activate(inputs[i])[-1])
-    #
-    # plot_latent_space_2D(np.array(list))
+    print(neural_network.layers)
+    i =0
+    for layer in neural_network.layers:
+        print(i,layer)
+        i+=1
+
+    print(neural_network.eval_error_uni(neural_network.net_as_uni()))
+    layer1 = neural_network.layers[0]
+    layer2 = neural_network.layers[1]
+
+    list = []
+    neural_network1 = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+    for i in range(len(inputs)):
+        value = neural_network1.activate(inputs[i])[-1]
+        list.append(value)
+        print("Latent space value: ",value, " for letter in index ", i)
+
+    plot_latent_space_2D(np.array(list))
+    print("error final ",neural_network.eval_error_uni(neural_network.net_as_uni()))
 
 
 
