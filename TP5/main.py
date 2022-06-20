@@ -18,9 +18,9 @@ def main():
     inputs = get_parsed_fonts()
 
     # Combine the layers to create a neural network
-    neural_network = NeuralNetwork([layer1, layer2, layer3, layer4], sigmoid_classic_activation,
-                                   sigmoid_classic_activation_derivative, 0.1)
-
+    neural_network = NeuralNetwork([layer1,layer2,layer3,layer4],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+    encoder = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+    decoder = NeuralNetwork([layer3,layer4],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
     "Stage 1) Random starting synaptic weights: "
     # neural_network.print_weights()
 
@@ -34,11 +34,26 @@ def main():
     # end_time = time.time()
     # print("Training time", end_time - start_time)
 
+
     print(neural_network.layers)
     i = 0
     for layer in neural_network.layers:
-        print(i, layer)
-        i += 1
+        print(i,layer)
+        i+=1
+
+    print(neural_network.eval_error_uni(neural_network.net_as_uni()))
+    layer1 = neural_network.layers[0]
+    layer2 = neural_network.layers[1]
+
+    list = []
+    neural_network1 = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+    for i in range(len(inputs)):
+        value = neural_network1.activate(inputs[i])[-1]
+        list.append(value)
+        print("Latent space value: ",value, " for letter in index ", i)
+
+    plot_latent_space_2D(np.array(list),decoder)
+    print("error final ",neural_network.eval_error_uni(neural_network.net_as_uni()))
 
     error = []
     for i in range(100):
