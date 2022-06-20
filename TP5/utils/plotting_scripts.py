@@ -8,9 +8,10 @@ def plot_latent_space_2D(latent_space:np.array, decoder:NeuralNetwork):
 
     fig, ax = plt.subplots(1, 2)
 
-    plt.title("Espacio latente")
-    # plt.ylim((0,1.1))
-    # plt.xlim((0,1.1))
+    ax[0].set_title("Espacio latente")
+    ax[0].set_ylim((0,1.1))
+    ax[0].set_xlim((0,1.1))
+    ax[1].set_title("Imagen generada")
     # plt.scatter(latent_space[:, 0], latent_space[:, 1])
 
     for i in range(len(latent_space[:,0])):
