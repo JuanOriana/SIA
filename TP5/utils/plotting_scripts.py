@@ -30,7 +30,7 @@ def plot_latent_space_2D(latent_space:np.array, decoder:NeuralNetwork):
     cid = fig.canvas.mpl_connect('motion_notify_event', onclick)
     plt.show()
 
-def plot_error(error:np.array,mutation):
+def plot_error(error:np.array, title):
 
     plt.title("Denoising error con mutacion:"+ str(mutation))
     plt.ylabel("Error obtenido")
