@@ -15,7 +15,7 @@ def plot_latent_space_2D(latent_space:np.array):
         plt.annotate(chr(ord(' ')+i),(latent_space[i][0], latent_space[i][1]))
     plt.show()
 
-def plot_error(error:np.array,mutation):
+def plot_error(error:np.array, title):
 
     plt.title("Denoising error con mutacion:"+ str(mutation))
     plt.ylabel("Error obtenido")

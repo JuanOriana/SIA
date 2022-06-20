@@ -53,7 +53,7 @@ def denoiser():
         neural_network.train(np.array(inputs), np.array(outputs), 1)
         error.append((i,neural_network.eval_error_uni(neural_network.net_as_uni())))
 
-    plot_error(np.array(error),mutation_prob)
+    plot_error(np.array(error),"Denoising error con mutacion:"+ str(mutation_prob))
 
 
 
