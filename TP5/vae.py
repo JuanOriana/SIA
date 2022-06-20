@@ -2,6 +2,8 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+import os
+from PIL import Image
 import matplotlib.pyplot as plt
 
 # https://keras.io/examples/generative/vae/
@@ -59,12 +61,82 @@ class Sampling(layers.Layer):
         return z_mean + tf.exp(0.5 * z_log_var) * epsilon
 
 
+paths = []
+data = []
+labels =[]
+for r, d, f in os.walk(r"./datasets/shapes/circle"):
+    for file in f:
+        if '.png' in file:
+            paths.append(os.path.join(r, file))
+
+for path in paths:
+    img = Image.open(path).convert('L')
+    img = img.resize((28, 28))
+    img = np.array(img)
+    if img.shape == (28, 28):
+        data.append(np.array(img))
+        labels.append(0)
+
+paths = []
+
+
+for r, d, f in os.walk(r"./datasets/shapes/square"):
+    for file in f:
+        if '.png' in file:
+            paths.append(os.path.join(r, file))
+
+for path in paths:
+    img = Image.open(path).convert('L')
+    img = img.resize((28, 28))
+    img = np.array(img)
+    if img.shape == (28, 28):
+        data.append(np.array(img))
+        labels.append(1)
+
+paths = []
+
+for r, d, f in os.walk(r"./datasets/shapes/star"):
+    for file in f:
+        if '.png' in file:
+            paths.append(os.path.join(r, file))
+
+for path in paths:
+    img = Image.open(path).convert('L')
+    img = img.resize((28, 28))
+    img = np.array(img)
+    if img.shape == (28, 28):
+        data.append(np.array(img))
+        labels.append(2)
+
+paths = []
+
+
+for r, d, f in os.walk(r"./datasets/shapes/triangle"):
+    for file in f:
+        if '.png' in file:
+            paths.append(os.path.join(r, file))
+
+for path in paths:
+    img = Image.open(path).convert('L')
+    img = img.resize((28, 28))
+    img = np.array(img)
+    if img.shape == (28, 28):
+        data.append(np.array(img))
+        labels.append(3)
+
+paths = []
+data = np.array(data)
+
+
+
+print('data shape is:', data.shape)
+
 latent_dim = 2
 
 # encoder
 encoder_inputs = keras.Input(shape=(28, 28, 1))
 x = layers.Conv2D(32, 3, activation="relu", strides=2, padding="same")(encoder_inputs)
-x = layers.Conv2D(64, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Conv2D(64, 3, activation="relu",strides=2, padding="same")(x)
 x = layers.Flatten()(x)
 x = layers.Dense(16, activation="relu")(x)
 z_mean = layers.Dense(latent_dim, name="z_mean")(x)
@@ -78,19 +150,23 @@ encoder.summary()
 latent_inputs = keras.Input(shape=(latent_dim,))
 x = layers.Dense(7 * 7 * 64, activation="relu")(latent_inputs)
 x = layers.Reshape((7, 7, 64))(x)
-x = layers.Conv2DTranspose(64, 3, activation="relu", strides=2, padding="same")(x)
-x = layers.Conv2DTranspose(32, 3, activation="relu", strides=2, padding="same")(x)
+x = layers.Conv2DTranspose(64, 3, activation="relu",strides=2, padding="same")(x)
+x = layers.Conv2DTranspose(32, 3, activation="relu",strides=2, padding="same")(x)
 decoder_outputs = layers.Conv2DTranspose(1, 3, activation="sigmoid", padding="same")(x)
 decoder = keras.Model(latent_inputs, decoder_outputs, name="decoder")
 decoder.summary()
 
-(x_train, _), (x_test, _) = keras.datasets.mnist.load_data()
-mnist_digits = np.concatenate([x_train, x_test], axis=0)
-mnist_digits = np.expand_dims(mnist_digits, -1).astype("float32") / 255
 
+data = np.expand_dims(data, -1).astype("float32") / 255.0
+print(np.max(data))
+print(np.min(data))
+plt.imshow(data[8000])
+plt.show()
+print(data.shape)
 vae = VAE(encoder, decoder)
 vae.compile(optimizer=keras.optimizers.Adam())
-vae.fit(mnist_digits, epochs=30, batch_size=128)
+vae.fit(data, epochs=50)
+
 
 def plot_latent_space(vae, n=30, figsize=15):
     # display a n*n 2D manifold of digits
@@ -127,3 +203,20 @@ def plot_latent_space(vae, n=30, figsize=15):
 
 
 plot_latent_space(vae)
+
+def plot_label_clusters(vae, data, labels):
+    # display a 2D plot of the digit classes in the latent space
+    z_mean, _, _ = vae.encoder.predict(data)
+    print(z_mean.shape)
+    print(np.array(labels).shape)
+    plt.figure(figsize=(12, 10))
+    plt.scatter(z_mean[:, 0], z_mean[:, 1], c=labels)
+    plt.colorbar()
+    plt.xlabel("z[0]")
+    plt.ylabel("z[1]")
+
+    plt.show()
+
+
+print(data.shape)
+plot_label_clusters(vae, data, labels)
