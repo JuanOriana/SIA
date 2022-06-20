@@ -17,7 +17,7 @@ def plot_latent_space_2D(latent_space:np.array):
 
 def plot_error(error:np.array, title):
 
-    plt.title("Denoising error con mutacion:"+ str(mutation))
+    plt.title(title)
     plt.ylabel("Error obtenido")
     plt.xlabel("Iteracion")
     plt.plot(error[:, 0], error[:, 1])
