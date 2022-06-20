@@ -11,8 +11,6 @@ from TP5.utils.plotting_scripts import plot_latent_space_2D
 
 def main():
 
-
-
     layer1 = Layer(5, 35)
     layer2 = Layer(2, 5)
     layer3 = Layer(5,2)
@@ -22,7 +20,8 @@ def main():
 
     # Combine the layers to create a neural network
     neural_network = NeuralNetwork([layer1,layer2,layer3,layer4],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
-
+    encoder = NeuralNetwork([layer1,layer2],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
+    decoder = NeuralNetwork([layer3,layer4],sigmoid_classic_activation,sigmoid_classic_activation_derivative,0.1)
     "Stage 1) Random starting synaptic weights: "
     #neural_network.print_weights()
 
@@ -33,7 +32,7 @@ def main():
     # Do it 60,000 times and make small adjustments each time.
     start_time = time.time()
     print("training...")
-    neural_network.train(inputs, inputs, 100)
+    neural_network.train(inputs, inputs, 30)
     end_time = time.time()
     print("Training time" ,end_time - start_time)
 
@@ -54,7 +53,7 @@ def main():
         list.append(value)
         print("Latent space value: ",value, " for letter in index ", i)
 
-    plot_latent_space_2D(np.array(list))
+    plot_latent_space_2D(np.array(list),decoder)
     print("error final ",neural_network.eval_error_uni(neural_network.net_as_uni()))
 
 
