@@ -218,5 +218,33 @@ def plot_label_clusters(vae, data, labels):
     plt.show()
 
 
+
 print(data.shape)
 plot_label_clusters(vae, data, labels)
+
+
+encoded_imgs = encoder.predict(data)
+decoded_imgs = decoder.predict(encoded_imgs)
+
+fig, ax = plt.subplots(1, 2)
+ax[0].scatter(encoded_imgs[:,0],encoded_imgs[:,1],
+	c=y_test, s=8, cmap='tab10')
+
+
+def onclick(event):
+    global flag
+    ix, iy = event.xdata, event.ydata
+    latent_vector = np.array([[ix, iy]])
+    
+    decoded_img = decoder.predict(latent_vector)
+    decoded_img = decoded_img.reshape(28, 28)
+    ax[1].imshow(decoded_img, cmap='gray')
+    plt.draw()
+
+# button_press_event
+# motion_notify_event
+cid = fig.canvas.mpl_connect('motion_notify_event', onclick)
+
+
+
+plt.show() 
